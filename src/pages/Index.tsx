@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,8 +6,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { CalendarIcon, Baby, Users, Heart } from "lucide-react";
-import { format, addDays, differenceInDays, differenceInWeeks } from "date-fns";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { CalendarIcon, Baby, Users, Heart, Settings } from "lucide-react";
+import { format, addDays, differenceInDays, differenceInWeeks, subDays } from "date-fns";
 import { cn } from "@/lib/utils";
 import WeeklyInfo from "@/components/WeeklyInfo";
 import Community from "@/components/Community";
@@ -17,21 +17,49 @@ const Index = () => {
   const [lastPeriodDate, setLastPeriodDate] = useState<Date | null>(null);
   const [isFirstTime, setIsFirstTime] = useState(true);
   const [selectedDate, setSelectedDate] = useState<Date>();
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [selectedDueDate, setSelectedDueDate] = useState<Date>();
+  const [dueDateMode, setDueDateMode] = useState<'period' | 'duedate'>('period');
 
   useEffect(() => {
     const savedDate = localStorage.getItem('lastPeriodDate');
+    const savedMode = localStorage.getItem('dueDateMode') as 'period' | 'duedate' || 'period';
+    
     if (savedDate) {
       setLastPeriodDate(new Date(savedDate));
       setIsFirstTime(false);
+      setDueDateMode(savedMode);
     }
   }, []);
 
   const handleDateSubmit = () => {
-    if (selectedDate) {
+    if (dueDateMode === 'period' && selectedDate) {
       setLastPeriodDate(selectedDate);
       localStorage.setItem('lastPeriodDate', selectedDate.toISOString());
+      localStorage.setItem('dueDateMode', 'period');
+      setIsFirstTime(false);
+    } else if (dueDateMode === 'duedate' && selectedDueDate) {
+      // Calculate last period date from due date (subtract 280 days)
+      const calculatedLastPeriod = subDays(selectedDueDate, 280);
+      setLastPeriodDate(calculatedLastPeriod);
+      localStorage.setItem('lastPeriodDate', calculatedLastPeriod.toISOString());
+      localStorage.setItem('dueDateMode', 'duedate');
       setIsFirstTime(false);
     }
+  };
+
+  const handleSettingsUpdate = () => {
+    if (dueDateMode === 'period' && selectedDate) {
+      setLastPeriodDate(selectedDate);
+      localStorage.setItem('lastPeriodDate', selectedDate.toISOString());
+      localStorage.setItem('dueDateMode', 'period');
+    } else if (dueDateMode === 'duedate' && selectedDueDate) {
+      const calculatedLastPeriod = subDays(selectedDueDate, 280);
+      setLastPeriodDate(calculatedLastPeriod);
+      localStorage.setItem('lastPeriodDate', calculatedLastPeriod.toISOString());
+      localStorage.setItem('dueDateMode', 'duedate');
+    }
+    setIsSettingsOpen(false);
   };
 
   const calculatePregnancyInfo = () => {
@@ -65,40 +93,89 @@ const Index = () => {
             </div>
             <CardTitle className="text-2xl text-pink-800">Welcome to Your Pregnancy Journey</CardTitle>
             <CardDescription>
-              Let's start by entering the first day of your last menstrual period
+              Choose how you'd like to start tracking your pregnancy
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            <div className="space-y-2">
-              <Label htmlFor="last-period">First day of last period</Label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className={cn(
-                      "w-full justify-start text-left font-normal",
-                      !selectedDate && "text-muted-foreground"
-                    )}
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {selectedDate ? format(selectedDate, "PPP") : "Select date"}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={selectedDate}
-                    onSelect={setSelectedDate}
-                    disabled={(date) => date > new Date()}
-                    initialFocus
-                    className="pointer-events-auto"
-                  />
-                </PopoverContent>
-              </Popover>
+            <div className="space-y-4">
+              <div className="flex space-x-2">
+                <Button
+                  variant={dueDateMode === 'period' ? 'default' : 'outline'}
+                  onClick={() => setDueDateMode('period')}
+                  className="flex-1"
+                >
+                  Last Period Date
+                </Button>
+                <Button
+                  variant={dueDateMode === 'duedate' ? 'default' : 'outline'}
+                  onClick={() => setDueDateMode('duedate')}
+                  className="flex-1"
+                >
+                  Due Date
+                </Button>
+              </div>
+
+              {dueDateMode === 'period' ? (
+                <div className="space-y-2">
+                  <Label htmlFor="last-period">First day of last period</Label>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className={cn(
+                          "w-full justify-start text-left font-normal",
+                          !selectedDate && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {selectedDate ? format(selectedDate, "PPP") : "Select date"}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={selectedDate}
+                        onSelect={setSelectedDate}
+                        disabled={(date) => date > new Date()}
+                        initialFocus
+                        className="pointer-events-auto"
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  <Label htmlFor="due-date">Expected due date</Label>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className={cn(
+                          "w-full justify-start text-left font-normal",
+                          !selectedDueDate && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {selectedDueDate ? format(selectedDueDate, "PPP") : "Select due date"}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={selectedDueDate}
+                        onSelect={setSelectedDueDate}
+                        disabled={(date) => date < new Date()}
+                        initialFocus
+                        className="pointer-events-auto"
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+              )}
             </div>
             <Button 
               onClick={handleDateSubmit} 
-              disabled={!selectedDate}
+              disabled={dueDateMode === 'period' ? !selectedDate : !selectedDueDate}
               className="w-full bg-pink-600 hover:bg-pink-700"
             >
               Start Tracking
@@ -112,9 +189,116 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-pink-50 to-purple-50">
       <div className="container mx-auto p-4 max-w-4xl">
-        <div className="mb-6 text-center">
+        <div className="mb-6 text-center relative">
           <h1 className="text-3xl font-bold text-pink-800 mb-2">Your Pregnancy Journey</h1>
           <p className="text-pink-600">Track your beautiful journey to motherhood</p>
+          
+          <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
+            <DialogTrigger asChild>
+              <Button variant="outline" size="icon" className="absolute top-0 right-0">
+                <Settings className="h-4 w-4" />
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-md">
+              <DialogHeader>
+                <DialogTitle>Update Pregnancy Dates</DialogTitle>
+                <DialogDescription>
+                  Change your pregnancy tracking information or start fresh with a new pregnancy.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="space-y-6">
+                <div className="space-y-4">
+                  <div className="flex space-x-2">
+                    <Button
+                      variant={dueDateMode === 'period' ? 'default' : 'outline'}
+                      onClick={() => setDueDateMode('period')}
+                      className="flex-1"
+                    >
+                      Last Period Date
+                    </Button>
+                    <Button
+                      variant={dueDateMode === 'duedate' ? 'default' : 'outline'}
+                      onClick={() => setDueDateMode('duedate')}
+                      className="flex-1"
+                    >
+                      Due Date
+                    </Button>
+                  </div>
+
+                  {dueDateMode === 'period' ? (
+                    <div className="space-y-2">
+                      <Label>First day of last period</Label>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className={cn(
+                              "w-full justify-start text-left font-normal",
+                              !selectedDate && "text-muted-foreground"
+                            )}
+                          >
+                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            {selectedDate ? format(selectedDate, "PPP") : "Select date"}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={selectedDate}
+                            onSelect={setSelectedDate}
+                            disabled={(date) => date > new Date()}
+                            initialFocus
+                            className="pointer-events-auto"
+                          />
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      <Label>Expected due date</Label>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className={cn(
+                              "w-full justify-start text-left font-normal",
+                              !selectedDueDate && "text-muted-foreground"
+                            )}
+                          >
+                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            {selectedDueDate ? format(selectedDueDate, "PPP") : "Select due date"}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={selectedDueDate}
+                            onSelect={setSelectedDueDate}
+                            disabled={(date) => date < new Date()}
+                            initialFocus
+                            className="pointer-events-auto"
+                          />
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+                  )}
+                </div>
+                
+                <div className="flex space-x-2">
+                  <Button variant="outline" onClick={() => setIsSettingsOpen(false)} className="flex-1">
+                    Cancel
+                  </Button>
+                  <Button 
+                    onClick={handleSettingsUpdate}
+                    disabled={dueDateMode === 'period' ? !selectedDate : !selectedDueDate}
+                    className="flex-1 bg-pink-600 hover:bg-pink-700"
+                  >
+                    Update
+                  </Button>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
         </div>
 
         <Tabs defaultValue="dashboard" className="w-full">
