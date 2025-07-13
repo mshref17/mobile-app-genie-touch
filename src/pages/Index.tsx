@@ -17,6 +17,7 @@ import Community from "@/components/Community";
 import DailyTip from "@/components/DailyTip";
 import NotificationSettings from "@/components/NotificationSettings";
 import { NotificationService } from "@/lib/notifications";
+import { admobService } from "@/services/admobService";
 
 const Index = () => {
   const { t, language, setLanguage } = useLanguage();
@@ -26,6 +27,7 @@ const Index = () => {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [selectedDueDate, setSelectedDueDate] = useState<Date>();
   const [dueDateMode, setDueDateMode] = useState<'period' | 'duedate'>('period');
+  const [currentTab, setCurrentTab] = useState('dashboard');
 
   useEffect(() => {
     const savedDate = localStorage.getItem('lastPeriodDate');
@@ -44,6 +46,13 @@ const Index = () => {
         NotificationService.scheduleDailyTipNotification();
       }
     }
+
+    // Initialize AdMob
+    admobService.initialize().then((success) => {
+      if (success) {
+        console.log('AdMob service initialized successfully');
+      }
+    });
   }, []);
 
   const handleDateSubmit = () => {
@@ -97,6 +106,16 @@ const Index = () => {
 
   const calculatePregnancyInfo = () => {
     return calculatePregnancyInfoForDate(lastPeriodDate);
+  };
+
+  // Handle tab changes with AdMob interstitial ads
+  const handleTabChange = async (newTab: string) => {
+    // Only show ads when switching between dashboard and weekly tabs
+    if ((currentTab === 'dashboard' && newTab === 'weekly') || 
+        (currentTab === 'weekly' && newTab === 'dashboard')) {
+      await admobService.showInterstitialOnTabSwitch();
+    }
+    setCurrentTab(newTab);
   };
 
   const pregnancyInfo = calculatePregnancyInfo();
@@ -209,7 +228,7 @@ const Index = () => {
   return (
     <div className={`min-h-screen bg-gradient-to-b from-pink-50 to-purple-50 safe-area-full ${language === 'ar' ? 'rtl' : 'ltr'}`}>
       <div className="container mx-auto p-4 max-w-4xl">
-        <Tabs defaultValue="dashboard" className="w-full">
+        <Tabs value={currentTab} onValueChange={handleTabChange} className="w-full">
           <div className="flex items-center justify-between mb-6">
             <TabsList className="grid grid-cols-3 bg-white border-b border-gray-200 rounded-none p-0 h-auto flex-1">
               <TabsTrigger value="dashboard" className="flex items-center gap-2 border-b-2 border-transparent data-[state=active]:border-pink-500 data-[state=active]:bg-transparent bg-transparent rounded-none py-3 px-4 text-gray-600 data-[state=active]:text-pink-600">
