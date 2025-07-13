@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Lightbulb } from "lucide-react";
+import { Lamp } from "lucide-react";
 import { useLanguage } from '@/contexts/LanguageContext';
 
 interface DailyTipProps {
@@ -51,7 +51,7 @@ const DailyTip = ({ currentDay }: DailyTipProps) => {
     <Card className="mb-6">
       <CardHeader>
         <CardTitle className="text-pink-800 flex items-center gap-2">
-          <Lightbulb className="w-5 h-5 text-yellow-500" />
+          <Lamp className="w-5 h-5 text-yellow-500" />
           {t('dailyTip')} - {t('day')} {currentDay}
         </CardTitle>
       </CardHeader>

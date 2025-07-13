@@ -355,15 +355,15 @@ const Index = () => {
         <Tabs defaultValue="dashboard" className="w-full">
           <TabsList className="grid w-full grid-cols-3 mb-6 bg-white border-b border-gray-200 rounded-none p-0 h-auto">
             <TabsTrigger value="dashboard" className="flex items-center gap-2 border-b-2 border-transparent data-[state=active]:border-pink-500 data-[state=active]:bg-transparent bg-transparent rounded-none py-3 px-4 text-gray-600 data-[state=active]:text-pink-600">
-              <Heart className="w-4 h-4" />
+              <Heart className="w-5 h-5" />
               {t('dashboard')}
             </TabsTrigger>
             <TabsTrigger value="weekly" className="flex items-center gap-2 border-b-2 border-transparent data-[state=active]:border-pink-500 data-[state=active]:bg-transparent bg-transparent rounded-none py-3 px-4 text-gray-600 data-[state=active]:text-pink-600">
-              <Baby className="w-4 h-4" />
+              <Baby className="w-5 h-5" />
               {t('weeklyInfo')}
             </TabsTrigger>
             <TabsTrigger value="community" className="flex items-center gap-2 border-b-2 border-transparent data-[state=active]:border-pink-500 data-[state=active]:bg-transparent bg-transparent rounded-none py-3 px-4 text-gray-600 data-[state=active]:text-pink-600">
-              <Users className="w-4 h-4" />
+              <Users className="w-5 h-5" />
               {t('community')}
             </TabsTrigger>
           </TabsList>
