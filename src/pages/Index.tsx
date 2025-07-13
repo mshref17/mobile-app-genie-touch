@@ -88,7 +88,7 @@ const Index = () => {
 
   if (isFirstTime) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-pink-50 to-purple-50 p-4 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-b from-pink-50 to-purple-50 p-4 flex items-center justify-center safe-area-full">
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
             <div className="mx-auto mb-4 w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center">
@@ -190,7 +190,7 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-pink-50 to-purple-50">
+    <div className="min-h-screen bg-gradient-to-b from-pink-50 to-purple-50 safe-area-full">
       <div className="container mx-auto p-4 max-w-4xl">
         <div className="mb-6 text-center relative">
           <h1 className="text-3xl font-bold text-pink-800 mb-2">Your Pregnancy Journey</h1>
