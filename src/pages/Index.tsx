@@ -219,7 +219,7 @@ const Index = () => {
           <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
             <DialogTrigger asChild>
               <Button variant="ghost" size="icon" className="hover:bg-pink-50">
-                <Settings className="h-5 w-5 text-gray-600 hover:text-pink-600" />
+                <Settings className="h-6 w-6 text-gray-600 hover:text-pink-600" />
               </Button>
             </DialogTrigger>
               <DialogContent className="sm:max-w-md">
