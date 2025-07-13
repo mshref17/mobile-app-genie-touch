@@ -14,7 +14,14 @@
     "english": "English",
     "arabic": "العربية",
     "dailyTip": "Daily Tip",
-    "day": "Day"
+    "day": "Day",
+    "settings": "Settings",
+    "notificationSettings": "Notification Settings",
+    "weeklyNotifications": "Weekly Progress Notifications",
+    "weeklyNotificationsDesc": "Get notified when you complete a week (9 AM every week)",
+    "dailyTipsNotifications": "Daily Tips Notifications", 
+    "dailyTipsNotificationsDesc": "Get daily pregnancy tips (8 AM every day)",
+    "enableNotifications": "Enable Notifications"
   },
   "ar": {
     "weeklyInformation": "المعلومات الأسبوعية",
@@ -31,6 +38,13 @@
     "english": "English",
     "arabic": "العربية",
     "dailyTip": "نصيحة يومية",
-    "day": "يوم"
+    "day": "يوم",
+    "settings": "الإعدادات",
+    "notificationSettings": "إعدادات الإشعارات",
+    "weeklyNotifications": "إشعارات التقدم الأسبوعي",
+    "weeklyNotificationsDesc": "احصلي على إشعار عند إكمال أسبوع (9 صباحاً كل أسبوع)",
+    "dailyTipsNotifications": "إشعارات النصائح اليومية",
+    "dailyTipsNotificationsDesc": "احصلي على نصائح الحمل اليومية (8 صباحاً كل يوم)",
+    "enableNotifications": "تفعيل الإشعارات"
   }
 }

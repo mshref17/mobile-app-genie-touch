@@ -15,6 +15,8 @@ import { LanguageToggle } from "@/components/LanguageToggle";
 import WeeklyInfo from "@/components/WeeklyInfo";
 import Community from "@/components/Community";
 import DailyTip from "@/components/DailyTip";
+import NotificationSettings from "@/components/NotificationSettings";
+import { NotificationService } from "@/lib/notifications";
 
 const Index = () => {
   const { t } = useLanguage();
@@ -30,9 +32,17 @@ const Index = () => {
     const savedMode = localStorage.getItem('dueDateMode') as 'period' | 'duedate' || 'period';
     
     if (savedDate) {
-      setLastPeriodDate(new Date(savedDate));
+      const date = new Date(savedDate);
+      setLastPeriodDate(date);
       setIsFirstTime(false);
       setDueDateMode(savedMode);
+      
+      // Initialize notifications when app loads
+      const pregnancyInfo = calculatePregnancyInfoForDate(date);
+      if (pregnancyInfo) {
+        NotificationService.scheduleWeeklyNotification(pregnancyInfo.weeksPregnant, date);
+        NotificationService.scheduleDailyTipNotification();
+      }
     }
   }, []);
 
@@ -66,14 +76,14 @@ const Index = () => {
     setIsSettingsOpen(false);
   };
 
-  const calculatePregnancyInfo = () => {
-    if (!lastPeriodDate) return null;
+  const calculatePregnancyInfoForDate = (periodDate: Date) => {
+    if (!periodDate) return null;
 
     const today = new Date();
-    const daysPregnant = differenceInDays(today, lastPeriodDate);
+    const daysPregnant = differenceInDays(today, periodDate);
     const weeksPregnant = Math.floor(daysPregnant / 7);
     const daysInCurrentWeek = daysPregnant % 7;
-    const dueDate = addDays(lastPeriodDate, 280); // 40 weeks
+    const dueDate = addDays(periodDate, 280); // 40 weeks
     const daysRemaining = differenceInDays(dueDate, today);
 
     return {
@@ -83,6 +93,10 @@ const Index = () => {
       daysRemaining: Math.max(0, daysRemaining),
       totalDays: daysPregnant
     };
+  };
+
+  const calculatePregnancyInfo = () => {
+    return calculatePregnancyInfoForDate(lastPeriodDate);
   };
 
   const pregnancyInfo = calculatePregnancyInfo();
@@ -308,7 +322,7 @@ const Index = () => {
         </div>
 
         <Tabs defaultValue="dashboard" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 mb-6">
+          <TabsList className="grid w-full grid-cols-4 mb-6">
             <TabsTrigger value="dashboard" className="flex items-center gap-2">
               <Heart className="w-4 h-4" />
               {t('dashboard')}
@@ -320,6 +334,10 @@ const Index = () => {
             <TabsTrigger value="community" className="flex items-center gap-2">
               <Users className="w-4 h-4" />
               {t('community')}
+            </TabsTrigger>
+            <TabsTrigger value="settings" className="flex items-center gap-2">
+              <Settings className="w-4 h-4" />
+              {t('settings')}
             </TabsTrigger>
           </TabsList>
 
@@ -403,6 +421,13 @@ const Index = () => {
 
           <TabsContent value="community">
             <Community />
+          </TabsContent>
+
+          <TabsContent value="settings">
+            <NotificationSettings 
+              currentWeek={pregnancyInfo?.weeksPregnant || 0}
+              pregnancyStartDate={lastPeriodDate}
+            />
           </TabsContent>
         </Tabs>
       </div>
