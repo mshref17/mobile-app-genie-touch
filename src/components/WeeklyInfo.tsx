@@ -1,6 +1,8 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useEffect, useState } from "react";
 import ultrasoundWeek8 from "@/assets/ultrasound-week-8.jpg";
@@ -25,6 +27,7 @@ interface WeekData {
 const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
   const { language, t } = useLanguage();
   const [weeklyData, setWeeklyData] = useState<Record<string, WeekData>>({});
+  const [selectedWeek, setSelectedWeek] = useState(currentWeek);
 
   useEffect(() => {
     const loadWeeklyData = async () => {
@@ -44,13 +47,31 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
     loadWeeklyData();
   }, [language]);
 
-  // Find the closest week data
+  // Update selected week when current week changes
+  useEffect(() => {
+    setSelectedWeek(currentWeek);
+  }, [currentWeek]);
+
+  // Find the closest week data for selected week
   const availableWeeks = Object.keys(weeklyData).map(Number).sort((a, b) => a - b);
   const closestWeek = availableWeeks.length > 0 
     ? availableWeeks.reduce((prev, curr) => 
-        Math.abs(curr - currentWeek) < Math.abs(prev - currentWeek) ? curr : prev
+        Math.abs(curr - selectedWeek) < Math.abs(prev - selectedWeek) ? curr : prev
       )
     : 4;
+
+  // Navigation handlers
+  const handlePreviousWeek = () => {
+    if (selectedWeek > 1) {
+      setSelectedWeek(selectedWeek - 1);
+    }
+  };
+
+  const handleNextWeek = () => {
+    if (selectedWeek < 40) {
+      setSelectedWeek(selectedWeek + 1);
+    }
+  };
 
   // Get ultrasound image for the week
   const getUltrasoundImage = (week: number) => {
@@ -77,21 +98,52 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
 
   return (
     <div className="space-y-6">
+      {/* Week Navigation Header */}
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
-            <div>
-              <CardTitle className="text-pink-800">{weekData.title}</CardTitle>
-              <CardDescription>{t('currentWeek', { week: currentWeek })}</CardDescription>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={handlePreviousWeek}
+              disabled={selectedWeek <= 1}
+              className="h-10 w-10"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+
+            <div className="flex flex-col items-center">
+              <Badge variant="secondary" className="bg-pink-100 text-pink-800 mb-2 px-4 py-1 text-lg">
+                {t('week')} {selectedWeek}
+              </Badge>
+              {selectedWeek === currentWeek ? (
+                <span className="text-sm text-pink-600 font-medium">{t('currentWeek')}</span>
+              ) : (
+                <span className="text-sm text-gray-500">
+                  {selectedWeek < currentWeek ? t('previousWeek') : t('upcomingWeek')}
+                </span>
+              )}
             </div>
-            <Badge variant="secondary" className="bg-pink-100 text-pink-800">
-              {t('week')} {currentWeek}
-            </Badge>
+
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={handleNextWeek}
+              disabled={selectedWeek >= 40}
+              className="h-10 w-10"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
           </div>
         </CardHeader>
-        <CardContent>
-          <p className="text-gray-600 mb-4">{weekData.description}</p>
-        </CardContent>
+      </Card>
+
+      {/* Week Information */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-pink-800">{weekData.title}</CardTitle>
+          <CardDescription>{weekData.description}</CardDescription>
+        </CardHeader>
       </Card>
 
       <Card>
@@ -119,14 +171,14 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
             <CardTitle className="text-pink-800">{t('babyDevelopment')}</CardTitle>
           </CardHeader>
           <CardContent>
-            {getUltrasoundImage(currentWeek) && (
+            {getUltrasoundImage(selectedWeek) && (
               <div className="mb-4">
                 <img 
-                  src={getUltrasoundImage(currentWeek) || ''}
-                  alt={`Ultrasound at week ${currentWeek}`}
+                  src={getUltrasoundImage(selectedWeek) || ''}
+                  alt={`Ultrasound at week ${selectedWeek}`}
                   className="w-full max-w-md mx-auto rounded-lg border-2 border-gray-200 mb-3"
                 />
-                <p className="text-xs text-gray-500 text-center">Ultrasound image for week {currentWeek}</p>
+                <p className="text-xs text-gray-500 text-center">Ultrasound image for week {selectedWeek}</p>
               </div>
             )}
             <ul className="space-y-2">

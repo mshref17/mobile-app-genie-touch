@@ -32,7 +32,10 @@
     "selectDueDate": "Select due date",
     "cancel": "Cancel",
     "update": "Update",
-    "pregnancyGuide": "Pregnancy Guide"
+    "pregnancyGuide": "Pregnancy Guide",
+    "currentWeek": "Current Week",
+    "previousWeek": "Previous Week",
+    "upcomingWeek": "Upcoming Week"
   },
   "ar": {
     "weeklyInformation": "المعلومات الأسبوعية",
@@ -67,6 +70,9 @@
     "selectDueDate": "اختر تاريخ الولادة",
     "cancel": "إلغاء",
     "update": "تحديث",
-    "pregnancyGuide": "دليل حملي"
+    "pregnancyGuide": "دليل حملي",
+    "currentWeek": "الأسبوع الحالي",
+    "previousWeek": "أسبوع سابق",
+    "upcomingWeek": "أسبوع قادم"
   }
 }
