@@ -78,11 +78,9 @@ const DailyTip = ({ currentDay }: DailyTipProps) => {
         </CardHeader>
         
         <CardContent className="pt-0 pb-6">
-          <div className="bg-gradient-to-br from-gray-50 to-pink-50 rounded-xl p-5 border-l-4 border-pink-400">
-            <p className="text-gray-700 leading-relaxed text-base font-medium italic">
-              "{dailyTip}"
-            </p>
-          </div>
+          <p className="text-gray-700 leading-relaxed text-base font-medium italic">
+            "{dailyTip}"
+          </p>
         </CardContent>
       </Card>
     </div>
