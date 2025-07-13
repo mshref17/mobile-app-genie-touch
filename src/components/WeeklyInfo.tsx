@@ -195,12 +195,8 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
           <Badge variant="secondary" className="bg-pink-100 text-pink-800 px-6 py-2 text-xl font-semibold">
             {t('week')} {selectedWeek}
           </Badge>
-          {selectedWeek === currentWeek ? (
-            <span className="text-xs text-pink-600 font-medium mt-1">{t('currentWeek')}</span>
-          ) : (
-            <span className="text-xs text-gray-500 mt-1">
-              {selectedWeek < currentWeek ? t('previousWeek') : t('upcomingWeek')}
-            </span>
+          {selectedWeek === currentWeek && (
+            <span className="text-xs text-pink-600 font-medium mt-1">({t('currentWeek')})</span>
           )}
         </div>
 
