@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { LampCeiling } from "lucide-react";
+import { Lightbulb } from "lucide-react";
 import { useLanguage } from '@/contexts/LanguageContext';
 
 interface DailyTipProps {
@@ -58,7 +58,7 @@ const DailyTip = ({ currentDay }: DailyTipProps) => {
             <div className="flex-shrink-0">
               <div className="relative">
                 <div className="w-14 h-14 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg transform rotate-12 group-hover:rotate-0 transition-transform duration-300">
-                  <LampCeiling className="w-7 h-7 text-white" />
+                  <Lightbulb className="w-7 h-7 text-white" />
                 </div>
                 <div className="absolute -top-1 -right-1 w-6 h-6 bg-pink-500 rounded-full flex items-center justify-center">
                   <span className="text-white text-xs font-bold">{currentDay}</span>
