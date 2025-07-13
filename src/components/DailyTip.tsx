@@ -48,29 +48,47 @@ const DailyTip = ({ currentDay }: DailyTipProps) => {
   }
 
   return (
-    <Card className="mb-6 overflow-hidden bg-gradient-to-br from-yellow-50 via-orange-50 to-pink-50 border-0 shadow-lg">
-      <div className="absolute inset-0 bg-gradient-to-br from-yellow-100/20 via-orange-100/20 to-pink-100/20"></div>
-      <CardHeader className="relative pb-3">
-        <CardTitle className="text-pink-800 flex items-center gap-3 text-lg">
-          <div className="p-2 bg-yellow-100 rounded-full shadow-md">
-            <Lamp className="w-5 h-5 text-yellow-600" />
-          </div>
-          <div>
-            <div className="text-sm font-medium text-pink-600 uppercase tracking-wide">
-              {t('dailyTip')}
+    <div className="mb-6 relative group">
+      <div className="absolute inset-0 bg-gradient-to-r from-pink-400 via-purple-400 to-indigo-400 rounded-2xl blur-lg opacity-30 group-hover:opacity-50 transition-opacity duration-300"></div>
+      <Card className="relative bg-white/95 backdrop-blur-md rounded-2xl border-0 shadow-xl overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500"></div>
+        
+        <CardHeader className="pb-4 pt-6">
+          <div className="flex items-start gap-4">
+            <div className="flex-shrink-0">
+              <div className="relative">
+                <div className="w-14 h-14 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg transform rotate-12 group-hover:rotate-0 transition-transform duration-300">
+                  <Lamp className="w-7 h-7 text-white" />
+                </div>
+                <div className="absolute -top-1 -right-1 w-6 h-6 bg-pink-500 rounded-full flex items-center justify-center">
+                  <span className="text-white text-xs font-bold">{currentDay}</span>
+                </div>
+              </div>
             </div>
-            <div className="text-xs text-pink-500 font-normal">
-              {t('day')} {currentDay}
+            
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 mb-1">
+                <h3 className="text-lg font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
+                  {t('dailyTip')}
+                </h3>
+                <div className="flex-1 h-px bg-gradient-to-r from-pink-200 to-transparent"></div>
+              </div>
+              <p className="text-sm text-gray-500 font-medium">
+                {t('day')} {currentDay} • {new Date().toLocaleDateString()}
+              </p>
             </div>
           </div>
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="relative">
-        <div className="bg-white/70 backdrop-blur-sm rounded-lg p-4 border border-white/50 shadow-sm">
-          <p className="text-gray-700 leading-relaxed text-base font-medium">{dailyTip}</p>
-        </div>
-      </CardContent>
-    </Card>
+        </CardHeader>
+        
+        <CardContent className="pt-0 pb-6">
+          <div className="bg-gradient-to-br from-gray-50 to-pink-50 rounded-xl p-5 border-l-4 border-pink-400">
+            <p className="text-gray-700 leading-relaxed text-base font-medium italic">
+              "{dailyTip}"
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 
