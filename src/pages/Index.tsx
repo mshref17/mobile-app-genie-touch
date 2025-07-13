@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { CalendarIcon, Baby, Users, Heart, Settings, CalendarDays, Clock, Star, Gift } from "lucide-react";
+import { CalendarIcon, Baby, Users, Heart, CalendarDays, Clock, Star, Gift } from "lucide-react";
 import { format, addDays, differenceInDays, differenceInWeeks, subDays } from "date-fns";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -16,6 +16,7 @@ import WeeklyInfo from "@/components/WeeklyInfo";
 import Community from "@/components/Community";
 import DailyTip from "@/components/DailyTip";
 import NotificationSettings from "@/components/NotificationSettings";
+import { ProfileMenu } from "@/components/ProfileMenu";
 import { NotificationService } from "@/lib/notifications";
 
 const Index = () => {
@@ -225,13 +226,12 @@ const Index = () => {
                 {t('community')}
               </TabsTrigger>
             </TabsList>
+            <ProfileMenu 
+              currentWeek={pregnancyInfo?.weeksPregnant || 0}
+              onSettingsOpen={() => setIsSettingsOpen(true)}
+            />
             
             <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
-              <DialogTrigger asChild>
-                <Button variant="ghost" size="icon" className="ml-2 border-b-2 border-transparent hover:border-pink-500 rounded-none py-3">
-                  <Settings className="h-5 w-5 text-gray-600 hover:text-pink-600" />
-                </Button>
-              </DialogTrigger>
               <DialogContent className="sm:max-w-md">
                 <DialogHeader>
                   <DialogTitle>{t('settings')}</DialogTitle>
