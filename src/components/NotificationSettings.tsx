@@ -55,18 +55,17 @@ const NotificationSettingsComponent = ({ currentWeek, pregnancyStartDate }: Noti
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-pink-800 flex items-center gap-2">
-          <Bell className="w-5 h-5" />
-          {t('notificationSettings')}
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-6">
+    <div className="space-y-4">
+      <h4 className="text-pink-800 flex items-center gap-2 font-medium">
+        <Bell className="w-4 h-4" />
+        {t('notificationSettings')}
+      </h4>
+      
+      <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div className="space-y-0.5">
-            <Label className="text-base">{t('weeklyNotifications')}</Label>
-            <p className="text-sm text-muted-foreground">
+            <Label className="text-sm font-medium">{t('weeklyNotifications')}</Label>
+            <p className="text-xs text-muted-foreground">
               {t('weeklyNotificationsDesc')}
             </p>
           </div>
@@ -78,8 +77,8 @@ const NotificationSettingsComponent = ({ currentWeek, pregnancyStartDate }: Noti
 
         <div className="flex items-center justify-between">
           <div className="space-y-0.5">
-            <Label className="text-base">{t('dailyTipsNotifications')}</Label>
-            <p className="text-sm text-muted-foreground">
+            <Label className="text-sm font-medium">{t('dailyTipsNotifications')}</Label>
+            <p className="text-xs text-muted-foreground">
               {t('dailyTipsNotificationsDesc')}
             </p>
           </div>
@@ -94,13 +93,14 @@ const NotificationSettingsComponent = ({ currentWeek, pregnancyStartDate }: Noti
             onClick={requestNotificationPermissions}
             className="w-full"
             variant="outline"
+            size="sm"
           >
             <Bell className="w-4 h-4 mr-2" />
             {t('enableNotifications')}
           </Button>
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };
 

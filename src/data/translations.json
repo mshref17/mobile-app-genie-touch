@@ -21,7 +21,17 @@
     "weeklyNotificationsDesc": "Get notified when you complete a week (9 AM every week)",
     "dailyTipsNotifications": "Daily Tips Notifications", 
     "dailyTipsNotificationsDesc": "Get daily pregnancy tips (8 AM every day)",
-    "enableNotifications": "Enable Notifications"
+    "enableNotifications": "Enable Notifications",
+    "updatePregnancyDates": "Change your pregnancy tracking information or start fresh with a new pregnancy.",
+    "pregnancyDates": "Pregnancy Dates",
+    "lastPeriodDate": "Last Period Date",
+    "dueDate": "Due Date",
+    "firstDayLastPeriod": "First day of last period",
+    "expectedDueDate": "Expected due date",
+    "selectDate": "Select date",
+    "selectDueDate": "Select due date",
+    "cancel": "Cancel",
+    "update": "Update"
   },
   "ar": {
     "weeklyInformation": "المعلومات الأسبوعية",
@@ -45,6 +55,16 @@
     "weeklyNotificationsDesc": "احصلي على إشعار عند إكمال أسبوع (9 صباحاً كل أسبوع)",
     "dailyTipsNotifications": "إشعارات النصائح اليومية",
     "dailyTipsNotificationsDesc": "احصلي على نصائح الحمل اليومية (8 صباحاً كل يوم)",
-    "enableNotifications": "تفعيل الإشعارات"
+    "enableNotifications": "تفعيل الإشعارات",
+    "updatePregnancyDates": "قم بتغيير معلومات تتبع الحمل أو ابدأ من جديد مع حمل جديد.",
+    "pregnancyDates": "تواريخ الحمل",
+    "lastPeriodDate": "تاريخ آخر دورة",
+    "dueDate": "تاريخ الولادة المتوقع",
+    "firstDayLastPeriod": "أول يوم من آخر دورة",
+    "expectedDueDate": "تاريخ الولادة المتوقع",
+    "selectDate": "اختر التاريخ",
+    "selectDueDate": "اختر تاريخ الولادة",
+    "cancel": "إلغاء",
+    "update": "تحديث"
   }
 }

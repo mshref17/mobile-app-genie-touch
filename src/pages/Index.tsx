@@ -204,8 +204,10 @@ const Index = () => {
     );
   }
 
+  const { language } = useLanguage();
+  
   return (
-    <div className="min-h-screen bg-gradient-to-b from-pink-50 to-purple-50 safe-area-full">
+    <div className={`min-h-screen bg-gradient-to-b from-pink-50 to-purple-50 safe-area-full ${language === 'ar' ? 'rtl' : 'ltr'}`}>
       <div className="container mx-auto p-4 max-w-4xl">
         <div className="mb-6 text-center relative">
           <div className="absolute top-0 left-0">
@@ -221,33 +223,34 @@ const Index = () => {
             </DialogTrigger>
             <DialogContent className="sm:max-w-md">
               <DialogHeader>
-                <DialogTitle>Update Pregnancy Dates</DialogTitle>
+                <DialogTitle>{t('settings')}</DialogTitle>
                 <DialogDescription>
-                  Change your pregnancy tracking information or start fresh with a new pregnancy.
+                  {t('updatePregnancyDates')}
                 </DialogDescription>
               </DialogHeader>
               <div className="space-y-6">
                 <div className="space-y-4">
+                  <h4 className="text-sm font-medium">{t('pregnancyDates')}</h4>
                   <div className="flex space-x-2">
                     <Button
                       variant={dueDateMode === 'period' ? 'default' : 'outline'}
                       onClick={() => setDueDateMode('period')}
                       className="flex-1"
                     >
-                      Last Period Date
+                      {t('lastPeriodDate')}
                     </Button>
                     <Button
                       variant={dueDateMode === 'duedate' ? 'default' : 'outline'}
                       onClick={() => setDueDateMode('duedate')}
                       className="flex-1"
                     >
-                      Due Date
+                      {t('dueDate')}
                     </Button>
                   </div>
 
                   {dueDateMode === 'period' ? (
                     <div className="space-y-2">
-                      <Label>First day of last period</Label>
+                      <Label>{t('firstDayLastPeriod')}</Label>
                       <Popover>
                         <PopoverTrigger asChild>
                           <Button
@@ -258,7 +261,7 @@ const Index = () => {
                             )}
                           >
                             <CalendarIcon className="mr-2 h-4 w-4" />
-                            {selectedDate ? format(selectedDate, "PPP") : "Select date"}
+                            {selectedDate ? format(selectedDate, "PPP") : t('selectDate')}
                           </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-auto p-0" align="start">
@@ -275,7 +278,7 @@ const Index = () => {
                     </div>
                   ) : (
                     <div className="space-y-2">
-                      <Label>Expected due date</Label>
+                      <Label>{t('expectedDueDate')}</Label>
                       <Popover>
                         <PopoverTrigger asChild>
                           <Button
@@ -286,7 +289,7 @@ const Index = () => {
                             )}
                           >
                             <CalendarIcon className="mr-2 h-4 w-4" />
-                            {selectedDueDate ? format(selectedDueDate, "PPP") : "Select due date"}
+                            {selectedDueDate ? format(selectedDueDate, "PPP") : t('selectDueDate')}
                           </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-auto p-0" align="start">
@@ -304,16 +307,26 @@ const Index = () => {
                   )}
                 </div>
                 
+                {/* Notification Settings */}
+                {pregnancyInfo && (
+                  <div className="border-t pt-4">
+                    <NotificationSettings 
+                      currentWeek={pregnancyInfo.weeksPregnant}
+                      pregnancyStartDate={lastPeriodDate}
+                    />
+                  </div>
+                )}
+                
                 <div className="flex space-x-2">
                   <Button variant="outline" onClick={() => setIsSettingsOpen(false)} className="flex-1">
-                    Cancel
+                    {t('cancel')}
                   </Button>
                   <Button 
                     onClick={handleSettingsUpdate}
                     disabled={dueDateMode === 'period' ? !selectedDate : !selectedDueDate}
                     className="flex-1 bg-pink-600 hover:bg-pink-700"
                   >
-                    Update
+                    {t('update')}
                   </Button>
                 </div>
               </div>
@@ -322,7 +335,7 @@ const Index = () => {
         </div>
 
         <Tabs defaultValue="dashboard" className="w-full">
-          <TabsList className="grid w-full grid-cols-4 mb-6">
+          <TabsList className="grid w-full grid-cols-3 mb-6">
             <TabsTrigger value="dashboard" className="flex items-center gap-2">
               <Heart className="w-4 h-4" />
               {t('dashboard')}
@@ -334,10 +347,6 @@ const Index = () => {
             <TabsTrigger value="community" className="flex items-center gap-2">
               <Users className="w-4 h-4" />
               {t('community')}
-            </TabsTrigger>
-            <TabsTrigger value="settings" className="flex items-center gap-2">
-              <Settings className="w-4 h-4" />
-              {t('settings')}
             </TabsTrigger>
           </TabsList>
 
@@ -423,12 +432,6 @@ const Index = () => {
             <Community />
           </TabsContent>
 
-          <TabsContent value="settings">
-            <NotificationSettings 
-              currentWeek={pregnancyInfo?.weeksPregnant || 0}
-              pregnancyStartDate={lastPeriodDate}
-            />
-          </TabsContent>
         </Tabs>
       </div>
     </div>
