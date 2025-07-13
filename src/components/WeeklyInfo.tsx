@@ -2,7 +2,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Baby } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useEffect, useState } from "react";
 import ultrasoundWeek8 from "@/assets/ultrasound-week-8.jpg";
@@ -259,7 +259,10 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-purple-800">{t('tipsForMom')}</CardTitle>
+            <CardTitle className="text-purple-800 flex items-center gap-2">
+              <Baby className="h-5 w-5" />
+              {t('tipsForMom')}
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <ul className="space-y-2">
