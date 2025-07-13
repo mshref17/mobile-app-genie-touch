@@ -10,10 +10,13 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { CalendarIcon, Baby, Users, Heart, Settings } from "lucide-react";
 import { format, addDays, differenceInDays, differenceInWeeks, subDays } from "date-fns";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { LanguageToggle } from "@/components/LanguageToggle";
 import WeeklyInfo from "@/components/WeeklyInfo";
 import Community from "@/components/Community";
 
 const Index = () => {
+  const { t } = useLanguage();
   const [lastPeriodDate, setLastPeriodDate] = useState<Date | null>(null);
   const [isFirstTime, setIsFirstTime] = useState(true);
   const [selectedDate, setSelectedDate] = useState<Date>();
@@ -301,19 +304,24 @@ const Index = () => {
           </Dialog>
         </div>
 
+        <div className="flex justify-between items-center mb-6">
+          <div></div>
+          <LanguageToggle />
+        </div>
+
         <Tabs defaultValue="dashboard" className="w-full">
           <TabsList className="grid w-full grid-cols-3 mb-6">
             <TabsTrigger value="dashboard" className="flex items-center gap-2">
               <Heart className="w-4 h-4" />
-              Dashboard
+              {t('dashboard')}
             </TabsTrigger>
             <TabsTrigger value="weekly" className="flex items-center gap-2">
               <Baby className="w-4 h-4" />
-              Weekly Info
+              {t('weeklyInfo')}
             </TabsTrigger>
             <TabsTrigger value="community" className="flex items-center gap-2">
               <Users className="w-4 h-4" />
-              Community
+              {t('community')}
             </TabsTrigger>
           </TabsList>
 

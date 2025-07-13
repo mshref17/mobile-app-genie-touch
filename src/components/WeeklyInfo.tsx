@@ -1,98 +1,62 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useEffect, useState } from "react";
 
 interface WeeklyInfoProps {
   currentWeek: number;
 }
 
-const weeklyData = {
-  4: {
-    title: "Week 4: The Beginning",
-    babySize: "Poppy Seed",
-    sizeDescription: "About 2mm",
-    description: "Your baby is just a cluster of cells, but amazing development is already beginning!",
-    developments: [
-      "The neural tube is forming",
-      "Basic circulation is developing",
-      "Hormone production begins"
-    ],
-    momTips: [
-      "Start taking prenatal vitamins",
-      "Avoid alcohol and smoking",
-      "Schedule your first prenatal appointment"
-    ],
-    image: "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=400&h=300&fit=crop"
-  },
-  8: {
-    title: "Week 8: Rapid Growth",
-    babySize: "Raspberry",
-    sizeDescription: "About 16mm",
-    description: "Your baby is growing rapidly and major organs are developing.",
-    developments: [
-      "Arms and legs are growing longer",
-      "Fingers and toes are forming", 
-      "Heart is beating regularly"
-    ],
-    momTips: [
-      "Stay hydrated",
-      "Eat small, frequent meals",
-      "Get plenty of rest"
-    ],
-    image: "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=400&h=300&fit=crop"
-  },
-  12: {
-    title: "Week 12: End of First Trimester",
-    babySize: "Lime",
-    sizeDescription: "About 5cm",
-    description: "Congratulations! You've reached an important milestone.",
-    developments: [
-      "All major organs are formed",
-      "Baby can move and stretch",
-      "Facial features are developing"
-    ],
-    momTips: [
-      "Morning sickness may improve",
-      "Consider sharing your news",
-      "Continue healthy eating habits"
-    ],
-    image: "https://images.unsplash.com/photo-1535268647677-300dbf3d78d1?w=400&h=300&fit=crop"
-  },
-  16: {
-    title: "Week 16: Second Trimester Begins",
-    babySize: "Avocado",
-    sizeDescription: "About 11cm",
-    description: "Welcome to the second trimester! Many women feel their best during this time.",
-    developments: [
-      "Baby's skeleton is developing",
-      "You might feel first movements",
-      "Baby can hear sounds"
-    ],
-    momTips: [
-      "Enjoy increased energy",
-      "Start thinking about baby names",
-      "Consider prenatal yoga"
-    ],
-    image: "https://images.unsplash.com/photo-1472396961693-142e6e269027?w=400&h=300&fit=crop"
-  }
-};
+interface WeekData {
+  title: string;
+  babySize: string;
+  sizeDescription: string;
+  description: string;
+  developments: string[];
+  momTips: string[];
+  image: string;
+}
 
 const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
+  const { language, t } = useLanguage();
+  const [weeklyData, setWeeklyData] = useState<Record<string, WeekData>>({});
+
+  useEffect(() => {
+    const loadWeeklyData = async () => {
+      try {
+        const data = await import(`@/data/weeks-${language}.json`);
+        setWeeklyData(data.default);
+      } catch (error) {
+        console.error('Error loading weekly data:', error);
+        // Fallback to English if Arabic data fails to load
+        if (language === 'ar') {
+          const fallbackData = await import('@/data/weeks-en.json');
+          setWeeklyData(fallbackData.default);
+        }
+      }
+    };
+
+    loadWeeklyData();
+  }, [language]);
+
   // Find the closest week data
   const availableWeeks = Object.keys(weeklyData).map(Number).sort((a, b) => a - b);
-  const closestWeek = availableWeeks.reduce((prev, curr) => 
-    Math.abs(curr - currentWeek) < Math.abs(prev - currentWeek) ? curr : prev
-  );
+  const closestWeek = availableWeeks.length > 0 
+    ? availableWeeks.reduce((prev, curr) => 
+        Math.abs(curr - currentWeek) < Math.abs(prev - currentWeek) ? curr : prev
+      )
+    : 4;
 
-  const weekData = weeklyData[closestWeek as keyof typeof weeklyData];
+  const weekData = weeklyData[closestWeek.toString()];
 
-  if (currentWeek === 0) {
+  if (currentWeek === 0 || !weekData) {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Weekly Information</CardTitle>
+          <CardTitle>{t('weeklyInformation')}</CardTitle>
           <CardDescription>
-            Your weekly pregnancy information will appear here once your pregnancy progresses.
+            {t('weeklyInfoDescription')}
           </CardDescription>
         </CardHeader>
       </Card>
@@ -106,10 +70,10 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
           <div className="flex items-center justify-between">
             <div>
               <CardTitle className="text-pink-800">{weekData.title}</CardTitle>
-              <CardDescription>You are currently {currentWeek} weeks pregnant</CardDescription>
+              <CardDescription>{t('currentWeek', { week: currentWeek })}</CardDescription>
             </div>
             <Badge variant="secondary" className="bg-pink-100 text-pink-800">
-              Week {currentWeek}
+              {t('week')} {currentWeek}
             </Badge>
           </div>
         </CardHeader>
@@ -120,7 +84,7 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-pink-800">Baby's Size This Week</CardTitle>
+          <CardTitle className="text-pink-800">{t('babySizeThisWeek')}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex items-center space-x-4">
@@ -140,7 +104,7 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
       <div className="grid md:grid-cols-2 gap-6">
         <Card>
           <CardHeader>
-            <CardTitle className="text-pink-800">Baby's Development</CardTitle>
+            <CardTitle className="text-pink-800">{t('babyDevelopment')}</CardTitle>
           </CardHeader>
           <CardContent>
             <ul className="space-y-2">
@@ -156,7 +120,7 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-purple-800">Tips for Mom</CardTitle>
+            <CardTitle className="text-purple-800">{t('tipsForMom')}</CardTitle>
           </CardHeader>
           <CardContent>
             <ul className="space-y-2">
