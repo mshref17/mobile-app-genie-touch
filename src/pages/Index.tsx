@@ -368,20 +368,6 @@ const Index = () => {
             </Dialog>
           </div>
 
-          {pregnancyInfo && (
-            <div className="mb-6">
-              <div className="w-full bg-pink-200 rounded-full h-3 mb-2">
-                <div 
-                  className="bg-pink-600 h-3 rounded-full transition-all duration-500"
-                  style={{ width: `${Math.min((pregnancyInfo.weeksPregnant / 40) * 100, 100)}%` }}
-                ></div>
-              </div>
-              <p className="text-center text-sm text-pink-600">
-                {Math.round((pregnancyInfo.weeksPregnant / 40) * 100)}% Complete
-              </p>
-            </div>
-          )}
-
           <TabsContent value="dashboard" className="space-y-6">
             {pregnancyInfo && (
               <>
