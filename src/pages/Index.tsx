@@ -209,164 +209,164 @@ const Index = () => {
   return (
     <div className={`min-h-screen bg-gradient-to-b from-pink-50 to-purple-50 safe-area-full ${language === 'ar' ? 'rtl' : 'ltr'}`}>
       <div className="container mx-auto p-4 max-w-4xl">
-        <div className="mb-6 flex justify-end">
-          <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
-            <DialogTrigger asChild>
-              <Button variant="outline" size="icon">
-                <Settings className="h-4 w-4" />
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-md">
-              <DialogHeader>
-                <DialogTitle>{t('settings')}</DialogTitle>
-                <DialogDescription>
-                  {t('updatePregnancyDates')}
-                </DialogDescription>
-              </DialogHeader>
-              <div className="space-y-6">
-                {/* Language Settings */}
-                <div className="space-y-3">
-                  <h4 className="text-sm font-medium">{t('language')}</h4>
-                  <div className="flex gap-2">
-                    <Button
-                      variant={language === 'en' ? 'default' : 'outline'}
-                      size="sm"
-                      onClick={() => setLanguage('en')}
-                      className="flex-1"
-                    >
-                      {t('english')}
-                    </Button>
-                    <Button
-                      variant={language === 'ar' ? 'default' : 'outline'}
-                      size="sm"
-                      onClick={() => setLanguage('ar')}
-                      className="flex-1"
-                    >
-                      {t('arabic')}
-                    </Button>
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  <h4 className="text-sm font-medium">{t('pregnancyDates')}</h4>
-                  <div className="flex space-x-2">
-                    <Button
-                      variant={dueDateMode === 'period' ? 'default' : 'outline'}
-                      onClick={() => setDueDateMode('period')}
-                      className="flex-1"
-                    >
-                      {t('lastPeriodDate')}
-                    </Button>
-                    <Button
-                      variant={dueDateMode === 'duedate' ? 'default' : 'outline'}
-                      onClick={() => setDueDateMode('duedate')}
-                      className="flex-1"
-                    >
-                      {t('dueDate')}
-                    </Button>
-                  </div>
-
-                  {dueDateMode === 'period' ? (
-                    <div className="space-y-2">
-                      <Label>{t('firstDayLastPeriod')}</Label>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant="outline"
-                            className={cn(
-                              "w-full justify-start text-left font-normal",
-                              !selectedDate && "text-muted-foreground"
-                            )}
-                          >
-                            <CalendarIcon className="mr-2 h-4 w-4" />
-                            {selectedDate ? format(selectedDate, "PPP") : t('selectDate')}
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0" align="start">
-                          <Calendar
-                            mode="single"
-                            selected={selectedDate}
-                            onSelect={setSelectedDate}
-                            disabled={(date) => date > new Date()}
-                            initialFocus
-                            className="pointer-events-auto"
-                          />
-                        </PopoverContent>
-                      </Popover>
+        <Tabs defaultValue="dashboard" className="w-full">
+          <div className="flex items-center justify-between mb-6">
+            <TabsList className="grid grid-cols-3 bg-white border-b border-gray-200 rounded-none p-0 h-auto flex-1">
+              <TabsTrigger value="dashboard" className="flex items-center gap-2 border-b-2 border-transparent data-[state=active]:border-pink-500 data-[state=active]:bg-transparent bg-transparent rounded-none py-3 px-4 text-gray-600 data-[state=active]:text-pink-600">
+                <Heart className="w-5 h-5" />
+                {t('dashboard')}
+              </TabsTrigger>
+              <TabsTrigger value="weekly" className="flex items-center gap-2 border-b-2 border-transparent data-[state=active]:border-pink-500 data-[state=active]:bg-transparent bg-transparent rounded-none py-3 px-4 text-gray-600 data-[state=active]:text-pink-600">
+                <Baby className="w-5 h-5" />
+                {t('weeklyInfo')}
+              </TabsTrigger>
+              <TabsTrigger value="community" className="flex items-center gap-2 border-b-2 border-transparent data-[state=active]:border-pink-500 data-[state=active]:bg-transparent bg-transparent rounded-none py-3 px-4 text-gray-600 data-[state=active]:text-pink-600">
+                <Users className="w-5 h-5" />
+                {t('community')}
+              </TabsTrigger>
+            </TabsList>
+            
+            <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
+              <DialogTrigger asChild>
+                <Button variant="ghost" size="icon" className="ml-2 border-b-2 border-transparent hover:border-pink-500 rounded-none py-3">
+                  <Settings className="h-5 w-5 text-gray-600 hover:text-pink-600" />
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                  <DialogTitle>{t('settings')}</DialogTitle>
+                  <DialogDescription>
+                    {t('updatePregnancyDates')}
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="space-y-6">
+                  {/* Language Settings */}
+                  <div className="space-y-3">
+                    <h4 className="text-sm font-medium">{t('language')}</h4>
+                    <div className="flex gap-2">
+                      <Button
+                        variant={language === 'en' ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => setLanguage('en')}
+                        className="flex-1"
+                      >
+                        {t('english')}
+                      </Button>
+                      <Button
+                        variant={language === 'ar' ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => setLanguage('ar')}
+                        className="flex-1"
+                      >
+                        {t('arabic')}
+                      </Button>
                     </div>
-                  ) : (
-                    <div className="space-y-2">
-                      <Label>{t('expectedDueDate')}</Label>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant="outline"
-                            className={cn(
-                              "w-full justify-start text-left font-normal",
-                              !selectedDueDate && "text-muted-foreground"
-                            )}
-                          >
-                            <CalendarIcon className="mr-2 h-4 w-4" />
-                            {selectedDueDate ? format(selectedDueDate, "PPP") : t('selectDueDate')}
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0" align="start">
-                          <Calendar
-                            mode="single"
-                            selected={selectedDueDate}
-                            onSelect={setSelectedDueDate}
-                            disabled={(date) => date < new Date()}
-                            initialFocus
-                            className="pointer-events-auto"
-                          />
-                        </PopoverContent>
-                      </Popover>
+                  </div>
+
+                  <div className="space-y-4">
+                    <h4 className="text-sm font-medium">{t('pregnancyDates')}</h4>
+                    <div className="flex space-x-2">
+                      <Button
+                        variant={dueDateMode === 'period' ? 'default' : 'outline'}
+                        onClick={() => setDueDateMode('period')}
+                        className="flex-1"
+                      >
+                        {t('lastPeriodDate')}
+                      </Button>
+                      <Button
+                        variant={dueDateMode === 'duedate' ? 'default' : 'outline'}
+                        onClick={() => setDueDateMode('duedate')}
+                        className="flex-1"
+                      >
+                        {t('dueDate')}
+                      </Button>
+                    </div>
+
+                    {dueDateMode === 'period' ? (
+                      <div className="space-y-2">
+                        <Label>{t('firstDayLastPeriod')}</Label>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <Button
+                              variant="outline"
+                              className={cn(
+                                "w-full justify-start text-left font-normal",
+                                !selectedDate && "text-muted-foreground"
+                              )}
+                            >
+                              <CalendarIcon className="mr-2 h-4 w-4" />
+                              {selectedDate ? format(selectedDate, "PPP") : t('selectDate')}
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0" align="start">
+                            <Calendar
+                              mode="single"
+                              selected={selectedDate}
+                              onSelect={setSelectedDate}
+                              disabled={(date) => date > new Date()}
+                              initialFocus
+                              className="pointer-events-auto"
+                            />
+                          </PopoverContent>
+                        </Popover>
+                      </div>
+                    ) : (
+                      <div className="space-y-2">
+                        <Label>{t('expectedDueDate')}</Label>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <Button
+                              variant="outline"
+                              className={cn(
+                                "w-full justify-start text-left font-normal",
+                                !selectedDueDate && "text-muted-foreground"
+                              )}
+                            >
+                              <CalendarIcon className="mr-2 h-4 w-4" />
+                              {selectedDueDate ? format(selectedDueDate, "PPP") : t('selectDueDate')}
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0" align="start">
+                            <Calendar
+                              mode="single"
+                              selected={selectedDueDate}
+                              onSelect={setSelectedDueDate}
+                              disabled={(date) => date < new Date()}
+                              initialFocus
+                              className="pointer-events-auto"
+                            />
+                          </PopoverContent>
+                        </Popover>
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Notification Settings */}
+                  {pregnancyInfo && (
+                    <div className="border-t pt-4">
+                      <NotificationSettings 
+                        currentWeek={pregnancyInfo.weeksPregnant}
+                        pregnancyStartDate={lastPeriodDate}
+                      />
                     </div>
                   )}
-                </div>
-                
-                {/* Notification Settings */}
-                {pregnancyInfo && (
-                  <div className="border-t pt-4">
-                    <NotificationSettings 
-                      currentWeek={pregnancyInfo.weeksPregnant}
-                      pregnancyStartDate={lastPeriodDate}
-                    />
+                  
+                  <div className="flex space-x-2">
+                    <Button variant="outline" onClick={() => setIsSettingsOpen(false)} className="flex-1">
+                      {t('cancel')}
+                    </Button>
+                    <Button 
+                      onClick={handleSettingsUpdate}
+                      disabled={dueDateMode === 'period' ? !selectedDate : !selectedDueDate}
+                      className="flex-1 bg-pink-600 hover:bg-pink-700"
+                    >
+                      {t('update')}
+                    </Button>
                   </div>
-                )}
-                
-                <div className="flex space-x-2">
-                  <Button variant="outline" onClick={() => setIsSettingsOpen(false)} className="flex-1">
-                    {t('cancel')}
-                  </Button>
-                  <Button 
-                    onClick={handleSettingsUpdate}
-                    disabled={dueDateMode === 'period' ? !selectedDate : !selectedDueDate}
-                    className="flex-1 bg-pink-600 hover:bg-pink-700"
-                  >
-                    {t('update')}
-                  </Button>
                 </div>
-              </div>
-            </DialogContent>
-          </Dialog>
-        </div>
-
-        <Tabs defaultValue="dashboard" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 mb-6 bg-white border-b border-gray-200 rounded-none p-0 h-auto">
-            <TabsTrigger value="dashboard" className="flex items-center gap-2 border-b-2 border-transparent data-[state=active]:border-pink-500 data-[state=active]:bg-transparent bg-transparent rounded-none py-3 px-4 text-gray-600 data-[state=active]:text-pink-600">
-              <Heart className="w-5 h-5" />
-              {t('dashboard')}
-            </TabsTrigger>
-            <TabsTrigger value="weekly" className="flex items-center gap-2 border-b-2 border-transparent data-[state=active]:border-pink-500 data-[state=active]:bg-transparent bg-transparent rounded-none py-3 px-4 text-gray-600 data-[state=active]:text-pink-600">
-              <Baby className="w-5 h-5" />
-              {t('weeklyInfo')}
-            </TabsTrigger>
-            <TabsTrigger value="community" className="flex items-center gap-2 border-b-2 border-transparent data-[state=active]:border-pink-500 data-[state=active]:bg-transparent bg-transparent rounded-none py-3 px-4 text-gray-600 data-[state=active]:text-pink-600">
-              <Users className="w-5 h-5" />
-              {t('community')}
-            </TabsTrigger>
-          </TabsList>
+              </DialogContent>
+            </Dialog>
+          </div>
 
           {pregnancyInfo && (
             <div className="mb-6">
