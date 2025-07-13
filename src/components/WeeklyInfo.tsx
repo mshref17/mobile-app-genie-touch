@@ -93,11 +93,72 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
     
     const baseData = weeklyData[closestWeek.toString()];
     
+    // Create week-specific data based on trimester and stage
+    const getWeekSpecificData = (weekNumber: number) => {
+      if (weekNumber <= 12) {
+        // First trimester
+        return {
+          developments: [
+            `Major organ development continues in week ${weekNumber}`,
+            "Neural tube and brain development progressing",
+            "Heart begins to beat more regularly",
+            "Limb buds are forming and growing"
+          ],
+          momTips: [
+            "Take prenatal vitamins daily",
+            "Stay hydrated and eat small frequent meals",
+            "Get plenty of rest and avoid stress",
+            "Schedule regular prenatal checkups"
+          ]
+        };
+      } else if (weekNumber <= 28) {
+        // Second trimester
+        return {
+          developments: [
+            `Baby is growing rapidly in week ${weekNumber}`,
+            "Muscles and bones are strengthening",
+            "Baby can hear sounds from outside",
+            "Movement becomes more coordinated",
+            "Facial features are becoming clearer"
+          ],
+          momTips: [
+            "Enjoy increased energy levels",
+            "Start preparing the nursery",
+            "Consider prenatal yoga or gentle exercise",
+            "Begin thinking about baby names",
+            "Track baby's movements"
+          ]
+        };
+      } else {
+        // Third trimester
+        return {
+          developments: [
+            `Baby is preparing for birth in week ${weekNumber}`,
+            "Lungs are maturing for breathing",
+            "Brain development continues rapidly",
+            "Baby is gaining weight steadily",
+            "Getting into head-down position"
+          ],
+          momTips: [
+            "Pack your hospital bag",
+            "Practice breathing techniques",
+            "Get plenty of rest when possible",
+            "Stay active with gentle walks",
+            "Prepare for labor and delivery"
+          ]
+        };
+      }
+    };
+    
+    const weekSpecificData = getWeekSpecificData(week);
+    
     // Create generic data for the selected week
     return {
       ...baseData,
       title: `${t('week')} ${week}`,
-      description: `${t('pregnancyProgressWeek')} ${week}.`
+      description: `${t('pregnancyProgressWeek')} ${week}.`,
+      developments: weekSpecificData.developments,
+      momTips: weekSpecificData.momTips
     };
   };
 
