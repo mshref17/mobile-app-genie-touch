@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import ultrasoundWeek8 from "@/assets/ultrasound-week-8.jpg";
 import ultrasoundWeek12 from "@/assets/ultrasound-week-12.jpg";
 import ultrasoundWeek20 from "@/assets/ultrasound-week-20.jpg";
+import { loadBabySizeImage, getFallbackFruitEmoji } from "@/utils/imageLoader";
 
 interface WeeklyInfoProps {
   currentWeek: number;
@@ -28,6 +29,7 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
   const { language, t } = useLanguage();
   const [weeklyData, setWeeklyData] = useState<Record<string, WeekData>>({});
   const [selectedWeek, setSelectedWeek] = useState(currentWeek);
+  const [babySizeImage, setBabySizeImage] = useState<string | null>(null);
 
   useEffect(() => {
     const loadWeeklyData = async () => {
@@ -51,6 +53,18 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
   useEffect(() => {
     setSelectedWeek(currentWeek);
   }, [currentWeek]);
+
+  // Load baby size image when selectedWeek changes
+  useEffect(() => {
+    const loadImage = async () => {
+      if (selectedWeek > 0) {
+        const image = await loadBabySizeImage(selectedWeek);
+        setBabySizeImage(image);
+      }
+    };
+    
+    loadImage();
+  }, [selectedWeek]);
 
   // Find the closest week data for selected week
   const availableWeeks = Object.keys(weeklyData).map(Number).sort((a, b) => a - b);
@@ -217,11 +231,17 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
         </CardHeader>
         <CardContent>
           <div className="flex items-center space-x-4">
-            <img 
-              src={weekData.image} 
-              alt={weekData.babySize}
-              className="w-24 h-24 rounded-lg object-cover"
-            />
+            {babySizeImage ? (
+              <img 
+                src={babySizeImage} 
+                alt={weekData.babySize}
+                className="w-24 h-24 rounded-lg object-cover border-2 border-pink-200 animate-fade-in"
+              />
+            ) : (
+              <div className="w-24 h-24 rounded-lg bg-gradient-to-br from-pink-100 to-purple-100 flex items-center justify-center border-2 border-pink-200">
+                <span className="text-4xl">{getFallbackFruitEmoji(selectedWeek)}</span>
+              </div>
+            )}
             <div>
               <h3 className="text-xl font-semibold text-pink-600">{weekData.babySize}</h3>
               <p className="text-gray-600">{weekData.sizeDescription}</p>
