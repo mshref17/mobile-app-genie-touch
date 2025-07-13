@@ -423,51 +423,6 @@ const Index = () => {
 
                 <DailyTip currentDay={pregnancyInfo.totalDays} />
 
-                {/* Baby Development Card */}
-                <Card className="overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-100 border-0 shadow-lg">
-                  <CardHeader className="pb-4">
-                    <CardTitle className="flex items-center gap-3 text-indigo-800">
-                      <div className="p-2 bg-indigo-100 rounded-full">
-                        <Baby className="w-5 h-5 text-indigo-600" />
-                      </div>
-                      Your Baby This Week
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-4">
-                        <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4">
-                          <h4 className="font-semibold text-indigo-700 mb-2">Size Comparison</h4>
-                          <p className="text-gray-700">
-                            {pregnancyInfo.weeksPregnant < 8 ? "🫐 Blueberry" :
-                             pregnancyInfo.weeksPregnant < 12 ? "🍓 Strawberry" :
-                             pregnancyInfo.weeksPregnant < 16 ? "🍋 Lemon" :
-                             pregnancyInfo.weeksPregnant < 20 ? "🍌 Banana" :
-                             pregnancyInfo.weeksPregnant < 24 ? "🥭 Mango" :
-                             pregnancyInfo.weeksPregnant < 28 ? "🥥 Coconut" :
-                             pregnancyInfo.weeksPregnant < 32 ? "🍍 Pineapple" :
-                             pregnancyInfo.weeksPregnant < 36 ? "🎃 Pumpkin" : "🍉 Watermelon"}
-                          </p>
-                        </div>
-                        <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4">
-                          <h4 className="font-semibold text-indigo-700 mb-2">Development</h4>
-                          <p className="text-gray-700 text-sm">
-                            {pregnancyInfo.weeksPregnant < 12 ? "Major organs are forming" :
-                             pregnancyInfo.weeksPregnant < 20 ? "Baby is moving and growing rapidly" :
-                             pregnancyInfo.weeksPregnant < 28 ? "Baby can hear your voice" :
-                             pregnancyInfo.weeksPregnant < 36 ? "Baby is gaining weight" : "Baby is ready to meet you!"}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex items-center justify-center">
-                        <div className="w-32 h-32 bg-gradient-to-br from-pink-200 to-purple-200 rounded-full flex items-center justify-center shadow-lg">
-                          <Baby className="w-16 h-16 text-pink-600" />
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
                 {/* Quick Stats Grid */}
                 <div className="grid grid-cols-2 gap-4">
                   <Card className="bg-gradient-to-br from-pink-50 to-rose-100 border-0 shadow-md">
