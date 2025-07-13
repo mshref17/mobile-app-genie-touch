@@ -14,6 +14,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { LanguageToggle } from "@/components/LanguageToggle";
 import WeeklyInfo from "@/components/WeeklyInfo";
 import Community from "@/components/Community";
+import DailyTip from "@/components/DailyTip";
 
 const Index = () => {
   const { t } = useLanguage();
@@ -328,6 +329,7 @@ const Index = () => {
           <TabsContent value="dashboard" className="space-y-6">
             {pregnancyInfo && (
               <>
+                <DailyTip currentDay={pregnancyInfo.totalDays} />
                 <Card>
                   <CardHeader>
                     <CardTitle className="text-pink-800">Pregnancy Overview</CardTitle>

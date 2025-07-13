@@ -12,7 +12,9 @@
     "community": "Community",
     "language": "Language",
     "english": "English",
-    "arabic": "العربية"
+    "arabic": "العربية",
+    "dailyTip": "Daily Tip",
+    "day": "Day"
   },
   "ar": {
     "weeklyInformation": "المعلومات الأسبوعية",
@@ -27,6 +29,8 @@
     "community": "المجتمع",
     "language": "اللغة",
     "english": "English",
-    "arabic": "العربية"
+    "arabic": "العربية",
+    "dailyTip": "نصيحة يومية",
+    "day": "يوم"
   }
 }
