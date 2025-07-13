@@ -214,7 +214,7 @@ const Index = () => {
         <div className="flex items-center justify-between mb-4 -mx-4 px-4 py-3 bg-white/80 backdrop-blur-sm border-b">
           <div className="flex items-center gap-3">
             <img src={appLogo} alt="App Logo" className="w-8 h-8 rounded-lg" />
-            <h1 className="text-xl font-semibold text-gray-800">Pregnancy Tracker</h1>
+            <h1 className="text-xl font-semibold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">Pregnancy Tracker</h1>
           </div>
           <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
             <DialogTrigger asChild>
@@ -360,16 +360,13 @@ const Index = () => {
 
         <Tabs defaultValue="dashboard" className="w-full">
           <TabsList className="grid grid-cols-3 bg-white border-b border-gray-200 rounded-none p-0 h-auto">
-            <TabsTrigger value="dashboard" className="flex items-center gap-2 border-b-2 border-transparent data-[state=active]:border-pink-500 data-[state=active]:bg-transparent bg-transparent rounded-none py-3 px-4 text-gray-600 data-[state=active]:text-pink-600">
-              <Heart className="w-5 h-5" />
+            <TabsTrigger value="dashboard" className="border-b-2 border-transparent data-[state=active]:border-pink-500 data-[state=active]:bg-transparent bg-transparent rounded-none py-3 px-4 text-gray-600 data-[state=active]:text-pink-600">
               {t('dashboard')}
             </TabsTrigger>
-            <TabsTrigger value="weekly" className="flex items-center gap-2 border-b-2 border-transparent data-[state=active]:border-pink-500 data-[state=active]:bg-transparent bg-transparent rounded-none py-3 px-4 text-gray-600 data-[state=active]:text-pink-600">
-              <Baby className="w-5 h-5" />
+            <TabsTrigger value="weekly" className="border-b-2 border-transparent data-[state=active]:border-pink-500 data-[state=active]:bg-transparent bg-transparent rounded-none py-3 px-4 text-gray-600 data-[state=active]:text-pink-600">
               {t('weeklyInfo')}
             </TabsTrigger>
-            <TabsTrigger value="community" className="flex items-center gap-2 border-b-2 border-transparent data-[state=active]:border-pink-500 data-[state=active]:bg-transparent bg-transparent rounded-none py-3 px-4 text-gray-600 data-[state=active]:text-pink-600">
-              <Users className="w-5 h-5" />
+            <TabsTrigger value="community" className="border-b-2 border-transparent data-[state=active]:border-pink-500 data-[state=active]:bg-transparent bg-transparent rounded-none py-3 px-4 text-gray-600 data-[state=active]:text-pink-600">
               {t('community')}
             </TabsTrigger>
           </TabsList>
