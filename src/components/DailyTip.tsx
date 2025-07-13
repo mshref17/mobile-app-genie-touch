@@ -53,7 +53,7 @@ const DailyTip = ({ currentDay }: DailyTipProps) => {
       <Card className="relative bg-white/95 backdrop-blur-md rounded-2xl border-0 shadow-xl overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500"></div>
         
-        <CardHeader className="pb-4 pt-6">
+        <CardHeader className="pb-6 pt-6">
           <div className="flex items-start gap-4">
             <div className="flex-shrink-0">
               <div className="relative">
@@ -67,21 +67,18 @@ const DailyTip = ({ currentDay }: DailyTipProps) => {
             </div>
             
             <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 mb-1">
+              <div className="flex items-center gap-2 mb-4">
                 <h3 className="text-lg font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
                   {t('dailyTip')}
                 </h3>
                 <div className="flex-1 h-px bg-gradient-to-r from-pink-200 to-transparent"></div>
               </div>
+              <p className="text-gray-700 leading-relaxed text-base font-medium italic">
+                "{dailyTip}"
+              </p>
             </div>
           </div>
         </CardHeader>
-        
-        <CardContent className="pt-0 pb-6">
-          <p className="text-gray-700 leading-relaxed text-base font-medium italic">
-            "{dailyTip}"
-          </p>
-        </CardContent>
       </Card>
     </div>
   );
