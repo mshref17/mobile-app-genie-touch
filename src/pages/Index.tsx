@@ -450,68 +450,73 @@ const Index = () => {
                   </Card>
                 </div>
 
-                {/* Upcoming Milestones */}
-                <Card className="bg-gradient-to-br from-orange-50 to-yellow-100 border-0 shadow-lg">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-3 text-orange-800">
-                      <div className="p-2 bg-orange-100 rounded-full">
-                        <Star className="w-5 h-5 text-orange-600" />
+                {/* Milestones & Due Date Row */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Upcoming Milestones */}
+                  <Card className="bg-gradient-to-br from-orange-50 to-yellow-100 border-0 shadow-lg">
+                    <CardHeader className="pb-4">
+                      <CardTitle className="flex items-center gap-3 text-orange-800">
+                        <div className="p-2 bg-orange-100 rounded-full">
+                          <Star className="w-5 h-5 text-orange-600" />
+                        </div>
+                        Upcoming Milestones
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-3">
+                        {pregnancyInfo.weeksPregnant < 20 && (
+                          <div className="flex items-center gap-3 p-3 bg-white/70 rounded-lg">
+                            <Gift className="w-5 h-5 text-orange-600" />
+                            <div>
+                              <div className="font-medium text-orange-700">Anatomy Scan</div>
+                              <div className="text-sm text-gray-600">Week 18-22</div>
+                            </div>
+                          </div>
+                        )}
+                        {pregnancyInfo.weeksPregnant < 28 && (
+                          <div className="flex items-center gap-3 p-3 bg-white/70 rounded-lg">
+                            <Heart className="w-5 h-5 text-orange-600" />
+                            <div>
+                              <div className="font-medium text-orange-700">Third Trimester</div>
+                              <div className="text-sm text-gray-600">Week 28</div>
+                            </div>
+                          </div>
+                        )}
+                        {pregnancyInfo.weeksPregnant < 36 && (
+                          <div className="flex items-center gap-3 p-3 bg-white/70 rounded-lg">
+                            <Baby className="w-5 h-5 text-orange-600" />
+                            <div>
+                              <div className="font-medium text-orange-700">Baby is Full Term</div>
+                              <div className="text-sm text-gray-600">Week 37</div>
+                            </div>
+                          </div>
+                        )}
                       </div>
-                      Upcoming Milestones
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-3">
-                      {pregnancyInfo.weeksPregnant < 20 && (
-                        <div className="flex items-center gap-3 p-3 bg-white/70 rounded-lg">
-                          <Gift className="w-5 h-5 text-orange-600" />
-                          <div>
-                            <div className="font-medium text-orange-700">Anatomy Scan</div>
-                            <div className="text-sm text-gray-600">Week 18-22</div>
-                          </div>
-                        </div>
-                      )}
-                      {pregnancyInfo.weeksPregnant < 28 && (
-                        <div className="flex items-center gap-3 p-3 bg-white/70 rounded-lg">
-                          <Heart className="w-5 h-5 text-orange-600" />
-                          <div>
-                            <div className="font-medium text-orange-700">Third Trimester</div>
-                            <div className="text-sm text-gray-600">Week 28</div>
-                          </div>
-                        </div>
-                      )}
-                      {pregnancyInfo.weeksPregnant < 36 && (
-                        <div className="flex items-center gap-3 p-3 bg-white/70 rounded-lg">
-                          <Baby className="w-5 h-5 text-orange-600" />
-                          <div>
-                            <div className="font-medium text-orange-700">Baby is Full Term</div>
-                            <div className="text-sm text-gray-600">Week 37</div>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
+                    </CardContent>
+                  </Card>
 
-                {/* Due Date Card */}
-                <Card className="bg-gradient-to-br from-emerald-50 to-teal-100 border-0 shadow-lg">
-                  <CardContent className="p-6">
-                    <div className="text-center">
-                      <div className="flex items-center justify-center mb-3">
-                        <div className="p-3 bg-emerald-100 rounded-full">
-                          <CalendarDays className="w-6 h-6 text-emerald-600" />
+                  {/* Due Date Card */}
+                  <Card className="bg-gradient-to-br from-emerald-50 to-teal-100 border-0 shadow-lg">
+                    <CardHeader className="pb-4">
+                      <CardTitle className="flex items-center gap-3 text-emerald-800">
+                        <div className="p-2 bg-emerald-100 rounded-full">
+                          <CalendarDays className="w-5 h-5 text-emerald-600" />
+                        </div>
+                        Expected Due Date
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-emerald-700 mb-1">
+                          {format(pregnancyInfo.dueDate, "EEEE")}
+                        </div>
+                        <div className="text-xl text-emerald-600">
+                          {format(pregnancyInfo.dueDate, "MMMM d, yyyy")}
                         </div>
                       </div>
-                      <h3 className="text-lg font-semibold text-emerald-800 mb-2">Expected Due Date</h3>
-                      <div className="text-2xl font-bold text-emerald-700 mb-1">
-                        {format(pregnancyInfo.dueDate, "EEEE")}
-                      </div>
-                      <div className="text-xl text-emerald-600">
-                        {format(pregnancyInfo.dueDate, "MMMM d, yyyy")}
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                    </CardContent>
+                  </Card>
+                </div>
               </>
             )}
           </TabsContent>
