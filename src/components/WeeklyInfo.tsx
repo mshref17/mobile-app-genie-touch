@@ -180,7 +180,7 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
   return (
     <div className="space-y-6">
       {/* Week Navigation Header - Sticky */}
-      <div className="sticky top-16 z-20 bg-gradient-to-b from-pink-50 to-purple-50 py-4 -mx-4 px-4 flex items-center justify-between">
+      <div className="sticky top-16 z-20 bg-gradient-to-b from-pink-50 to-purple-50 pb-4 -mx-4 px-4 flex items-center justify-between">
         <Button
           variant="ghost"
           size="lg"
@@ -192,13 +192,13 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
         </Button>
 
         <div className="flex flex-col items-center">
-          <Badge variant="secondary" className="bg-pink-100 text-pink-800 mb-2 px-6 py-2 text-xl font-semibold">
+          <Badge variant="secondary" className="bg-pink-100 text-pink-800 px-6 py-2 text-xl font-semibold">
             {t('week')} {selectedWeek}
           </Badge>
           {selectedWeek === currentWeek ? (
-            <span className="text-sm text-pink-600 font-medium">{t('currentWeek')}</span>
+            <span className="text-xs text-pink-600 font-medium mt-1">{t('currentWeek')}</span>
           ) : (
-            <span className="text-sm text-gray-500">
+            <span className="text-xs text-gray-500 mt-1">
               {selectedWeek < currentWeek ? t('previousWeek') : t('upcomingWeek')}
             </span>
           )}
