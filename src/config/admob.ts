@@ -1,15 +1,15 @@
-// AdMob Configuration
+// AdMob Configuration with Google's Official Test IDs
 export const ADMOB_CONFIG = {
-  // Replace with your actual AdMob IDs when ready
+  // Google's official test App IDs
   APP_ID: {
-    ios: 'ca-app-pub-3940256099942544~1458002511', // Test App ID for iOS
-    android: 'ca-app-pub-3940256099942544~3347511713', // Test App ID for Android
+    ios: 'ca-app-pub-3940256099942544~1458002511', // Google Test App ID for iOS
+    android: 'ca-app-pub-3940256099942544~3347511713', // Google Test App ID for Android
   },
   INTERSTITIAL_AD_ID: {
-    ios: 'ca-app-pub-3940256099942544/4411468910', // Test Interstitial Ad ID for iOS
-    android: 'ca-app-pub-3940256099942544/1033173712', // Test Interstitial Ad ID for Android
+    ios: 'ca-app-pub-3940256099942544/4411468910', // Google Test Interstitial Ad ID for iOS
+    android: 'ca-app-pub-3940256099942544/1033173712', // Google Test Interstitial Ad ID for Android
   },
-  // Set to true to use test ads, false for production
+  // Using test ads - change to false when you add your real AdMob IDs
   USE_TEST_ADS: true,
   // Ad frequency settings
   AD_FREQUENCY: {

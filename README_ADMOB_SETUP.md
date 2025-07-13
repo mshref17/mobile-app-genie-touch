@@ -1,17 +1,25 @@
 # AdMob Setup Instructions
 
+## Current Status
+✅ **Currently using Google's official test AdMob IDs**
+- These test ads are safe to use and will show test advertisements
+- No revenue will be generated (this is expected for test ads)
+- When you're ready for production, follow the steps below
+
 ## Configuration
 
-The AdMob configuration is located in `src/config/admob.ts`. You need to replace the test IDs with your actual AdMob IDs.
+The AdMob configuration is located in `src/config/admob.ts`. Currently using test IDs.
 
-### Step 1: Get Your AdMob IDs
+### When Ready for Production:
+
+#### Step 1: Get Your AdMob IDs
 
 1. Go to [AdMob Console](https://apps.admob.com/)
 2. Create a new app or select existing app
 3. Get your App ID and create an Interstitial Ad Unit
 4. Copy the IDs
 
-### Step 2: Update Configuration
+#### Step 2: Update Configuration
 
 Edit `src/config/admob.ts` and replace the test IDs:
 
