@@ -54,11 +54,6 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
 
   // Find the closest week data for selected week
   const availableWeeks = Object.keys(weeklyData).map(Number).sort((a, b) => a - b);
-  const closestWeek = availableWeeks.length > 0 
-    ? availableWeeks.reduce((prev, curr) => 
-        Math.abs(curr - selectedWeek) < Math.abs(prev - selectedWeek) ? curr : prev
-      )
-    : 4;
 
   // Navigation handlers
   const handlePreviousWeek = () => {
@@ -81,7 +76,32 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
     return null;
   };
 
-  const weekData = weeklyData[closestWeek.toString()];
+  // Get week data - use exact week if available, otherwise create generic data
+  const getWeekData = (week: number): WeekData | null => {
+    // Try to get exact week data first
+    if (weeklyData[week.toString()]) {
+      return weeklyData[week.toString()];
+    }
+    
+    // If no exact data, find closest week for base information
+    const availableWeeks = Object.keys(weeklyData).map(Number).sort((a, b) => a - b);
+    if (availableWeeks.length === 0) return null;
+    
+    const closestWeek = availableWeeks.reduce((prev, curr) => 
+      Math.abs(curr - week) < Math.abs(prev - week) ? curr : prev
+    );
+    
+    const baseData = weeklyData[closestWeek.toString()];
+    
+    // Create generic data for the selected week
+    return {
+      ...baseData,
+      title: `${t('week')} ${week}`,
+      description: `${t('pregnancyProgressWeek')} ${week}.`
+    };
+  };
+
+  const weekData = getWeekData(selectedWeek);
 
   if (currentWeek === 0 || !weekData) {
     return (

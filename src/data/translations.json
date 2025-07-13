@@ -35,7 +35,8 @@
     "pregnancyGuide": "Pregnancy Guide",
     "currentWeek": "Current Week",
     "previousWeek": "Previous Week",
-    "upcomingWeek": "Upcoming Week"
+    "upcomingWeek": "Upcoming Week",
+    "pregnancyProgressWeek": "You are in week"
   },
   "ar": {
     "weeklyInformation": "المعلومات الأسبوعية",
@@ -73,6 +74,7 @@
     "pregnancyGuide": "دليل حملي",
     "currentWeek": "الأسبوع الحالي",
     "previousWeek": "أسبوع سابق",
-    "upcomingWeek": "أسبوع قادم"
+    "upcomingWeek": "أسبوع قادم",
+    "pregnancyProgressWeek": "أنت في الأسبوع"
   }
 }
