@@ -13,8 +13,8 @@ export const ADMOB_CONFIG = {
   USE_TEST_ADS: true,
   // Ad frequency settings
   AD_FREQUENCY: {
-    // Show ad every X tab switches
-    TAB_SWITCH_FREQUENCY: 3,
+    // Show ad every X tab switches - set to 1 for testing
+    TAB_SWITCH_FREQUENCY: 1,
   }
 };
 

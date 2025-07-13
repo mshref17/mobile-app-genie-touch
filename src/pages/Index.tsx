@@ -110,10 +110,15 @@ const Index = () => {
 
   // Handle tab changes with AdMob interstitial ads
   const handleTabChange = async (newTab: string) => {
+    console.log('Tab change:', currentTab, '->', newTab);
+    
     // Only show ads when switching between dashboard and weekly tabs
     if ((currentTab === 'dashboard' && newTab === 'weekly') || 
         (currentTab === 'weekly' && newTab === 'dashboard')) {
+      console.log('Tab switch qualifies for ad, calling showInterstitialOnTabSwitch');
       await admobService.showInterstitialOnTabSwitch();
+    } else {
+      console.log('Tab switch does not qualify for ad');
     }
     setCurrentTab(newTab);
   };
@@ -251,6 +256,16 @@ const Index = () => {
                   <Settings className="h-5 w-5 text-gray-600 hover:text-pink-600" />
                 </Button>
               </DialogTrigger>
+              
+              {/* Test Ad Button - Remove in production */}
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={() => admobService.forceShowAd()}
+                className="ml-2 text-xs"
+              >
+                Test Ad
+              </Button>
               <DialogContent className="sm:max-w-md">
                 <DialogHeader>
                   <DialogTitle>{t('settings')}</DialogTitle>
