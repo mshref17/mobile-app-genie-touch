@@ -11,7 +11,7 @@ import { CalendarIcon, Baby, Users, Heart, Settings } from "lucide-react";
 import { format, addDays, differenceInDays, differenceInWeeks, subDays } from "date-fns";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { LanguageToggle } from "@/components/LanguageToggle";
+
 import WeeklyInfo from "@/components/WeeklyInfo";
 import Community from "@/components/Community";
 import DailyTip from "@/components/DailyTip";
@@ -19,7 +19,7 @@ import NotificationSettings from "@/components/NotificationSettings";
 import { NotificationService } from "@/lib/notifications";
 
 const Index = () => {
-  const { t } = useLanguage();
+  const { t, language, setLanguage } = useLanguage();
   const [lastPeriodDate, setLastPeriodDate] = useState<Date | null>(null);
   const [isFirstTime, setIsFirstTime] = useState(true);
   const [selectedDate, setSelectedDate] = useState<Date>();
@@ -204,14 +204,12 @@ const Index = () => {
     );
   }
 
-  const { language } = useLanguage();
+  
   
   return (
     <div className={`min-h-screen bg-gradient-to-b from-pink-50 to-purple-50 safe-area-full ${language === 'ar' ? 'rtl' : 'ltr'}`}>
       <div className="container mx-auto p-4 max-w-4xl">
-        <div className="mb-6 flex justify-between items-start">
-          <LanguageToggle />
-          
+        <div className="mb-6 flex justify-end">
           <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
             <DialogTrigger asChild>
               <Button variant="outline" size="icon">
@@ -226,6 +224,29 @@ const Index = () => {
                 </DialogDescription>
               </DialogHeader>
               <div className="space-y-6">
+                {/* Language Settings */}
+                <div className="space-y-3">
+                  <h4 className="text-sm font-medium">{t('language')}</h4>
+                  <div className="flex gap-2">
+                    <Button
+                      variant={language === 'en' ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => setLanguage('en')}
+                      className="flex-1"
+                    >
+                      {t('english')}
+                    </Button>
+                    <Button
+                      variant={language === 'ar' ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => setLanguage('ar')}
+                      className="flex-1"
+                    >
+                      {t('arabic')}
+                    </Button>
+                  </div>
+                </div>
+
                 <div className="space-y-4">
                   <h4 className="text-sm font-medium">{t('pregnancyDates')}</h4>
                   <div className="flex space-x-2">
