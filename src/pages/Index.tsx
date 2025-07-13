@@ -17,6 +17,7 @@ import Community from "@/components/Community";
 import DailyTip from "@/components/DailyTip";
 import NotificationSettings from "@/components/NotificationSettings";
 import { NotificationService } from "@/lib/notifications";
+import appLogo from "@/assets/app-logo.png";
 
 const Index = () => {
   const { t, language, setLanguage } = useLanguage();
@@ -211,7 +212,10 @@ const Index = () => {
       <div className="container mx-auto p-4 max-w-4xl">
         {/* App Header Bar */}
         <div className="flex items-center justify-between mb-4 -mx-4 px-4 py-3 bg-white/80 backdrop-blur-sm border-b">
-          <h1 className="text-xl font-semibold text-gray-800">Pregnancy Tracker</h1>
+          <div className="flex items-center gap-3">
+            <img src={appLogo} alt="App Logo" className="w-8 h-8 rounded-lg" />
+            <h1 className="text-xl font-semibold text-gray-800">Pregnancy Tracker</h1>
+          </div>
           <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
             <DialogTrigger asChild>
               <Button variant="ghost" size="icon" className="hover:bg-pink-50">
