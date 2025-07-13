@@ -54,39 +54,4 @@ export const getFallbackFruitEmoji = (week: number): string => {
   return fruits[week % fruits.length];
 };
 
-// Dynamic ultrasound image loader
-const getUltrasoundImage = async (week: number): Promise<string | null> => {
-  try {
-    const extensions = ['jpg', 'jpeg', 'png', 'webp'];
-    
-    for (const ext of extensions) {
-      try {
-        const image = await import(`@/assets/ultrasounds/baby${week}.${ext}`);
-        return image.default;
-      } catch (error) {
-        continue;
-      }
-    }
-    
-    return null;
-  } catch (error) {
-    console.log(`No ultrasound image found for week ${week}`);
-    return null;
-  }
-};
-
-// Ultrasound image cache
-const ultrasoundCache: Record<number, string | null> = {};
-
-export const loadUltrasoundImage = async (week: number): Promise<string | null> => {
-  if (ultrasoundCache[week] !== undefined) {
-    return ultrasoundCache[week];
-  }
-  
-  const image = await getUltrasoundImage(week);
-  ultrasoundCache[week] = image;
-  
-  return image;
-};
-
 export default loadBabySizeImage;

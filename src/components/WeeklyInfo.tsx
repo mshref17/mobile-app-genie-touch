@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import ultrasoundWeek8 from "@/assets/ultrasound-week-8.jpg";
 import ultrasoundWeek12 from "@/assets/ultrasound-week-12.jpg";
 import ultrasoundWeek20 from "@/assets/ultrasound-week-20.jpg";
-import { loadBabySizeImage, getFallbackFruitEmoji, loadUltrasoundImage } from "@/utils/imageLoader";
+import { loadBabySizeImage, getFallbackFruitEmoji } from "@/utils/imageLoader";
 
 interface WeeklyInfoProps {
   currentWeek: number;
@@ -30,7 +30,6 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
   const [weeklyData, setWeeklyData] = useState<Record<string, WeekData>>({});
   const [selectedWeek, setSelectedWeek] = useState(currentWeek);
   const [babySizeImage, setBabySizeImage] = useState<string | null>(null);
-  const [ultrasoundImage, setUltrasoundImage] = useState<string | null>(null);
 
   useEffect(() => {
     const loadWeeklyData = async () => {
@@ -55,19 +54,16 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
     setSelectedWeek(currentWeek);
   }, [currentWeek]);
 
-  // Load baby size and ultrasound images when selectedWeek changes
+  // Load baby size image when selectedWeek changes
   useEffect(() => {
-    const loadImages = async () => {
+    const loadImage = async () => {
       if (selectedWeek > 0) {
-        const babySizeImg = await loadBabySizeImage(selectedWeek);
-        setBabySizeImage(babySizeImg);
-        
-        const ultrasoundImg = await loadUltrasoundImage(selectedWeek);
-        setUltrasoundImage(ultrasoundImg);
+        const image = await loadBabySizeImage(selectedWeek);
+        setBabySizeImage(image);
       }
     };
     
-    loadImages();
+    loadImage();
   }, [selectedWeek]);
 
   // Find the closest week data for selected week
@@ -260,10 +256,10 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
             <CardTitle className="text-pink-800">{t('babyDevelopment')}</CardTitle>
           </CardHeader>
           <CardContent>
-            {ultrasoundImage && (
+            {getUltrasoundImage(selectedWeek) && (
               <div className="mb-4">
                 <img 
-                  src={ultrasoundImage}
+                  src={getUltrasoundImage(selectedWeek) || ''}
                   alt={`Ultrasound at week ${selectedWeek}`}
                   className="w-full max-w-md mx-auto rounded-lg border-2 border-gray-200 mb-3"
                 />
