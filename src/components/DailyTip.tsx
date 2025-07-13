@@ -73,9 +73,6 @@ const DailyTip = ({ currentDay }: DailyTipProps) => {
                 </h3>
                 <div className="flex-1 h-px bg-gradient-to-r from-pink-200 to-transparent"></div>
               </div>
-              <p className="text-sm text-gray-500 font-medium">
-                {t('day')} {currentDay} • {new Date().toLocaleDateString()}
-              </p>
             </div>
           </div>
         </CardHeader>
