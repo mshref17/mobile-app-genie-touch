@@ -179,45 +179,37 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
 
   return (
     <div className="space-y-6">
-      {/* Week Navigation Header - Sticky */}
-      <div className="sticky top-16 z-20 bg-gradient-to-b from-pink-50 to-purple-50 pb-4 -mx-4 px-4 flex items-center justify-between">
+      {/* Week Navigation Header - Compact */}
+      <div className="sticky top-16 z-20 bg-gradient-to-b from-pink-50 to-purple-50 py-2 -mx-4 px-4 flex items-center justify-between">
         <Button
           variant="ghost"
-          size="lg"
+          size="sm"
           onClick={handlePreviousWeek}
           disabled={selectedWeek <= 1}
-          className="h-16 w-16 bg-white rounded-full shadow-lg hover:shadow-xl disabled:opacity-30 disabled:cursor-not-allowed"
+          className="h-10 w-10 bg-white rounded-full shadow hover:shadow-md disabled:opacity-30 disabled:cursor-not-allowed"
         >
-          <ChevronLeft className="h-8 w-8 text-pink-600" />
+          <ChevronLeft className="h-5 w-5 text-pink-600" />
         </Button>
 
         <div className="flex flex-col items-center">
-          <Badge variant="secondary" className="bg-pink-100 text-pink-800 px-6 py-2 text-xl font-semibold">
+          <Badge variant="secondary" className="bg-pink-100 text-pink-800 px-4 py-1 text-lg font-semibold">
             {t('week')} {selectedWeek}
+            {selectedWeek === currentWeek && (
+              <span className="text-xs ml-1">({t('currentWeek')})</span>
+            )}
           </Badge>
-          {selectedWeek === currentWeek && (
-            <span className="text-xs text-pink-600 font-medium mt-1">({t('currentWeek')})</span>
-          )}
         </div>
 
         <Button
           variant="ghost"
-          size="lg"
+          size="sm"
           onClick={handleNextWeek}
           disabled={selectedWeek >= 40}
-          className="h-16 w-16 bg-white rounded-full shadow-lg hover:shadow-xl disabled:opacity-30 disabled:cursor-not-allowed"
+          className="h-10 w-10 bg-white rounded-full shadow hover:shadow-md disabled:opacity-30 disabled:cursor-not-allowed"
         >
-          <ChevronRight className="h-8 w-8 text-pink-600" />
+          <ChevronRight className="h-5 w-5 text-pink-600" />
         </Button>
       </div>
-
-      {/* Week Information */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-pink-800">{weekData.title}</CardTitle>
-          <CardDescription>{weekData.description}</CardDescription>
-        </CardHeader>
-      </Card>
 
       <Card>
         <CardHeader>
