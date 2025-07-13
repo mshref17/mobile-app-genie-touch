@@ -1,124 +1,34 @@
 {
   "tips": [
-    {
-      "day": 1,
-      "tip": "Start taking folic acid supplements if you haven't already. It's crucial for your baby's neural development."
-    },
-    {
-      "day": 2,
-      "tip": "Begin tracking your symptoms and mood. This information will be valuable for your healthcare provider."
-    },
-    {
-      "day": 3,
-      "tip": "Stay hydrated by drinking at least 8 glasses of water daily. Your body needs extra fluids during pregnancy."
-    },
-    {
-      "day": 4,
-      "tip": "Avoid alcohol completely. Even small amounts can affect your developing baby."
-    },
-    {
-      "day": 5,
-      "tip": "Start eating more protein-rich foods. Your body needs extra protein for your growing baby."
-    },
-    {
-      "day": 6,
-      "tip": "Get plenty of rest. Your body is working hard to support your pregnancy."
-    },
-    {
-      "day": 7,
-      "tip": "Schedule your first prenatal appointment. Early prenatal care is essential for a healthy pregnancy."
-    },
-    {
-      "day": 8,
-      "tip": "Avoid smoking and secondhand smoke. Both can harm your developing baby."
-    },
-    {
-      "day": 9,
-      "tip": "Take a daily prenatal vitamin with folic acid, iron, and calcium."
-    },
-    {
-      "day": 10,
-      "tip": "Limit caffeine intake to less than 200mg per day (about one cup of coffee)."
-    },
-    {
-      "day": 11,
-      "tip": "Start gentle exercise like walking or prenatal yoga if approved by your doctor."
-    },
-    {
-      "day": 12,
-      "tip": "Eat small, frequent meals to help with morning sickness and maintain energy levels."
-    },
-    {
-      "day": 13,
-      "tip": "Keep crackers by your bedside to help with morning nausea."
-    },
-    {
-      "day": 14,
-      "tip": "Discuss any medications you're taking with your healthcare provider."
-    },
-    {
-      "day": 15,
-      "tip": "Start documenting your pregnancy journey with photos or a journal."
-    },
-    {
-      "day": 16,
-      "tip": "Wear comfortable, supportive shoes as your body begins to change."
-    },
-    {
-      "day": 17,
-      "tip": "Practice deep breathing exercises to help manage stress and anxiety."
-    },
-    {
-      "day": 18,
-      "tip": "Stock up on healthy snacks like nuts, fruits, and yogurt."
-    },
-    {
-      "day": 19,
-      "tip": "Get enough sleep - aim for 7-9 hours per night."
-    },
-    {
-      "day": 20,
-      "tip": "Start researching childbirth classes in your area."
-    },
-    {
-      "day": 21,
-      "tip": "Talk to your partner about your feelings and expectations about pregnancy."
-    },
-    {
-      "day": 22,
-      "tip": "Avoid raw or undercooked meats, eggs, and seafood to prevent foodborne illness."
-    },
-    {
-      "day": 23,
-      "tip": "Keep a water bottle with you to stay hydrated throughout the day."
-    },
-    {
-      "day": 24,
-      "tip": "Consider joining a prenatal support group or online community."
-    },
-    {
-      "day": 25,
-      "tip": "Start using fragrance-free lotions to keep your skin moisturized."
-    },
-    {
-      "day": 26,
-      "tip": "Eat foods rich in iron like lean meats, spinach, and beans."
-    },
-    {
-      "day": 27,
-      "tip": "Practice good dental hygiene - pregnancy can affect your gums."
-    },
-    {
-      "day": 28,
-      "tip": "Take time to relax and de-stress each day."
-    },
-    {
-      "day": 29,
-      "tip": "Wear sunscreen to protect against pregnancy-related skin changes."
-    },
-    {
-      "day": 30,
-      "tip": "Stay positive and celebrate this amazing journey you're on!"
-    }
+    { "day": 1, "tip": "Start taking prenatal vitamins with folic acid to support your baby's development." },
+    { "day": 2, "tip": "Stay hydrated by drinking plenty of water throughout the day." },
+    { "day": 3, "tip": "Eat small, frequent meals to help manage morning sickness." },
+    { "day": 4, "tip": "Get enough rest - your body is working hard to grow your baby." },
+    { "day": 5, "tip": "Start a pregnancy journal to document this special journey." },
+    { "day": 6, "tip": "Avoid alcohol, smoking, and limit caffeine intake." },
+    { "day": 7, "tip": "Schedule your first prenatal appointment with your healthcare provider." },
+    { "day": 8, "tip": "Listen to your body and rest when you feel tired." },
+    { "day": 9, "tip": "Include protein-rich foods in every meal for healthy development." },
+    { "day": 10, "tip": "Practice gentle exercises like walking or prenatal yoga." },
+    { "day": 11, "tip": "Connect with other expecting mothers for support and advice." },
+    { "day": 12, "tip": "Read books about pregnancy and childbirth to prepare yourself." },
+    { "day": 13, "tip": "Take time for self-care and relaxation." },
+    { "day": 14, "tip": "Discuss any concerns or questions with your healthcare provider." },
+    { "day": 15, "tip": "Start thinking about baby names - it's never too early!" },
+    { "day": 16, "tip": "Eat calcium-rich foods to support your baby's bone development." },
+    { "day": 17, "tip": "Practice deep breathing exercises to reduce stress." },
+    { "day": 18, "tip": "Stay active with safe, pregnancy-approved exercises." },
+    { "day": 19, "tip": "Plan healthy meals and snacks for the week ahead." },
+    { "day": 20, "tip": "Take photos to document your changing body." },
+    { "day": 21, "tip": "Get plenty of sleep - aim for 7-9 hours per night." },
+    { "day": 22, "tip": "Talk to your baby - they can hear your voice!" },
+    { "day": 23, "tip": "Research baby gear and create a registry." },
+    { "day": 24, "tip": "Practice prenatal massage or ask your partner to help." },
+    { "day": 25, "tip": "Stay positive and enjoy this special time." },
+    { "day": 26, "tip": "Prepare your home for baby's arrival gradually." },
+    { "day": 27, "tip": "Learn about breastfeeding and childbirth classes." },
+    { "day": 28, "tip": "Trust your instincts and listen to your body." },
+    { "day": 29, "tip": "Celebrate each milestone in your pregnancy journey." },
+    { "day": 30, "tip": "Remember that every pregnancy is unique and beautiful." }
   ]
 }
