@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { CalendarIcon, Baby, Users, Heart, Settings, CalendarDays, Clock, Star, Gift, ToggleLeft, ToggleRight } from "lucide-react";
+import { CalendarIcon, Baby, Users, Heart, Settings, CalendarDays, Clock, Star, Gift } from "lucide-react";
 import { format, addDays, differenceInDays, differenceInWeeks, subDays } from "date-fns";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -26,7 +26,6 @@ const Index = () => {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [selectedDueDate, setSelectedDueDate] = useState<Date>();
   const [dueDateMode, setDueDateMode] = useState<'period' | 'duedate'>('period');
-  const [isHijriDate, setIsHijriDate] = useState(false);
 
   useEffect(() => {
     const savedDate = localStorage.getItem('lastPeriodDate');
@@ -98,49 +97,6 @@ const Index = () => {
 
   const calculatePregnancyInfo = () => {
     return calculatePregnancyInfoForDate(lastPeriodDate);
-  };
-
-  // Convert Gregorian date to Hijri
-  const toHijri = (date: Date) => {
-    // Simple Hijri conversion (approximation)
-    // This is a basic conversion - for more accuracy, you'd use a proper Hijri library
-    const HIJRI_OFFSET = 227015; // Approximate difference in days
-    const MS_PER_DAY = 24 * 60 * 60 * 1000;
-    const hijriMs = date.getTime() - (HIJRI_OFFSET * MS_PER_DAY);
-    const hijriDate = new Date(hijriMs);
-    
-    // Hijri months names
-    const hijriMonths = [
-      'محرم', 'صفر', 'ربيع الأول', 'ربيع الثاني', 'جمادى الأولى', 'جمادى الثانية',
-      'رجب', 'شعبان', 'رمضان', 'شوال', 'ذو القعدة', 'ذو الحجة'
-    ];
-    
-    // This is a simplified calculation - real Hijri conversion is more complex
-    const hijriYear = Math.floor(hijriDate.getFullYear() + 579); // Approximate offset
-    const hijriMonth = hijriDate.getMonth();
-    const hijriDay = hijriDate.getDate();
-    
-    return {
-      day: hijriDay,
-      month: hijriMonths[hijriMonth],
-      year: hijriYear,
-      formatted: `${hijriDay} ${hijriMonths[hijriMonth]} ${hijriYear} هـ`
-    };
-  };
-
-  const formatDueDate = (date: Date) => {
-    if (isHijriDate) {
-      const hijri = toHijri(date);
-      return {
-        dayName: format(date, "EEEE"),
-        fullDate: hijri.formatted
-      };
-    } else {
-      return {
-        dayName: format(date, "EEEE"),
-        fullDate: format(date, "MMMM d, yyyy")
-      };
-    }
   };
 
   const pregnancyInfo = calculatePregnancyInfo();
@@ -483,44 +439,20 @@ const Index = () => {
                 {/* Due Date Card */}
                 <Card className="bg-gradient-to-br from-emerald-50 to-teal-100 border-0 shadow-lg">
                   <CardHeader className="pb-4">
-                    <CardTitle className="flex items-center gap-3 text-emerald-800 mb-3">
+                    <CardTitle className="flex items-center gap-3 text-emerald-800">
                       <div className="p-2 bg-emerald-100 rounded-full">
                         <CalendarDays className="w-5 h-5 text-emerald-600" />
                       </div>
                       Expected Due Date
                     </CardTitle>
-                    <div className="flex items-center justify-center">
-                      <div className="flex bg-white/70 rounded-lg p-1">
-                        <button
-                          onClick={() => setIsHijriDate(false)}
-                          className={`px-3 py-1 rounded-md text-sm font-medium transition-all ${
-                            !isHijriDate 
-                              ? 'bg-emerald-500 text-white shadow-sm' 
-                              : 'text-emerald-700 hover:bg-emerald-100'
-                          }`}
-                        >
-                          Gregorian
-                        </button>
-                        <button
-                          onClick={() => setIsHijriDate(true)}
-                          className={`px-3 py-1 rounded-md text-sm font-medium transition-all ${
-                            isHijriDate 
-                              ? 'bg-emerald-500 text-white shadow-sm' 
-                              : 'text-emerald-700 hover:bg-emerald-100'
-                          }`}
-                        >
-                          Hijri
-                        </button>
-                      </div>
-                    </div>
                   </CardHeader>
                   <CardContent>
                     <div className="text-center">
                       <div className="text-2xl font-bold text-emerald-700 mb-1">
-                        {formatDueDate(pregnancyInfo.dueDate).dayName}
+                        {format(pregnancyInfo.dueDate, "EEEE")}
                       </div>
                       <div className="text-xl text-emerald-600">
-                        {formatDueDate(pregnancyInfo.dueDate).fullDate}
+                        {format(pregnancyInfo.dueDate, "MMMM d, yyyy")}
                       </div>
                     </div>
                   </CardContent>
