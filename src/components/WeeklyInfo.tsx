@@ -3,6 +3,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useEffect, useState } from "react";
+import ultrasoundWeek8 from "@/assets/ultrasound-week-8.jpg";
+import ultrasoundWeek12 from "@/assets/ultrasound-week-12.jpg";
+import ultrasoundWeek20 from "@/assets/ultrasound-week-20.jpg";
 
 interface WeeklyInfoProps {
   currentWeek: number;
@@ -16,6 +19,7 @@ interface WeekData {
   developments: string[];
   momTips: string[];
   image: string;
+  ultrasoundImage?: string;
 }
 
 const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
@@ -47,6 +51,14 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
         Math.abs(curr - currentWeek) < Math.abs(prev - currentWeek) ? curr : prev
       )
     : 4;
+
+  // Get ultrasound image for the week
+  const getUltrasoundImage = (week: number) => {
+    if (week >= 8 && week < 12) return ultrasoundWeek8;
+    if (week >= 12 && week < 20) return ultrasoundWeek12;
+    if (week >= 20) return ultrasoundWeek20;
+    return null;
+  };
 
   const weekData = weeklyData[closestWeek.toString()];
 
@@ -107,6 +119,16 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
             <CardTitle className="text-pink-800">{t('babyDevelopment')}</CardTitle>
           </CardHeader>
           <CardContent>
+            {getUltrasoundImage(currentWeek) && (
+              <div className="mb-4">
+                <img 
+                  src={getUltrasoundImage(currentWeek) || ''}
+                  alt={`Ultrasound at week ${currentWeek}`}
+                  className="w-full max-w-md mx-auto rounded-lg border-2 border-gray-200 mb-3"
+                />
+                <p className="text-xs text-gray-500 text-center">Ultrasound image for week {currentWeek}</p>
+              </div>
+            )}
             <ul className="space-y-2">
               {weekData.developments.map((item, index) => (
                 <li key={index} className="flex items-start">
