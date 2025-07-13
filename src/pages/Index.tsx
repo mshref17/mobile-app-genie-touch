@@ -213,7 +213,7 @@ const Index = () => {
           <div className="absolute top-0 left-0">
             <LanguageToggle />
           </div>
-          <h1 className="text-3xl font-bold text-pink-800 mb-2">Your Pregnancy Journey</h1>
+          <h1 className="text-3xl font-bold text-pink-800 mb-2">{t('pregnancyGuide')}</h1>
           
           <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
             <DialogTrigger asChild>
