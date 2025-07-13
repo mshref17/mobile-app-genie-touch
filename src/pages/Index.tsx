@@ -483,20 +483,35 @@ const Index = () => {
                 {/* Due Date Card */}
                 <Card className="bg-gradient-to-br from-emerald-50 to-teal-100 border-0 shadow-lg">
                   <CardHeader className="pb-4">
-                    <div className="flex items-center justify-between">
-                      <CardTitle className="flex items-center gap-3 text-emerald-800">
-                        <div className="p-2 bg-emerald-100 rounded-full">
-                          <CalendarDays className="w-5 h-5 text-emerald-600" />
-                        </div>
-                        Expected Due Date
-                      </CardTitle>
-                      <button
-                        onClick={() => setIsHijriDate(!isHijriDate)}
-                        className="flex items-center gap-2 text-sm text-emerald-700 hover:text-emerald-800 transition-colors"
-                      >
-                        {isHijriDate ? <ToggleRight className="w-4 h-4" /> : <ToggleLeft className="w-4 h-4" />}
-                        {isHijriDate ? 'هجري' : 'Hijri'}
-                      </button>
+                    <CardTitle className="flex items-center gap-3 text-emerald-800 mb-3">
+                      <div className="p-2 bg-emerald-100 rounded-full">
+                        <CalendarDays className="w-5 h-5 text-emerald-600" />
+                      </div>
+                      Expected Due Date
+                    </CardTitle>
+                    <div className="flex items-center justify-center">
+                      <div className="flex bg-white/70 rounded-lg p-1">
+                        <button
+                          onClick={() => setIsHijriDate(false)}
+                          className={`px-3 py-1 rounded-md text-sm font-medium transition-all ${
+                            !isHijriDate 
+                              ? 'bg-emerald-500 text-white shadow-sm' 
+                              : 'text-emerald-700 hover:bg-emerald-100'
+                          }`}
+                        >
+                          Gregorian
+                        </button>
+                        <button
+                          onClick={() => setIsHijriDate(true)}
+                          className={`px-3 py-1 rounded-md text-sm font-medium transition-all ${
+                            isHijriDate 
+                              ? 'bg-emerald-500 text-white shadow-sm' 
+                              : 'text-emerald-700 hover:bg-emerald-100'
+                          }`}
+                        >
+                          Hijri
+                        </button>
+                      </div>
                     </div>
                   </CardHeader>
                   <CardContent>
