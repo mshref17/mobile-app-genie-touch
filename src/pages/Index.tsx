@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { CalendarIcon, Baby, Users, Heart, Settings } from "lucide-react";
+import { CalendarIcon, Baby, Users, Heart, Settings, CalendarDays, Clock, Star, Gift } from "lucide-react";
 import { format, addDays, differenceInDays, differenceInWeeks, subDays } from "date-fns";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -385,55 +385,174 @@ const Index = () => {
           <TabsContent value="dashboard" className="space-y-6">
             {pregnancyInfo && (
               <>
-                <DailyTip currentDay={pregnancyInfo.totalDays} />
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-pink-800">Pregnancy Overview</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="text-center p-4 bg-pink-100 rounded-lg">
-                        <div className="text-3xl font-bold text-pink-600">
-                          {pregnancyInfo.weeksPregnant}
-                        </div>
-                        <div className="text-sm text-pink-700">Weeks Pregnant</div>
-                        <div className="text-xs text-pink-600">
-                          +{pregnancyInfo.daysInCurrentWeek} days
+                {/* Hero Section with Baby Bump Progress */}
+                <div className="relative overflow-hidden bg-gradient-to-br from-pink-100 via-purple-100 to-indigo-100 rounded-3xl p-6 mb-6">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-pink-200/30 rounded-full -translate-y-16 translate-x-16"></div>
+                  <div className="absolute bottom-0 left-0 w-24 h-24 bg-purple-200/30 rounded-full translate-y-12 -translate-x-12"></div>
+                  
+                  <div className="relative z-10">
+                    <div className="text-center mb-6">
+                      <h2 className="text-3xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent mb-2">
+                        Week {pregnancyInfo.weeksPregnant}
+                      </h2>
+                      <p className="text-gray-600 text-lg">
+                        {pregnancyInfo.daysRemaining} days until you meet your baby
+                      </p>
+                    </div>
+                    
+                    {/* Pregnancy Progress Visualization */}
+                    <div className="relative">
+                      <div className="w-full bg-white/50 rounded-full h-4 mb-4">
+                        <div 
+                          className="bg-gradient-to-r from-pink-500 to-purple-500 h-4 rounded-full transition-all duration-1000 relative overflow-hidden"
+                          style={{ width: `${Math.min((pregnancyInfo.weeksPregnant / 40) * 100, 100)}%` }}
+                        >
+                          <div className="absolute inset-0 bg-white/30 animate-pulse"></div>
                         </div>
                       </div>
-                      <div className="text-center p-4 bg-purple-100 rounded-lg">
-                        <div className="text-3xl font-bold text-purple-600">
-                          {pregnancyInfo.daysRemaining}
+                      <div className="flex justify-between text-sm text-gray-600">
+                        <span>Week 1</span>
+                        <span className="font-semibold text-pink-600">
+                          {Math.round((pregnancyInfo.weeksPregnant / 40) * 100)}% Complete
+                        </span>
+                        <span>Week 40</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <DailyTip currentDay={pregnancyInfo.totalDays} />
+
+                {/* Baby Development Card */}
+                <Card className="overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-100 border-0 shadow-lg">
+                  <CardHeader className="pb-4">
+                    <CardTitle className="flex items-center gap-3 text-indigo-800">
+                      <div className="p-2 bg-indigo-100 rounded-full">
+                        <Baby className="w-5 h-5 text-indigo-600" />
+                      </div>
+                      Your Baby This Week
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-4">
+                        <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4">
+                          <h4 className="font-semibold text-indigo-700 mb-2">Size Comparison</h4>
+                          <p className="text-gray-700">
+                            {pregnancyInfo.weeksPregnant < 8 ? "🫐 Blueberry" :
+                             pregnancyInfo.weeksPregnant < 12 ? "🍓 Strawberry" :
+                             pregnancyInfo.weeksPregnant < 16 ? "🍋 Lemon" :
+                             pregnancyInfo.weeksPregnant < 20 ? "🍌 Banana" :
+                             pregnancyInfo.weeksPregnant < 24 ? "🥭 Mango" :
+                             pregnancyInfo.weeksPregnant < 28 ? "🥥 Coconut" :
+                             pregnancyInfo.weeksPregnant < 32 ? "🍍 Pineapple" :
+                             pregnancyInfo.weeksPregnant < 36 ? "🎃 Pumpkin" : "🍉 Watermelon"}
+                          </p>
                         </div>
-                        <div className="text-sm text-purple-700">Days to Go</div>
+                        <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4">
+                          <h4 className="font-semibold text-indigo-700 mb-2">Development</h4>
+                          <p className="text-gray-700 text-sm">
+                            {pregnancyInfo.weeksPregnant < 12 ? "Major organs are forming" :
+                             pregnancyInfo.weeksPregnant < 20 ? "Baby is moving and growing rapidly" :
+                             pregnancyInfo.weeksPregnant < 28 ? "Baby can hear your voice" :
+                             pregnancyInfo.weeksPregnant < 36 ? "Baby is gaining weight" : "Baby is ready to meet you!"}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-center">
+                        <div className="w-32 h-32 bg-gradient-to-br from-pink-200 to-purple-200 rounded-full flex items-center justify-center shadow-lg">
+                          <Baby className="w-16 h-16 text-pink-600" />
+                        </div>
                       </div>
                     </div>
                   </CardContent>
                 </Card>
 
-                <Card>
+                {/* Quick Stats Grid */}
+                <div className="grid grid-cols-2 gap-4">
+                  <Card className="bg-gradient-to-br from-pink-50 to-rose-100 border-0 shadow-md">
+                    <CardContent className="p-4 text-center">
+                      <div className="flex items-center justify-center mb-2">
+                        <CalendarDays className="w-6 h-6 text-pink-600" />
+                      </div>
+                      <div className="text-2xl font-bold text-pink-700">
+                        {pregnancyInfo.weeksPregnant}w {pregnancyInfo.daysInCurrentWeek}d
+                      </div>
+                      <div className="text-sm text-pink-600">Weeks + Days</div>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="bg-gradient-to-br from-purple-50 to-indigo-100 border-0 shadow-md">
+                    <CardContent className="p-4 text-center">
+                      <div className="flex items-center justify-center mb-2">
+                        <Clock className="w-6 h-6 text-purple-600" />
+                      </div>
+                      <div className="text-2xl font-bold text-purple-700">
+                        {pregnancyInfo.daysRemaining}
+                      </div>
+                      <div className="text-sm text-purple-600">Days Left</div>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                {/* Upcoming Milestones */}
+                <Card className="bg-gradient-to-br from-orange-50 to-yellow-100 border-0 shadow-lg">
                   <CardHeader>
-                    <CardTitle className="text-pink-800">Important Dates</CardTitle>
+                    <CardTitle className="flex items-center gap-3 text-orange-800">
+                      <div className="p-2 bg-orange-100 rounded-full">
+                        <Star className="w-5 h-5 text-orange-600" />
+                      </div>
+                      Upcoming Milestones
+                    </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-3">
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Due Date:</span>
-                        <span className="font-semibold text-pink-600">
-                          {format(pregnancyInfo.dueDate, "PPP")}
-                        </span>
+                      {pregnancyInfo.weeksPregnant < 20 && (
+                        <div className="flex items-center gap-3 p-3 bg-white/70 rounded-lg">
+                          <Gift className="w-5 h-5 text-orange-600" />
+                          <div>
+                            <div className="font-medium text-orange-700">Anatomy Scan</div>
+                            <div className="text-sm text-gray-600">Week 18-22</div>
+                          </div>
+                        </div>
+                      )}
+                      {pregnancyInfo.weeksPregnant < 28 && (
+                        <div className="flex items-center gap-3 p-3 bg-white/70 rounded-lg">
+                          <Heart className="w-5 h-5 text-orange-600" />
+                          <div>
+                            <div className="font-medium text-orange-700">Third Trimester</div>
+                            <div className="text-sm text-gray-600">Week 28</div>
+                          </div>
+                        </div>
+                      )}
+                      {pregnancyInfo.weeksPregnant < 36 && (
+                        <div className="flex items-center gap-3 p-3 bg-white/70 rounded-lg">
+                          <Baby className="w-5 h-5 text-orange-600" />
+                          <div>
+                            <div className="font-medium text-orange-700">Baby is Full Term</div>
+                            <div className="text-sm text-gray-600">Week 37</div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Due Date Card */}
+                <Card className="bg-gradient-to-br from-emerald-50 to-teal-100 border-0 shadow-lg">
+                  <CardContent className="p-6">
+                    <div className="text-center">
+                      <div className="flex items-center justify-center mb-3">
+                        <div className="p-3 bg-emerald-100 rounded-full">
+                          <CalendarDays className="w-6 h-6 text-emerald-600" />
+                        </div>
                       </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Days Pregnant:</span>
-                        <span className="font-semibold text-purple-600">
-                          {pregnancyInfo.totalDays} days
-                        </span>
+                      <h3 className="text-lg font-semibold text-emerald-800 mb-2">Expected Due Date</h3>
+                      <div className="text-2xl font-bold text-emerald-700 mb-1">
+                        {format(pregnancyInfo.dueDate, "EEEE")}
                       </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Current Week:</span>
-                        <span className="font-semibold text-pink-600">
-                          {pregnancyInfo.weeksPregnant} of 40 weeks
-                        </span>
+                      <div className="text-xl text-emerald-600">
+                        {format(pregnancyInfo.dueDate, "MMMM d, yyyy")}
                       </div>
                     </div>
                   </CardContent>
