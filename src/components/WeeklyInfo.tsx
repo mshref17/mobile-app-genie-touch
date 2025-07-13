@@ -259,10 +259,7 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-purple-800 flex items-center gap-2">
-              <Baby className="h-5 w-5" />
-              {t('tipsForMom')}
-            </CardTitle>
+            <CardTitle className="text-purple-800">{t('tipsForMom')}</CardTitle>
           </CardHeader>
           <CardContent>
             <ul className="space-y-2">
