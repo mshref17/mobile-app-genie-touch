@@ -110,9 +110,9 @@ const Index = () => {
             <div className="mx-auto mb-4 w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center">
               <Baby className="w-8 h-8 text-pink-600" />
             </div>
-            <CardTitle className="text-2xl text-pink-800">Welcome to Your Pregnancy Journey</CardTitle>
+            <CardTitle className="text-2xl text-pink-800">{t('welcomeTitle')}</CardTitle>
             <CardDescription>
-              Choose how you'd like to start tracking your pregnancy
+              {t('welcomeDescription')}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
@@ -123,20 +123,20 @@ const Index = () => {
                   onClick={() => setDueDateMode('period')}
                   className="flex-1"
                 >
-                  Last Period Date
+                  {t('lastPeriodOption')}
                 </Button>
                 <Button
                   variant={dueDateMode === 'duedate' ? 'default' : 'outline'}
                   onClick={() => setDueDateMode('duedate')}
                   className="flex-1"
                 >
-                  Due Date
+                  {t('dueDateOption')}
                 </Button>
               </div>
 
               {dueDateMode === 'period' ? (
                 <div className="space-y-2">
-                  <Label htmlFor="last-period">First day of last period</Label>
+                  <Label htmlFor="last-period">{t('firstDayLastPeriod')}</Label>
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button
@@ -147,7 +147,7 @@ const Index = () => {
                         )}
                       >
                         <CalendarIcon className="mr-2 h-4 w-4" />
-                        {selectedDate ? format(selectedDate, "PPP") : "Select date"}
+                        {selectedDate ? format(selectedDate, "PPP") : t('selectDate')}
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
@@ -164,7 +164,7 @@ const Index = () => {
                 </div>
               ) : (
                 <div className="space-y-2">
-                  <Label htmlFor="due-date">Expected due date</Label>
+                  <Label htmlFor="due-date">{t('expectedDueDate')}</Label>
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button
@@ -175,7 +175,7 @@ const Index = () => {
                         )}
                       >
                         <CalendarIcon className="mr-2 h-4 w-4" />
-                        {selectedDueDate ? format(selectedDueDate, "PPP") : "Select due date"}
+                        {selectedDueDate ? format(selectedDueDate, "PPP") : t('selectDueDate')}
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
@@ -197,7 +197,7 @@ const Index = () => {
               disabled={dueDateMode === 'period' ? !selectedDate : !selectedDueDate}
               className="w-full bg-pink-600 hover:bg-pink-700"
             >
-              Start Tracking
+              {t('startTracking')}
             </Button>
           </CardContent>
         </Card>
@@ -213,8 +213,8 @@ const Index = () => {
         {/* App Header Bar */}
         <div className="flex items-center justify-between mb-4 -mx-4 px-4 py-3 bg-white/80 backdrop-blur-sm border-b">
           <div className="flex items-center gap-3">
-            <img src={appLogo} alt="App Logo" className="w-8 h-8 rounded-lg" />
-            <h1 className="text-xl font-semibold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">Pregnancy Tracker</h1>
+            <img src={appLogo} alt={t('appLogoAlt')} className="w-8 h-8 rounded-lg" />
+            <h1 className="text-xl font-semibold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">{t('appName')}</h1>
           </div>
           <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
             <DialogTrigger asChild>
@@ -382,10 +382,10 @@ const Index = () => {
                   <div className="relative z-10">
                     <div className="text-center mb-6">
                       <h2 className="text-3xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent mb-2">
-                        Week {pregnancyInfo.weeksPregnant}
+                        {t('week')} {pregnancyInfo.weeksPregnant}
                       </h2>
                       <p className="text-gray-600 text-lg">
-                        {pregnancyInfo.daysRemaining} days until you meet your baby
+                        {pregnancyInfo.daysRemaining} {t('daysUntilBaby')}
                       </p>
                     </div>
                     
@@ -400,11 +400,11 @@ const Index = () => {
                         </div>
                       </div>
                       <div className="flex justify-between text-sm text-gray-600">
-                        <span>Week 1</span>
+                        <span>{t('week')} 1</span>
                         <span className="font-semibold text-pink-600">
-                          {Math.round((pregnancyInfo.weeksPregnant / 40) * 100)}% Complete
+                          {Math.round((pregnancyInfo.weeksPregnant / 40) * 100)}% {t('progressCompleted')}
                         </span>
-                        <span>Week 40</span>
+                        <span>{t('week')} 40</span>
                       </div>
                     </div>
                   </div>
@@ -422,7 +422,7 @@ const Index = () => {
                       <div className="text-2xl font-bold text-pink-700">
                         {pregnancyInfo.weeksPregnant}w {pregnancyInfo.daysInCurrentWeek}d
                       </div>
-                      <div className="text-sm text-pink-600">Weeks + Days</div>
+                      <div className="text-sm text-pink-600">{t('yourProgressText')}</div>
                     </CardContent>
                   </Card>
 
@@ -434,7 +434,7 @@ const Index = () => {
                       <div className="text-2xl font-bold text-purple-700">
                         {pregnancyInfo.daysRemaining}
                       </div>
-                      <div className="text-sm text-purple-600">Days Left</div>
+                      <div className="text-sm text-purple-600">{t('daysLeft')}</div>
                     </CardContent>
                   </Card>
                 </div>
@@ -446,7 +446,7 @@ const Index = () => {
                       <div className="p-2 bg-emerald-100 rounded-full">
                         <CalendarDays className="w-5 h-5 text-emerald-600" />
                       </div>
-                      Expected Due Date
+                      {t('expectedDueDate')}
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
