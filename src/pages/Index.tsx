@@ -194,8 +194,10 @@ const Index = () => {
     <div className="min-h-screen bg-gradient-to-b from-pink-50 to-purple-50 safe-area-full">
       <div className="container mx-auto p-4 max-w-4xl">
         <div className="mb-6 text-center relative">
+          <div className="absolute top-0 left-0">
+            <LanguageToggle />
+          </div>
           <h1 className="text-3xl font-bold text-pink-800 mb-2">Your Pregnancy Journey</h1>
-          <p className="text-pink-600">Track your beautiful journey to motherhood</p>
           
           <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
             <DialogTrigger asChild>
@@ -305,11 +307,6 @@ const Index = () => {
           </Dialog>
         </div>
 
-        <div className="flex justify-between items-center mb-6">
-          <div></div>
-          <LanguageToggle />
-        </div>
-
         <Tabs defaultValue="dashboard" className="w-full">
           <TabsList className="grid w-full grid-cols-3 mb-6">
             <TabsTrigger value="dashboard" className="flex items-center gap-2">
@@ -325,6 +322,20 @@ const Index = () => {
               {t('community')}
             </TabsTrigger>
           </TabsList>
+
+          {pregnancyInfo && (
+            <div className="mb-6">
+              <div className="w-full bg-pink-200 rounded-full h-3 mb-2">
+                <div 
+                  className="bg-pink-600 h-3 rounded-full transition-all duration-500"
+                  style={{ width: `${Math.min((pregnancyInfo.weeksPregnant / 40) * 100, 100)}%` }}
+                ></div>
+              </div>
+              <p className="text-center text-sm text-pink-600">
+                {Math.round((pregnancyInfo.weeksPregnant / 40) * 100)}% Complete
+              </p>
+            </div>
+          )}
 
           <TabsContent value="dashboard" className="space-y-6">
             {pregnancyInfo && (
@@ -382,16 +393,6 @@ const Index = () => {
                     </div>
                   </CardContent>
                 </Card>
-
-                <div className="w-full bg-pink-200 rounded-full h-3">
-                  <div 
-                    className="bg-pink-600 h-3 rounded-full transition-all duration-500"
-                    style={{ width: `${Math.min((pregnancyInfo.weeksPregnant / 40) * 100, 100)}%` }}
-                  ></div>
-                </div>
-                <p className="text-center text-sm text-pink-600">
-                  {Math.round((pregnancyInfo.weeksPregnant / 40) * 100)}% Complete
-                </p>
               </>
             )}
           </TabsContent>
