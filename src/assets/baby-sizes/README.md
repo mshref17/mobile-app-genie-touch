@@ -1,23 +1,19 @@
 # Baby Size Images
 
-Place your baby size images in this folder with the following naming convention:
+Place your baby size images in this folder using the following naming convention:
 
-- week1.jpg (or .png, .jpeg, .webp)
-- week2.jpg
-- week3.jpg
-- ...
-- week40.jpg
+- `week1.jpg`, `week1.png`, `week1.webp` for week 1
+- `week2.jpg`, `week2.png`, `week2.webp` for week 2
+- ...and so on up to week 40
 
 ## Supported formats:
 - JPG/JPEG
-- PNG
-- WebP
+- PNG  
+- WEBP
 
-## Example filenames:
-- week24.jpg
-- week25.png
-- week26.webp
+## Example file names:
+- week12.jpg
+- week24.png
+- week36.webp
 
-The system will automatically detect and use your images based on the current pregnancy week.
-
-If no image is found for a specific week, a fallback fruit emoji will be displayed instead.
+The app will automatically detect and load these images based on the selected week.
