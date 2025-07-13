@@ -99,44 +99,40 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
   return (
     <div className="space-y-6">
       {/* Week Navigation Header */}
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={handlePreviousWeek}
-              disabled={selectedWeek <= 1}
-              className="h-10 w-10"
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </Button>
+      <div className="flex items-center justify-between px-4">
+        <Button
+          variant="ghost"
+          size="lg"
+          onClick={handlePreviousWeek}
+          disabled={selectedWeek <= 1}
+          className="h-16 w-16 bg-white rounded-full shadow-lg hover:shadow-xl disabled:opacity-30 disabled:cursor-not-allowed"
+        >
+          <ChevronLeft className="h-8 w-8 text-pink-600" />
+        </Button>
 
-            <div className="flex flex-col items-center">
-              <Badge variant="secondary" className="bg-pink-100 text-pink-800 mb-2 px-4 py-1 text-lg">
-                {t('week')} {selectedWeek}
-              </Badge>
-              {selectedWeek === currentWeek ? (
-                <span className="text-sm text-pink-600 font-medium">{t('currentWeek')}</span>
-              ) : (
-                <span className="text-sm text-gray-500">
-                  {selectedWeek < currentWeek ? t('previousWeek') : t('upcomingWeek')}
-                </span>
-              )}
-            </div>
+        <div className="flex flex-col items-center">
+          <Badge variant="secondary" className="bg-pink-100 text-pink-800 mb-2 px-6 py-2 text-xl font-semibold">
+            {t('week')} {selectedWeek}
+          </Badge>
+          {selectedWeek === currentWeek ? (
+            <span className="text-sm text-pink-600 font-medium">{t('currentWeek')}</span>
+          ) : (
+            <span className="text-sm text-gray-500">
+              {selectedWeek < currentWeek ? t('previousWeek') : t('upcomingWeek')}
+            </span>
+          )}
+        </div>
 
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={handleNextWeek}
-              disabled={selectedWeek >= 40}
-              className="h-10 w-10"
-            >
-              <ChevronRight className="h-4 w-4" />
-            </Button>
-          </div>
-        </CardHeader>
-      </Card>
+        <Button
+          variant="ghost"
+          size="lg"
+          onClick={handleNextWeek}
+          disabled={selectedWeek >= 40}
+          className="h-16 w-16 bg-white rounded-full shadow-lg hover:shadow-xl disabled:opacity-30 disabled:cursor-not-allowed"
+        >
+          <ChevronRight className="h-8 w-8 text-pink-600" />
+        </Button>
+      </div>
 
       {/* Week Information */}
       <Card>
