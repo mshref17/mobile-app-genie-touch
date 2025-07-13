@@ -5,10 +5,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, Baby } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useEffect, useState } from "react";
-import ultrasoundWeek8 from "@/assets/ultrasound-week-8.jpg";
-import ultrasoundWeek12 from "@/assets/ultrasound-week-12.jpg";
-import ultrasoundWeek20 from "@/assets/ultrasound-week-20.jpg";
-import { loadBabySizeImage, getFallbackFruitEmoji } from "@/utils/imageLoader";
+import { loadBabySizeImage, loadUltrasoundImage, getFallbackFruitEmoji } from "@/utils/imageLoader";
 
 interface WeeklyInfoProps {
   currentWeek: number;
@@ -30,6 +27,7 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
   const [weeklyData, setWeeklyData] = useState<Record<string, WeekData>>({});
   const [selectedWeek, setSelectedWeek] = useState(currentWeek);
   const [babySizeImage, setBabySizeImage] = useState<string | null>(null);
+  const [ultrasoundImage, setUltrasoundImage] = useState<string | null>(null);
 
   useEffect(() => {
     const loadWeeklyData = async () => {
@@ -66,8 +64,17 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
     loadImage();
   }, [selectedWeek]);
 
-  // Find the closest week data for selected week
-  const availableWeeks = Object.keys(weeklyData).map(Number).sort((a, b) => a - b);
+  // Load ultrasound image when selectedWeek changes
+  useEffect(() => {
+    const loadImage = async () => {
+      if (selectedWeek > 0) {
+        const image = await loadUltrasoundImage(selectedWeek);
+        setUltrasoundImage(image);
+      }
+    };
+    
+    loadImage();
+  }, [selectedWeek]);
 
   // Navigation handlers
   const handlePreviousWeek = () => {
@@ -80,14 +87,6 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
     if (selectedWeek < 40) {
       setSelectedWeek(selectedWeek + 1);
     }
-  };
-
-  // Get ultrasound image for the week
-  const getUltrasoundImage = (week: number) => {
-    if (week >= 8 && week < 12) return ultrasoundWeek8;
-    if (week >= 12 && week < 20) return ultrasoundWeek12;
-    if (week >= 20) return ultrasoundWeek20;
-    return null;
   };
 
   // Get week data - use exact week if available, otherwise create generic data
@@ -256,12 +255,12 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
             <CardTitle className="text-pink-800">{t('babyDevelopment')}</CardTitle>
           </CardHeader>
           <CardContent>
-            {getUltrasoundImage(selectedWeek) && (
+            {ultrasoundImage && (
               <div className="mb-4">
                 <img 
-                  src={getUltrasoundImage(selectedWeek) || ''}
+                  src={ultrasoundImage}
                   alt={`Ultrasound at week ${selectedWeek}`}
-                  className="w-full max-w-md mx-auto rounded-lg border-2 border-gray-200 mb-3"
+                  className="w-full max-w-md mx-auto rounded-lg border-2 border-gray-200 mb-3 animate-fade-in"
                 />
                 <p className="text-xs text-gray-500 text-center">Ultrasound image for week {selectedWeek}</p>
               </div>
