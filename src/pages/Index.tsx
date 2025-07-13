@@ -209,29 +209,15 @@ const Index = () => {
   return (
     <div className={`min-h-screen bg-gradient-to-b from-pink-50 to-purple-50 safe-area-full ${language === 'ar' ? 'rtl' : 'ltr'}`}>
       <div className="container mx-auto p-4 max-w-4xl">
-        <Tabs defaultValue="dashboard" className="w-full">
-          <div className="sticky top-0 z-10 bg-gradient-to-b from-pink-50 to-purple-50 pb-2 -mx-4 px-4 flex items-center justify-between mb-6">
-            <TabsList className="grid grid-cols-3 bg-white border-b border-gray-200 rounded-none p-0 h-auto flex-1">
-              <TabsTrigger value="dashboard" className="flex items-center gap-2 border-b-2 border-transparent data-[state=active]:border-pink-500 data-[state=active]:bg-transparent bg-transparent rounded-none py-3 px-4 text-gray-600 data-[state=active]:text-pink-600">
-                <Heart className="w-5 h-5" />
-                {t('dashboard')}
-              </TabsTrigger>
-              <TabsTrigger value="weekly" className="flex items-center gap-2 border-b-2 border-transparent data-[state=active]:border-pink-500 data-[state=active]:bg-transparent bg-transparent rounded-none py-3 px-4 text-gray-600 data-[state=active]:text-pink-600">
-                <Baby className="w-5 h-5" />
-                {t('weeklyInfo')}
-              </TabsTrigger>
-              <TabsTrigger value="community" className="flex items-center gap-2 border-b-2 border-transparent data-[state=active]:border-pink-500 data-[state=active]:bg-transparent bg-transparent rounded-none py-3 px-4 text-gray-600 data-[state=active]:text-pink-600">
-                <Users className="w-5 h-5" />
-                {t('community')}
-              </TabsTrigger>
-            </TabsList>
-            
-            <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
-              <DialogTrigger asChild>
-                <Button variant="ghost" size="icon" className="ml-2 border-b-2 border-transparent hover:border-pink-500 rounded-none py-3">
-                  <Settings className="h-5 w-5 text-gray-600 hover:text-pink-600" />
-                </Button>
-              </DialogTrigger>
+        {/* App Header Bar */}
+        <div className="flex items-center justify-between mb-4 -mx-4 px-4 py-3 bg-white/80 backdrop-blur-sm border-b">
+          <h1 className="text-xl font-semibold text-gray-800">Pregnancy Tracker</h1>
+          <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
+            <DialogTrigger asChild>
+              <Button variant="ghost" size="icon" className="hover:bg-pink-50">
+                <Settings className="h-5 w-5 text-gray-600 hover:text-pink-600" />
+              </Button>
+            </DialogTrigger>
               <DialogContent className="sm:max-w-md">
                 <DialogHeader>
                   <DialogTitle>{t('settings')}</DialogTitle>
@@ -366,7 +352,23 @@ const Index = () => {
                 </div>
               </DialogContent>
             </Dialog>
-          </div>
+        </div>
+
+        <Tabs defaultValue="dashboard" className="w-full">
+          <TabsList className="grid grid-cols-3 bg-white border-b border-gray-200 rounded-none p-0 h-auto">
+            <TabsTrigger value="dashboard" className="flex items-center gap-2 border-b-2 border-transparent data-[state=active]:border-pink-500 data-[state=active]:bg-transparent bg-transparent rounded-none py-3 px-4 text-gray-600 data-[state=active]:text-pink-600">
+              <Heart className="w-5 h-5" />
+              {t('dashboard')}
+            </TabsTrigger>
+            <TabsTrigger value="weekly" className="flex items-center gap-2 border-b-2 border-transparent data-[state=active]:border-pink-500 data-[state=active]:bg-transparent bg-transparent rounded-none py-3 px-4 text-gray-600 data-[state=active]:text-pink-600">
+              <Baby className="w-5 h-5" />
+              {t('weeklyInfo')}
+            </TabsTrigger>
+            <TabsTrigger value="community" className="flex items-center gap-2 border-b-2 border-transparent data-[state=active]:border-pink-500 data-[state=active]:bg-transparent bg-transparent rounded-none py-3 px-4 text-gray-600 data-[state=active]:text-pink-600">
+              <Users className="w-5 h-5" />
+              {t('community')}
+            </TabsTrigger>
+          </TabsList>
 
           <TabsContent value="dashboard" className="space-y-6">
             {pregnancyInfo && (
