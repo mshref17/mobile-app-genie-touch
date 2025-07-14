@@ -17,7 +17,7 @@ import Community from "@/components/Community";
 import DailyTip from "@/components/DailyTip";
 import NotificationSettings from "@/components/NotificationSettings";
 import { NotificationService } from "@/lib/notifications";
-import { AdMobBanner } from "@/components/AdMobBanner";
+
 import appLogo from "@/assets/app-logo.png";
 
 const Index = () => {
@@ -359,8 +359,6 @@ const Index = () => {
             </Dialog>
         </div>
 
-        {/* AdMob Banner */}
-        <AdMobBanner />
 
         <Tabs defaultValue="dashboard" className="w-full">
           <TabsList className="grid grid-cols-3 bg-white border-b border-gray-200 rounded-none p-0 h-auto">
