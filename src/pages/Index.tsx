@@ -118,22 +118,22 @@ const Index = () => {
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="space-y-4">
-              <div className="flex space-x-2">
-                <Button
-                  variant={dueDateMode === 'period' ? 'default' : 'outline'}
-                  onClick={() => setDueDateMode('period')}
-                  className="flex-1"
-                >
-                  {t('lastPeriodOption')}
-                </Button>
-                <Button
-                  variant={dueDateMode === 'duedate' ? 'default' : 'outline'}
-                  onClick={() => setDueDateMode('duedate')}
-                  className="flex-1"
-                >
-                  {t('dueDateOption')}
-                </Button>
-              </div>
+                      <div className="flex gap-2">
+                        <Button
+                          variant={dueDateMode === 'period' ? 'default' : 'outline'}
+                          onClick={() => setDueDateMode('period')}
+                          className="flex-1"
+                        >
+                          {t('lastPeriodOption')}
+                        </Button>
+                        <Button
+                          variant={dueDateMode === 'duedate' ? 'default' : 'outline'}
+                          onClick={() => setDueDateMode('duedate')}
+                          className="flex-1"
+                        >
+                          {t('dueDateOption')}
+                        </Button>
+                      </div>
 
               {dueDateMode === 'period' ? (
                 <div className="space-y-2">
@@ -147,7 +147,7 @@ const Index = () => {
                           !selectedDate && "text-muted-foreground"
                         )}
                       >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        <CalendarIcon className="me-2 h-4 w-4" />
                         {selectedDate ? format(selectedDate, "PPP") : t('selectDate')}
                       </Button>
                     </PopoverTrigger>
@@ -175,7 +175,7 @@ const Index = () => {
                           !selectedDueDate && "text-muted-foreground"
                         )}
                       >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        <CalendarIcon className="me-2 h-4 w-4" />
                         {selectedDueDate ? format(selectedDueDate, "PPP") : t('selectDueDate')}
                       </Button>
                     </PopoverTrigger>
@@ -257,7 +257,7 @@ const Index = () => {
 
                     <div className="space-y-4">
                       <h4 className="text-sm font-medium">{t('pregnancyDates')}</h4>
-                      <div className="flex space-x-2">
+                      <div className="flex gap-2">
                         <Button
                           variant={dueDateMode === 'period' ? 'default' : 'outline'}
                           onClick={() => setDueDateMode('period')}
@@ -286,7 +286,7 @@ const Index = () => {
                                   !selectedDate && "text-muted-foreground"
                                 )}
                               >
-                                <CalendarIcon className="mr-2 h-4 w-4" />
+                                <CalendarIcon className="me-2 h-4 w-4" />
                                 {selectedDate ? format(selectedDate, "PPP") : t('selectDate')}
                               </Button>
                             </PopoverTrigger>
@@ -314,7 +314,7 @@ const Index = () => {
                                   !selectedDueDate && "text-muted-foreground"
                                 )}
                               >
-                                <CalendarIcon className="mr-2 h-4 w-4" />
+                                <CalendarIcon className="me-2 h-4 w-4" />
                                 {selectedDueDate ? format(selectedDueDate, "PPP") : t('selectDueDate')}
                               </Button>
                             </PopoverTrigger>
@@ -343,7 +343,7 @@ const Index = () => {
                       </div>
                     )}
                     
-                    <div className="flex space-x-2">
+                    <div className="flex gap-2">
                       <Button variant="outline" onClick={() => setIsSettingsOpen(false)} className="flex-1">
                         {t('cancel')}
                       </Button>

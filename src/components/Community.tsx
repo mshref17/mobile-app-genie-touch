@@ -20,7 +20,7 @@ interface Post {
 }
 
 const Community = () => {
-  const { t } = useLanguage();
+  const { t, isRTL } = useLanguage();
   const [posts, setPosts] = useState<Post[]>([
     {
       id: '1',
@@ -116,8 +116,8 @@ const Community = () => {
             className="min-h-[100px]"
           />
           
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-2">
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
               <Input
                 type="file"
                 id="file-upload"
@@ -127,13 +127,13 @@ const Community = () => {
                 className="hidden"
               />
               <Label htmlFor="file-upload" className="cursor-pointer">
-                <div className="flex items-center space-x-2 px-3 py-2 border rounded-md hover:bg-gray-50">
+                <div className="flex items-center gap-2 px-3 py-2 border rounded-md hover:bg-gray-50">
                   <Camera className="w-4 h-4" />
                   <span className="text-sm">{t("photo")}</span>
                 </div>
               </Label>
               <Label htmlFor="file-upload" className="cursor-pointer">
-                <div className="flex items-center space-x-2 px-3 py-2 border rounded-md hover:bg-gray-50">
+                <div className="flex items-center gap-2 px-3 py-2 border rounded-md hover:bg-gray-50">
                   <Video className="w-4 h-4" />
                   <span className="text-sm">{t("video")}</span>
                 </div>
@@ -143,9 +143,9 @@ const Community = () => {
             <Button 
               onClick={handleSubmitPost}
               disabled={!newPost.trim()}
-              className="ml-auto bg-pink-600 hover:bg-pink-700"
+              className={`bg-pink-600 hover:bg-pink-700 ${isRTL ? 'mr-auto' : 'ml-auto'}`}
             >
-              <Send className="w-4 h-4 mr-2" />
+              <Send className={`w-4 h-4 ${isRTL ? 'ml-2' : 'mr-2'}`} />
               {t("share")}
             </Button>
           </div>
@@ -181,13 +181,13 @@ const Community = () => {
                 
                 <p className="text-gray-700">{post.content}</p>
                 
-                <div className="flex items-center space-x-4 pt-2">
+                <div className="flex items-center gap-4 pt-2">
                   <Button variant="ghost" size="sm" className="text-pink-600 hover:text-pink-700">
-                    <Heart className="w-4 h-4 mr-1" />
+                    <Heart className={`w-4 h-4 ${isRTL ? 'ml-1' : 'mr-1'}`} />
                     {post.likes}
                   </Button>
                   <Button variant="ghost" size="sm" className="text-purple-600 hover:text-purple-700">
-                    <MessageCircle className="w-4 h-4 mr-1" />
+                    <MessageCircle className={`w-4 h-4 ${isRTL ? 'ml-1' : 'mr-1'}`} />
                     {post.replies} {t("replies")}
                   </Button>
                 </div>
