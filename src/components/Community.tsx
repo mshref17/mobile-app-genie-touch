@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Heart, MessageCircle, Camera, Video, Send } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface Post {
   id: string;
@@ -19,6 +20,7 @@ interface Post {
 }
 
 const Community = () => {
+  const { t } = useLanguage();
   const [posts, setPosts] = useState<Post[]>([
     {
       id: '1',
@@ -26,7 +28,7 @@ const Community = () => {
       timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000), // 2 hours ago
       likes: 5,
       replies: 3,
-      category: "First Trimester"
+      category: t("firstTrimester")
     },
     {
       id: '2', 
@@ -34,7 +36,7 @@ const Community = () => {
       timestamp: new Date(Date.now() - 5 * 60 * 60 * 1000), // 5 hours ago
       likes: 8,
       replies: 7,
-      category: "Fitness"
+      category: t("fitness")
     }
   ]);
 
@@ -50,7 +52,7 @@ const Community = () => {
         timestamp: new Date(),
         likes: 0,
         replies: 0,
-        category: "General"
+        category: t("general")
       };
       
       setPosts([post, ...posts]);
@@ -58,8 +60,8 @@ const Community = () => {
       setSelectedFiles([]);
       
       toast({
-        title: "Post shared!",
-        description: "Your question has been posted to the community.",
+        title: t("postShared"),
+        description: t("postSharedDescription"),
       });
     }
   };
@@ -74,8 +76,8 @@ const Community = () => {
     
     if (validFiles.length !== files.length) {
       toast({
-        title: "Some files were skipped",
-        description: "Only images and videos under 10MB are allowed.",
+        title: t("filesSkipped"),
+        description: t("filesSkippedDescription"),
         variant: "destructive"
       });
     }
@@ -101,14 +103,14 @@ const Community = () => {
       {/* Create Post */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-pink-800">Share with the Community</CardTitle>
+          <CardTitle className="text-pink-800">{t("shareWithCommunity")}</CardTitle>
           <CardDescription>
-            Ask questions, share experiences, and connect with other expecting mothers
+            {t("communityDescription")}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <Textarea
-            placeholder="What would you like to ask or share with the community?"
+            placeholder={t("communityPlaceholder")}
             value={newPost}
             onChange={(e) => setNewPost(e.target.value)}
             className="min-h-[100px]"
@@ -127,13 +129,13 @@ const Community = () => {
               <Label htmlFor="file-upload" className="cursor-pointer">
                 <div className="flex items-center space-x-2 px-3 py-2 border rounded-md hover:bg-gray-50">
                   <Camera className="w-4 h-4" />
-                  <span className="text-sm">Photo</span>
+                  <span className="text-sm">{t("photo")}</span>
                 </div>
               </Label>
               <Label htmlFor="file-upload" className="cursor-pointer">
                 <div className="flex items-center space-x-2 px-3 py-2 border rounded-md hover:bg-gray-50">
                   <Video className="w-4 h-4" />
-                  <span className="text-sm">Video</span>
+                  <span className="text-sm">{t("video")}</span>
                 </div>
               </Label>
             </div>
@@ -144,7 +146,7 @@ const Community = () => {
               className="ml-auto bg-pink-600 hover:bg-pink-700"
             >
               <Send className="w-4 h-4 mr-2" />
-              Share
+              {t("share")}
             </Button>
           </div>
           
@@ -162,7 +164,7 @@ const Community = () => {
 
       {/* Posts Feed */}
       <div className="space-y-4">
-        <h3 className="text-xl font-semibold text-pink-800">Community Questions</h3>
+        <h3 className="text-xl font-semibold text-pink-800">{t("communityQuestions")}</h3>
         
         {posts.map((post) => (
           <Card key={post.id}>
@@ -186,7 +188,7 @@ const Community = () => {
                   </Button>
                   <Button variant="ghost" size="sm" className="text-purple-600 hover:text-purple-700">
                     <MessageCircle className="w-4 h-4 mr-1" />
-                    {post.replies} replies
+                    {post.replies} {t("replies")}
                   </Button>
                 </div>
               </div>
@@ -198,10 +200,9 @@ const Community = () => {
       {/* Firebase Setup Notice */}
       <Card className="border-yellow-200 bg-yellow-50">
         <CardHeader>
-          <CardTitle className="text-yellow-800">🔧 Setup Required</CardTitle>
+          <CardTitle className="text-yellow-800">{t("setupRequired")}</CardTitle>
           <CardDescription className="text-yellow-700">
-            To enable real-time community features, please provide your Firebase configuration. 
-            The community currently works with local data.
+            {t("firebaseSetupNotice")}
           </CardDescription>
         </CardHeader>
       </Card>
