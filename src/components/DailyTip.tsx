@@ -23,9 +23,15 @@ const DailyTip = ({ currentDay }: DailyTipProps) => {
   useEffect(() => {
     const loadDailyTips = async () => {
       try {
-        const fileName = language === 'ar' ? 'daily-tips-ar.json' : 'daily-tips-en.json';
-        const response = await import(`@/data/${fileName}`);
-        const tipsData: TipsData = response.default;
+        let tipsData: TipsData;
+        
+        if (language === 'ar') {
+          const response = await import('@/data/daily-tips-ar.json');
+          tipsData = response.default;
+        } else {
+          const response = await import('@/data/daily-tips-en.json');
+          tipsData = response.default;
+        }
         
         // Use modulo to cycle through tips if current day exceeds available tips
         const tipIndex = currentDay > 0 ? ((currentDay - 1) % tipsData.tips.length) : 0;
