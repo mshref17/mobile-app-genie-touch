@@ -243,10 +243,15 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
               </div>
             )}
             <div>
-              <h3 className="text-xl font-semibold text-pink-600">{weekData.babySize}</h3>
-              <p className="text-gray-600">{weekData.sizeDescription}</p>
+              <h3 className="text-xl font-semibold text-pink-600" dangerouslySetInnerHTML={{ __html: weekData.babySize }}></h3>
+              <p className="text-gray-600" dangerouslySetInnerHTML={{ __html: weekData.sizeDescription }}></p>
             </div>
           </div>
+          {weekData.description && (
+            <div className="mt-4 p-4 bg-pink-50 rounded-lg">
+              <p className="text-gray-700" dangerouslySetInnerHTML={{ __html: weekData.description }}></p>
+            </div>
+          )}
         </CardContent>
       </Card>
 
@@ -270,7 +275,7 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
               {weekData.developments.map((item, index) => (
                 <li key={index} className="flex items-start">
                   <div className={`w-2 h-2 bg-pink-400 rounded-full mt-2 flex-shrink-0 ${isRTL ? 'ml-3' : 'mr-3'}`}></div>
-                  <span className="text-gray-600">{item}</span>
+                  <span className="text-gray-600" dangerouslySetInnerHTML={{ __html: item }}></span>
                 </li>
               ))}
             </ul>
@@ -286,7 +291,7 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
               {weekData.momTips.map((tip, index) => (
                 <li key={index} className="flex items-start">
                   <div className={`w-2 h-2 bg-purple-400 rounded-full mt-2 flex-shrink-0 ${isRTL ? 'ml-3' : 'mr-3'}`}></div>
-                  <span className="text-gray-600">{tip}</span>
+                  <span className="text-gray-600" dangerouslySetInnerHTML={{ __html: tip }}></span>
                 </li>
               ))}
             </ul>
