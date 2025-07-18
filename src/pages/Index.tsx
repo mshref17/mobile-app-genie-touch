@@ -18,7 +18,7 @@ import DailyTip from "@/components/DailyTip";
 import NotificationSettings from "@/components/NotificationSettings";
 import { NotificationService } from "@/lib/notifications";
 
-import appLogo from "@/assets/app-logo.png";
+const appLogo = "/lovable-uploads/7a6df10b-0d20-4b9d-acd0-6b0536777e43.png";
 
 const Index = () => {
   const { t, language, setLanguage } = useLanguage();
