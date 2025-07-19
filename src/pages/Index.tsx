@@ -209,9 +209,9 @@ const Index = () => {
   
   
   return (
-    <div className={`min-h-screen bg-gradient-to-b from-pink-50 to-purple-50 safe-area-full ${language === 'ar' ? 'rtl' : 'ltr'}`}>
+    <div className={`min-h-screen bg-gradient-to-b from-pink-50 to-purple-50 ${language === 'ar' ? 'rtl' : 'ltr'}`}>
       {/* Fixed App Header Bar */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b">
+      <div className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b safe-area-top">
         <div className="container mx-auto px-4 py-3 max-w-4xl">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -363,7 +363,7 @@ const Index = () => {
       </div>
 
       {/* Main Content with Top Padding */}
-      <div className="container mx-auto p-4 max-w-4xl pt-32 pb-24">
+      <div className="container mx-auto p-4 max-w-4xl pt-32 pb-24 safe-area-bottom">
         <Tabs defaultValue="dashboard" className="w-full">
           {/* Fixed Tabs Bar */}
           <div className="fixed top-[73px] left-0 right-0 z-40 bg-white border-b border-gray-200">
