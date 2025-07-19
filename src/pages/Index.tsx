@@ -97,6 +97,19 @@ const Index = () => {
     };
   };
 
+  const calculatePregnancyMonth = (weeks: number) => {
+    if (weeks >= 1 && weeks <= 4) return 1;
+    if (weeks >= 5 && weeks <= 8) return 2;
+    if (weeks >= 9 && weeks <= 13) return 3;
+    if (weeks >= 14 && weeks <= 17) return 4;
+    if (weeks >= 18 && weeks <= 21) return 5;
+    if (weeks >= 22 && weeks <= 26) return 6;
+    if (weeks >= 27 && weeks <= 30) return 7;
+    if (weeks >= 31 && weeks <= 35) return 8;
+    if (weeks >= 36 && weeks <= 40) return 9;
+    return 1; // fallback
+  };
+
   const calculatePregnancyInfo = () => {
     return calculatePregnancyInfoForDate(lastPeriodDate);
   };
@@ -424,7 +437,7 @@ const Index = () => {
                 <DailyTip currentDay={pregnancyInfo.totalDays} />
 
                 {/* Quick Stats Grid */}
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-3 gap-4">
                   <Card className="bg-gradient-to-br from-pink-50 to-rose-100 border-0 shadow-md">
                     <CardContent className="p-4 text-center">
                       <div className="flex items-center justify-center mb-2">
@@ -446,6 +459,18 @@ const Index = () => {
                         {pregnancyInfo.daysRemaining}
                       </div>
                       <div className="text-sm text-purple-600">{t('daysLeft')}</div>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="bg-gradient-to-br from-emerald-50 to-green-100 border-0 shadow-md">
+                    <CardContent className="p-4 text-center">
+                      <div className="flex items-center justify-center mb-2">
+                        <Baby className="w-6 h-6 text-emerald-600" />
+                      </div>
+                      <div className="text-2xl font-bold text-emerald-700">
+                        {calculatePregnancyMonth(pregnancyInfo.weeksPregnant)}
+                      </div>
+                      <div className="text-sm text-emerald-600">Month</div>
                     </CardContent>
                   </Card>
                 </div>
