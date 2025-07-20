@@ -7,7 +7,8 @@ import { Label } from "@/components/ui/label";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { CalendarIcon, Baby, Users, Heart, Settings, CalendarDays, Clock, Star, Gift } from "lucide-react";
+import { CalendarIcon, Baby, Users, Heart, Settings, CalendarDays, Clock, Star, Gift, Info } from "lucide-react";
+import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { format, addDays, differenceInDays, differenceInWeeks, subDays } from "date-fns";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -470,7 +471,38 @@ const Index = () => {
                       <div className="text-2xl font-bold text-emerald-700">
                         {calculatePregnancyMonth(pregnancyInfo.weeksPregnant)}
                       </div>
-                      <div className="text-sm text-emerald-600">Month</div>
+                      <div className="text-sm text-emerald-600 flex items-center justify-center gap-1">
+                        Month
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button variant="ghost" size="sm" className="p-0 h-auto w-auto hover:bg-transparent">
+                              <Info className="w-3 h-3 text-emerald-500 hover:text-emerald-700" />
+                            </Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>How We Calculate Months</AlertDialogTitle>
+                              <AlertDialogDescription className="text-left space-y-2">
+                                <p>Pregnancy months are calculated based on pregnancy weeks:</p>
+                                <ul className="list-disc list-inside space-y-1 text-sm">
+                                  <li>Weeks 1-4: Month 1</li>
+                                  <li>Weeks 5-8: Month 2</li>
+                                  <li>Weeks 9-13: Month 3</li>
+                                  <li>Weeks 14-17: Month 4</li>
+                                  <li>Weeks 18-21: Month 5</li>
+                                  <li>Weeks 22-26: Month 6</li>
+                                  <li>Weeks 27-30: Month 7</li>
+                                  <li>Weeks 31-35: Month 8</li>
+                                  <li>Weeks 36-40: Month 9</li>
+                                </ul>
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogAction>Got it</AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      </div>
                     </CardContent>
                   </Card>
                 </div>
