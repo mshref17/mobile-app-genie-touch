@@ -17,7 +17,7 @@ interface TipsData {
 }
 
 const DailyTip = ({ currentDay }: DailyTipProps) => {
-  const { language, t, isRTL } = useLanguage();
+  const { language, t } = useLanguage();
   const [dailyTip, setDailyTip] = useState<string>('');
 
   useEffect(() => {
@@ -66,7 +66,7 @@ const DailyTip = ({ currentDay }: DailyTipProps) => {
                 <div className="w-14 h-14 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg transform rotate-12 group-hover:rotate-0 transition-transform duration-300">
                   <Lightbulb className="w-7 h-7 text-white" />
                 </div>
-                <div className={`absolute -top-1 w-6 h-6 bg-pink-500 rounded-full flex items-center justify-center ${isRTL ? '-left-1' : '-right-1'}`}>
+                <div className="absolute -top-1 w-6 h-6 bg-pink-500 rounded-full flex items-center justify-center -right-1">
                   <span className="text-white text-xs font-bold">{currentDay}</span>
                 </div>
               </div>
@@ -77,7 +77,7 @@ const DailyTip = ({ currentDay }: DailyTipProps) => {
                 <h3 className="text-lg font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
                   {t('dailyTip')}
                 </h3>
-                <div className={`flex-1 h-px ${isRTL ? 'bg-gradient-to-l' : 'bg-gradient-to-r'} from-pink-200 to-transparent`}></div>
+                <div className="flex-1 h-px bg-gradient-to-r from-pink-200 to-transparent"></div>
               </div>
               <p className="text-gray-700 leading-relaxed text-base font-medium italic">
                 "{dailyTip}"

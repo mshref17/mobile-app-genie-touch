@@ -26,7 +26,7 @@ interface WeekData {
 }
 
 const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
-  const { language, t, isRTL } = useLanguage();
+  const { language, t } = useLanguage();
   const [weeklyData, setWeeklyData] = useState<Record<string, WeekData>>({});
   const [selectedWeek, setSelectedWeek] = useState(currentWeek);
   const [babySizeImage, setBabySizeImage] = useState<string | null>(null);
@@ -198,18 +198,18 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
         <Button
           variant="ghost"
           size="sm"
-          onClick={isRTL ? handleNextWeek : handlePreviousWeek}
-          disabled={isRTL ? selectedWeek >= 40 : selectedWeek <= 1}
+          onClick={handlePreviousWeek}
+          disabled={selectedWeek <= 1}
           className="h-10 w-10 bg-white rounded-full shadow hover:shadow-md disabled:opacity-30 disabled:cursor-not-allowed"
         >
-          {isRTL ? <ChevronRight className="h-5 w-5 text-pink-600" /> : <ChevronLeft className="h-5 w-5 text-pink-600" />}
+          <ChevronLeft className="h-5 w-5 text-pink-600" />
         </Button>
 
         <div className="flex flex-col items-center">
           <Badge variant="secondary" className="bg-pink-100 text-pink-800 px-4 py-1 text-lg font-semibold">
             {t('week')} {selectedWeek}
             {selectedWeek === currentWeek && (
-              <span className="text-xs ms-1">({t('currentWeek')})</span>
+              <span className="text-xs ml-1">({t('currentWeek')})</span>
             )}
           </Badge>
         </div>
@@ -217,11 +217,11 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
         <Button
           variant="ghost"
           size="sm"
-          onClick={isRTL ? handlePreviousWeek : handleNextWeek}
-          disabled={isRTL ? selectedWeek <= 1 : selectedWeek >= 40}
+          onClick={handleNextWeek}
+          disabled={selectedWeek >= 40}
           className="h-10 w-10 bg-white rounded-full shadow hover:shadow-md disabled:opacity-30 disabled:cursor-not-allowed"
         >
-          {isRTL ? <ChevronLeft className="h-5 w-5 text-pink-600" /> : <ChevronRight className="h-5 w-5 text-pink-600" />}
+          <ChevronRight className="h-5 w-5 text-pink-600" />
         </Button>
       </div>
 
@@ -274,7 +274,7 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
             <ul className="space-y-2">
               {weekData.developments.map((item, index) => (
                 <li key={index} className="flex items-start">
-                  <div className={`w-2 h-2 bg-pink-400 rounded-full mt-2 flex-shrink-0 ${isRTL ? 'ml-3' : 'mr-3'}`}></div>
+                  <div className="w-2 h-2 bg-pink-400 rounded-full mt-2 flex-shrink-0 mr-3"></div>
                   <span className="text-gray-600" dangerouslySetInnerHTML={{ __html: item }}></span>
                 </li>
               ))}
@@ -290,7 +290,7 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
             <ul className="space-y-2">
               {weekData.momTips.map((tip, index) => (
                 <li key={index} className="flex items-start">
-                  <div className={`w-2 h-2 bg-purple-400 rounded-full mt-2 flex-shrink-0 ${isRTL ? 'ml-3' : 'mr-3'}`}></div>
+                  <div className="w-2 h-2 bg-purple-400 rounded-full mt-2 flex-shrink-0 mr-3"></div>
                   <span className="text-gray-600" dangerouslySetInnerHTML={{ __html: tip }}></span>
                 </li>
               ))}

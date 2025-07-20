@@ -119,26 +119,4 @@ All colors MUST be HSL.
     padding-right: env(safe-area-inset-right);
   }
 
-  /* RTL Support */
-  [dir="rtl"] {
-    text-align: right;
-  }
-
-  [dir="ltr"] {
-    text-align: left;
-  }
-
-  /* RTL-aware utility classes */
-  .ms-2 { margin-inline-start: 0.5rem; }
-  .me-2 { margin-inline-end: 0.5rem; }
-  .ms-3 { margin-inline-start: 0.75rem; }
-  .me-3 { margin-inline-end: 0.75rem; }
-  .ms-4 { margin-inline-start: 1rem; }
-  .me-4 { margin-inline-end: 1rem; }
-  .ps-2 { padding-inline-start: 0.5rem; }
-  .pe-2 { padding-inline-end: 0.5rem; }
-  .ps-3 { padding-inline-start: 0.75rem; }
-  .pe-3 { padding-inline-end: 0.75rem; }
-  .ps-4 { padding-inline-start: 1rem; }
-  .pe-4 { padding-inline-end: 1rem; }
 }
