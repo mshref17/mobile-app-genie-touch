@@ -438,7 +438,7 @@ const Index = () => {
                 <DailyTip currentDay={pregnancyInfo.totalDays} />
 
                 {/* Quick Stats Grid */}
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-2 gap-4">
                   <Card className="bg-gradient-to-br from-pink-50 to-rose-100 border-0 shadow-md">
                     <CardContent className="p-4 text-center">
                       <div className="flex items-center justify-center mb-2">
@@ -448,18 +448,6 @@ const Index = () => {
                         {pregnancyInfo.weeksPregnant}{t('weekAbbrev')} {pregnancyInfo.daysInCurrentWeek}{t('dayAbbrev')}
                       </div>
                       <div className="text-sm text-pink-600">{t('yourProgressText')}</div>
-                    </CardContent>
-                  </Card>
-
-                  <Card className="bg-gradient-to-br from-purple-50 to-indigo-100 border-0 shadow-md">
-                    <CardContent className="p-4 text-center">
-                      <div className="flex items-center justify-center mb-2">
-                        <Clock className="w-6 h-6 text-purple-600" />
-                      </div>
-                      <div className="text-2xl font-bold text-purple-700">
-                        {pregnancyInfo.daysRemaining}
-                      </div>
-                      <div className="text-sm text-purple-600">{t('daysLeft')}</div>
                     </CardContent>
                   </Card>
 
