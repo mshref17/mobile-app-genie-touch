@@ -2,12 +2,12 @@
 // Firebase configuration - you'll need to replace this with your actual config
 const firebaseConfig = {
   // Add your Firebase config here
-  apiKey: "your-api-key",
+  apiKey: "AIzaSyDWBd4BY9pKYpYA2AlQu2f637WOFYM088g",
   authDomain: "your-project.firebaseapp.com", 
-  projectId: "your-project-id",
-  storageBucket: "your-project.appspot.com",
-  messagingSenderId: "your-sender-id",
-  appId: "your-app-id"
+  projectId: "pt-forum-5a586",
+  storageBucket: "pt-forum-5a586.appspot.com",
+  messagingSenderId: "1022269708142",
+  appId: "1:1022269708142:android:b1ef0db156f36f4151d37f"
 };
 
 // Uncomment and configure when you provide your Firebase config
