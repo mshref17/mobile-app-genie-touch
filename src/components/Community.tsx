@@ -1,61 +1,94 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Heart, MessageCircle, Camera, Video, Send } from "lucide-react";
+import { Heart, MessageCircle, Camera, Video, Send, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { db, storage } from "@/lib/firebase";
+import { 
+  collection, 
+  addDoc, 
+  query, 
+  orderBy, 
+  onSnapshot, 
+  updateDoc, 
+  doc, 
+  increment,
+  serverTimestamp 
+} from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 interface Post {
   id: string;
   content: string;
-  timestamp: Date;
+  timestamp: any;
   likes: number;
   replies: number;
   category: string;
+  attachments?: string[];
 }
 
 const Community = () => {
   const { t } = useLanguage();
-  const [posts, setPosts] = useState<Post[]>([
-    {
-      id: '1',
-      content: "First time mom here! When did you first feel your baby move? I'm 16 weeks and haven't felt anything yet. Is this normal?",
-      timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000), // 2 hours ago
-      likes: 5,
-      replies: 3,
-      category: t("firstTrimester")
-    },
-    {
-      id: '2', 
-      content: "What are your favorite pregnancy-safe exercises? Looking for ways to stay active during my second trimester.",
-      timestamp: new Date(Date.now() - 5 * 60 * 60 * 1000), // 5 hours ago
-      likes: 8,
-      replies: 7,
-      category: t("fitness")
-    }
-  ]);
-
+  const [posts, setPosts] = useState<Post[]>([]);
   const [newPost, setNewPost] = useState('');
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const { toast } = useToast();
 
-  const handleSubmitPost = () => {
-    if (newPost.trim()) {
-      const post: Post = {
-        id: Date.now().toString(),
+  // Load posts from Firebase
+  useEffect(() => {
+    const q = query(collection(db, 'posts'), orderBy('timestamp', 'desc'));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const postsData: Post[] = [];
+      querySnapshot.forEach((doc) => {
+        postsData.push({ id: doc.id, ...doc.data() } as Post);
+      });
+      setPosts(postsData);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const uploadFiles = async (files: File[]): Promise<string[]> => {
+    const uploadPromises = files.map(async (file) => {
+      const fileName = `${Date.now()}_${file.name}`;
+      const storageRef = ref(storage, `community/${fileName}`);
+      await uploadBytes(storageRef, file);
+      return getDownloadURL(storageRef);
+    });
+    
+    return Promise.all(uploadPromises);
+  };
+
+  const handleSubmitPost = async () => {
+    if (!newPost.trim()) return;
+    
+    setUploading(true);
+    try {
+      let attachments: string[] = [];
+      
+      // Upload files if any
+      if (selectedFiles.length > 0) {
+        attachments = await uploadFiles(selectedFiles);
+      }
+      
+      // Add post to Firestore
+      await addDoc(collection(db, 'posts'), {
         content: newPost,
-        timestamp: new Date(),
+        timestamp: serverTimestamp(),
         likes: 0,
         replies: 0,
-        category: t("general")
-      };
+        category: t("general"),
+        attachments: attachments
+      });
       
-      setPosts([post, ...posts]);
       setNewPost('');
       setSelectedFiles([]);
       
@@ -63,6 +96,15 @@ const Community = () => {
         title: t("postShared"),
         description: t("postSharedDescription"),
       });
+    } catch (error) {
+      console.error('Error adding post:', error);
+      toast({
+        title: "Error",
+        description: "Failed to share post. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -85,7 +127,21 @@ const Community = () => {
     setSelectedFiles(validFiles);
   };
 
-  const formatTimeAgo = (date: Date) => {
+  const handleLikePost = async (postId: string) => {
+    try {
+      const postRef = doc(db, 'posts', postId);
+      await updateDoc(postRef, {
+        likes: increment(1)
+      });
+    } catch (error) {
+      console.error('Error liking post:', error);
+    }
+  };
+
+  const formatTimeAgo = (timestamp: any) => {
+    if (!timestamp) return 'Just now';
+    
+    const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
     const now = new Date();
     const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60));
     
@@ -142,11 +198,15 @@ const Community = () => {
             
             <Button 
               onClick={handleSubmitPost}
-              disabled={!newPost.trim()}
+              disabled={!newPost.trim() || uploading}
               className="bg-pink-600 hover:bg-pink-700 ml-auto"
             >
-              <Send className="w-4 h-4 mr-2" />
-              {t("share")}
+              {uploading ? (
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              ) : (
+                <Send className="w-4 h-4 mr-2" />
+              )}
+              {uploading ? t("sharing") || "Sharing..." : t("share")}
             </Button>
           </div>
           
@@ -181,8 +241,36 @@ const Community = () => {
                 
                 <p className="text-gray-700">{post.content}</p>
                 
+                {/* Display attachments */}
+                {post.attachments && post.attachments.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mt-3">
+                    {post.attachments.map((url, index) => (
+                      <div key={index} className="relative">
+                        {url.includes('video') ? (
+                          <video 
+                            src={url} 
+                            controls 
+                            className="max-w-xs rounded-lg"
+                          />
+                        ) : (
+                          <img 
+                            src={url} 
+                            alt={`Attachment ${index + 1}`}
+                            className="max-w-xs rounded-lg"
+                          />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+                
                 <div className="flex items-center gap-4 pt-2">
-                  <Button variant="ghost" size="sm" className="text-pink-600 hover:text-pink-700">
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-pink-600 hover:text-pink-700"
+                    onClick={() => handleLikePost(post.id)}
+                  >
                     <Heart className="w-4 h-4 mr-1" />
                     {post.likes}
                   </Button>
@@ -197,15 +285,17 @@ const Community = () => {
         ))}
       </div>
 
-      {/* Firebase Setup Notice */}
-      <Card className="border-yellow-200 bg-yellow-50">
-        <CardHeader>
-          <CardTitle className="text-yellow-800">{t("setupRequired")}</CardTitle>
-          <CardDescription className="text-yellow-700">
-            {t("firebaseSetupNotice")}
-          </CardDescription>
-        </CardHeader>
-      </Card>
+      {/* Firebase Setup Notice - Show only if no config */}
+      {(!db || posts.length === 0) && (
+        <Card className="border-blue-200 bg-blue-50">
+          <CardHeader>
+            <CardTitle className="text-blue-800">Firebase Configuration</CardTitle>
+            <CardDescription className="text-blue-700">
+              Replace the placeholder config in src/lib/firebase.ts with your actual Firebase project configuration to enable community features.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+      )}
     </div>
   );
 };
