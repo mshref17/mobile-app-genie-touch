@@ -437,6 +437,28 @@ const Index = () => {
 
                 <DailyTip currentDay={pregnancyInfo.totalDays} />
 
+                {/* Due Date Card */}
+                <Card className="bg-gradient-to-br from-emerald-50 to-teal-100 border-0 shadow-lg">
+                  <CardHeader className="pb-4">
+                    <CardTitle className="flex items-center gap-3 text-emerald-800">
+                      <div className="p-2 bg-emerald-100 rounded-full">
+                        <CalendarDays className="w-5 h-5 text-emerald-600" />
+                      </div>
+                      {t('expectedDueDate')}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-center">
+                      <div className="text-2xl font-bold text-emerald-700 mb-1">
+                        {format(pregnancyInfo.dueDate, "EEEE")}
+                      </div>
+                      <div className="text-xl text-emerald-600">
+                        {format(pregnancyInfo.dueDate, "MMMM d, yyyy")}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
                 {/* Quick Stats Grid */}
                 <div className="grid grid-cols-2 gap-4">
                   <Card className="bg-gradient-to-br from-pink-50 to-rose-100 border-0 shadow-md">
@@ -494,28 +516,6 @@ const Index = () => {
                     </CardContent>
                   </Card>
                 </div>
-
-                {/* Due Date Card */}
-                <Card className="bg-gradient-to-br from-emerald-50 to-teal-100 border-0 shadow-lg">
-                  <CardHeader className="pb-4">
-                    <CardTitle className="flex items-center gap-3 text-emerald-800">
-                      <div className="p-2 bg-emerald-100 rounded-full">
-                        <CalendarDays className="w-5 h-5 text-emerald-600" />
-                      </div>
-                      {t('expectedDueDate')}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-center">
-                      <div className="text-2xl font-bold text-emerald-700 mb-1">
-                        {format(pregnancyInfo.dueDate, "EEEE")}
-                      </div>
-                      <div className="text-xl text-emerald-600">
-                        {format(pregnancyInfo.dueDate, "MMMM d, yyyy")}
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
               </>
             )}
           </TabsContent>
