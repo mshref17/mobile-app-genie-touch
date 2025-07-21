@@ -10,17 +10,13 @@ const firebaseConfig = {
   appId: "your-app-id"
 };
 
-// Uncomment and configure when you provide your Firebase config
-/*
+// Firebase services initialization
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
-import { getMessaging } from 'firebase/messaging';
 
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
-export const messaging = getMessaging(app);
-*/
 
 export default firebaseConfig;
