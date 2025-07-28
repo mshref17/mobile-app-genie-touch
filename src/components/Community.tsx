@@ -70,31 +70,38 @@ const Community = () => {
   const handleSubmitPost = async () => {
     if (!newPost.trim()) return;
     
+    console.log('Attempting to submit post:', newPost);
     setUploading(true);
     try {
       let attachments: string[] = [];
       
       // Upload files if any
       if (selectedFiles.length > 0) {
+        console.log('Uploading files:', selectedFiles);
         attachments = await uploadFiles(selectedFiles);
       }
       
-      // Add post to Firestore
-      await addDoc(collection(db, 'posts'), {
+      const postData = {
         content: newPost,
         timestamp: serverTimestamp(),
         likes: 0,
         replies: 0,
-        category: t("general"),
+        category: t("general") || "General",
         attachments: attachments
-      });
+      };
+      
+      console.log('Adding post to Firestore:', postData);
+      
+      // Add post to Firestore
+      const docRef = await addDoc(collection(db, 'posts'), postData);
+      console.log('Post added successfully with ID:', docRef.id);
       
       setNewPost('');
       setSelectedFiles([]);
       
       toast({
-        title: t("postShared"),
-        description: t("postSharedDescription"),
+        title: t("postShared") || "Post Shared",
+        description: t("postSharedDescription") || "Your post has been shared with the community.",
       });
     } catch (error) {
       console.error('Error adding post:', error);
