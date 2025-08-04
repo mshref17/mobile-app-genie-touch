@@ -81,14 +81,32 @@ const Community = () => {
   }, [replyListeners]);
 
   const uploadFiles = async (files: File[]): Promise<string[]> => {
+    console.log('Starting file upload for', files.length, 'files');
     const uploadPromises = files.map(async (file) => {
-      const fileName = `${Date.now()}_${file.name}`;
-      const storageRef = ref(storage, `community/${fileName}`);
-      await uploadBytes(storageRef, file);
-      return getDownloadURL(storageRef);
+      try {
+        console.log('Uploading file:', file.name, 'Size:', file.size, 'Type:', file.type);
+        const fileName = `${Date.now()}_${file.name}`;
+        const storageRef = ref(storage, `community/${fileName}`);
+        console.log('Storage ref created:', storageRef);
+        await uploadBytes(storageRef, file);
+        console.log('File uploaded successfully:', fileName);
+        const downloadURL = await getDownloadURL(storageRef);
+        console.log('Download URL obtained:', downloadURL);
+        return downloadURL;
+      } catch (error) {
+        console.error('Error uploading file:', file.name, error);
+        throw error;
+      }
     });
     
-    return Promise.all(uploadPromises);
+    try {
+      const urls = await Promise.all(uploadPromises);
+      console.log('All files uploaded successfully:', urls);
+      return urls;
+    } catch (error) {
+      console.error('Error in Promise.all for file uploads:', error);
+      throw error;
+    }
   };
 
   const handleSubmitPost = async () => {
