@@ -52,6 +52,7 @@ const Community = () => {
   const [replyContent, setReplyContent] = useState('');
   const [repliesVisible, setRepliesVisible] = useState<Record<string, boolean>>({});
   const [postReplies, setPostReplies] = useState<Record<string, Reply[]>>({});
+  const [replyListeners, setReplyListeners] = useState<Record<string, () => void>>({});
   const { toast } = useToast();
 
   // Load posts from Firebase
@@ -65,8 +66,19 @@ const Community = () => {
       setPosts(postsData);
     });
 
-    return () => unsubscribe();
+    return () => {
+      unsubscribe();
+      // Clean up all reply listeners
+      Object.values(replyListeners).forEach(unsubscribe => unsubscribe());
+    };
   }, []);
+
+  // Cleanup reply listeners on unmount
+  useEffect(() => {
+    return () => {
+      Object.values(replyListeners).forEach(unsubscribe => unsubscribe());
+    };
+  }, [replyListeners]);
 
   const uploadFiles = async (files: File[]): Promise<string[]> => {
     const uploadPromises = files.map(async (file) => {
@@ -193,23 +205,30 @@ const Community = () => {
     }
   };
 
-  const loadReplies = async (postId: string) => {
+  const loadReplies = (postId: string) => {
+    // Don't set up listener if one already exists
+    if (replyListeners[postId]) return;
+
     try {
       const q = query(
         collection(db, 'replies'),
         orderBy('timestamp', 'asc')
       );
       
-      const querySnapshot = await getDocs(q);
-      const replies: Reply[] = [];
-      querySnapshot.forEach((doc) => {
-        const replyData = { id: doc.id, ...doc.data() } as Reply;
-        if (replyData.postId === postId) {
-          replies.push(replyData);
-        }
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        const replies: Reply[] = [];
+        querySnapshot.forEach((doc) => {
+          const replyData = { id: doc.id, ...doc.data() } as Reply;
+          if (replyData.postId === postId) {
+            replies.push(replyData);
+          }
+        });
+        
+        setPostReplies(prev => ({ ...prev, [postId]: replies }));
       });
       
-      setPostReplies(prev => ({ ...prev, [postId]: replies }));
+      // Store the unsubscribe function
+      setReplyListeners(prev => ({ ...prev, [postId]: unsubscribe }));
     } catch (error) {
       console.error('Error loading replies:', error);
     }
