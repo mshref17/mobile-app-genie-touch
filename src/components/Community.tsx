@@ -9,6 +9,8 @@ import { Heart, MessageCircle, Camera, Video, Send, Loader2 } from "lucide-react
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/lib/supabase";
+import { storage } from "@/lib/firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 interface Post {
   id: string;
@@ -73,37 +75,37 @@ const Community = () => {
   };
 
   const uploadFiles = async (files: File[]): Promise<string[]> => {
-    console.log('Starting file upload for', files.length, 'files');
+    console.log('Starting Firebase file upload for', files.length, 'files');
     const uploadPromises = files.map(async (file) => {
       try {
-        console.log('Uploading file:', file.name, 'Size:', file.size, 'Type:', file.type);
+        console.log('Uploading file to Firebase:', file.name, 'Size:', file.size, 'Type:', file.type);
         const fileName = `${Date.now()}_${file.name}`;
         const filePath = `community/${fileName}`;
         
-        const { data, error } = await supabase.storage
-          .from('community-files')
-          .upload(filePath, file);
+        // Create a reference to Firebase Storage
+        const storageRef = ref(storage, filePath);
         
-        if (error) throw error;
+        // Upload the file
+        const snapshot = await uploadBytes(storageRef, file);
+        console.log('File uploaded to Firebase:', snapshot.ref.fullPath);
         
-        const { data: { publicUrl } } = supabase.storage
-          .from('community-files')
-          .getPublicUrl(filePath);
+        // Get the download URL
+        const downloadURL = await getDownloadURL(snapshot.ref);
+        console.log('Firebase download URL:', downloadURL);
         
-        console.log('File uploaded successfully:', publicUrl);
-        return publicUrl;
+        return downloadURL;
       } catch (error) {
-        console.error('Error uploading file:', file.name, error);
+        console.error('Error uploading file to Firebase:', file.name, error);
         throw error;
       }
     });
     
     try {
       const urls = await Promise.all(uploadPromises);
-      console.log('All files uploaded successfully:', urls);
+      console.log('All files uploaded successfully to Firebase:', urls);
       return urls;
     } catch (error) {
-      console.error('Error in Promise.all for file uploads:', error);
+      console.error('Error in Promise.all for Firebase uploads:', error);
       throw error;
     }
   };
