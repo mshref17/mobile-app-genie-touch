@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -9,25 +8,12 @@ import { Badge } from "@/components/ui/badge";
 import { Heart, MessageCircle, Camera, Video, Send, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { db, storage } from "@/lib/firebase";
-import { 
-  collection, 
-  addDoc, 
-  query, 
-  orderBy, 
-  onSnapshot, 
-  updateDoc, 
-  doc, 
-  increment,
-  serverTimestamp,
-  getDocs
-} from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { supabase } from "@/lib/supabase";
 
 interface Post {
   id: string;
   content: string;
-  timestamp: any;
+  created_at: string;
   likes: number;
   replies: number;
   category: string;
@@ -37,8 +23,8 @@ interface Post {
 interface Reply {
   id: string;
   content: string;
-  timestamp: any;
-  postId: string;
+  created_at: string;
+  post_id: string;
 }
 
 const Community = () => {
@@ -52,33 +38,39 @@ const Community = () => {
   const [replyContent, setReplyContent] = useState('');
   const [repliesVisible, setRepliesVisible] = useState<Record<string, boolean>>({});
   const [postReplies, setPostReplies] = useState<Record<string, Reply[]>>({});
-  const [replyListeners, setReplyListeners] = useState<Record<string, () => void>>({});
   const { toast } = useToast();
 
-  // Load posts from Firebase
+  // Load posts from Supabase
   useEffect(() => {
-    const q = query(collection(db, 'posts'), orderBy('timestamp', 'desc'));
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const postsData: Post[] = [];
-      querySnapshot.forEach((doc) => {
-        postsData.push({ id: doc.id, ...doc.data() } as Post);
-      });
-      setPosts(postsData);
-    });
+    loadPosts();
+    
+    // Subscribe to real-time changes
+    const subscription = supabase
+      .channel('posts_channel')
+      .on('postgres_changes', 
+        { event: '*', schema: 'public', table: 'posts' },
+        () => loadPosts()
+      )
+      .subscribe();
 
     return () => {
-      unsubscribe();
-      // Clean up all reply listeners
-      Object.values(replyListeners).forEach(unsubscribe => unsubscribe());
+      subscription.unsubscribe();
     };
   }, []);
 
-  // Cleanup reply listeners on unmount
-  useEffect(() => {
-    return () => {
-      Object.values(replyListeners).forEach(unsubscribe => unsubscribe());
-    };
-  }, [replyListeners]);
+  const loadPosts = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('posts')
+        .select('*')
+        .order('created_at', { ascending: false });
+      
+      if (error) throw error;
+      setPosts(data || []);
+    } catch (error) {
+      console.error('Error loading posts:', error);
+    }
+  };
 
   const uploadFiles = async (files: File[]): Promise<string[]> => {
     console.log('Starting file upload for', files.length, 'files');
@@ -86,13 +78,20 @@ const Community = () => {
       try {
         console.log('Uploading file:', file.name, 'Size:', file.size, 'Type:', file.type);
         const fileName = `${Date.now()}_${file.name}`;
-        const storageRef = ref(storage, `community/${fileName}`);
-        console.log('Storage ref created:', storageRef);
-        await uploadBytes(storageRef, file);
-        console.log('File uploaded successfully:', fileName);
-        const downloadURL = await getDownloadURL(storageRef);
-        console.log('Download URL obtained:', downloadURL);
-        return downloadURL;
+        const filePath = `community/${fileName}`;
+        
+        const { data, error } = await supabase.storage
+          .from('community-files')
+          .upload(filePath, file);
+        
+        if (error) throw error;
+        
+        const { data: { publicUrl } } = supabase.storage
+          .from('community-files')
+          .getPublicUrl(filePath);
+        
+        console.log('File uploaded successfully:', publicUrl);
+        return publicUrl;
       } catch (error) {
         console.error('Error uploading file:', file.name, error);
         throw error;
@@ -125,18 +124,22 @@ const Community = () => {
       
       const postData = {
         content: newPost,
-        timestamp: serverTimestamp(),
         likes: 0,
         replies: 0,
         category: t("general") || "General",
         attachments: attachments
       };
       
-      console.log('Adding post to Firestore:', postData);
+      console.log('Adding post to Supabase:', postData);
       
-      // Add post to Firestore
-      const docRef = await addDoc(collection(db, 'posts'), postData);
-      console.log('Post added successfully with ID:', docRef.id);
+      // Add post to Supabase
+      const { data, error } = await supabase
+        .from('posts')
+        .insert([postData])
+        .select();
+      
+      if (error) throw error;
+      console.log('Post added successfully:', data);
       
       setNewPost('');
       setSelectedFiles([]);
@@ -178,10 +181,8 @@ const Community = () => {
 
   const handleLikePost = async (postId: string) => {
     try {
-      const postRef = doc(db, 'posts', postId);
-      await updateDoc(postRef, {
-        likes: increment(1)
-      });
+      const { error } = await supabase.rpc('increment_likes', { post_id: postId });
+      if (error) throw error;
     } catch (error) {
       console.error('Error liking post:', error);
     }
@@ -193,21 +194,25 @@ const Community = () => {
     try {
       const replyData = {
         content: replyContent,
-        timestamp: serverTimestamp(),
-        postId: postId
+        post_id: postId
       };
       
-      // Add reply to Firestore
-      await addDoc(collection(db, 'replies'), replyData);
+      // Add reply to Supabase
+      const { error: replyError } = await supabase
+        .from('replies')
+        .insert([replyData]);
+      
+      if (replyError) throw replyError;
       
       // Update post reply count
-      const postRef = doc(db, 'posts', postId);
-      await updateDoc(postRef, {
-        replies: increment(1)
-      });
+      const { error: updateError } = await supabase.rpc('increment_replies', { post_id: postId });
+      if (updateError) throw updateError;
       
       setReplyContent('');
       setReplyingTo(null);
+      
+      // Reload replies for this post
+      loadReplies(postId);
       
       toast({
         title: t("replyAdded") || "Reply Added",
@@ -223,30 +228,16 @@ const Community = () => {
     }
   };
 
-  const loadReplies = (postId: string) => {
-    // Don't set up listener if one already exists
-    if (replyListeners[postId]) return;
-
+  const loadReplies = async (postId: string) => {
     try {
-      const q = query(
-        collection(db, 'replies'),
-        orderBy('timestamp', 'asc')
-      );
+      const { data, error } = await supabase
+        .from('replies')
+        .select('*')
+        .eq('post_id', postId)
+        .order('created_at', { ascending: true });
       
-      const unsubscribe = onSnapshot(q, (querySnapshot) => {
-        const replies: Reply[] = [];
-        querySnapshot.forEach((doc) => {
-          const replyData = { id: doc.id, ...doc.data() } as Reply;
-          if (replyData.postId === postId) {
-            replies.push(replyData);
-          }
-        });
-        
-        setPostReplies(prev => ({ ...prev, [postId]: replies }));
-      });
-      
-      // Store the unsubscribe function
-      setReplyListeners(prev => ({ ...prev, [postId]: unsubscribe }));
+      if (error) throw error;
+      setPostReplies(prev => ({ ...prev, [postId]: data || [] }));
     } catch (error) {
       console.error('Error loading replies:', error);
     }
@@ -260,10 +251,10 @@ const Community = () => {
     setRepliesVisible(prev => ({ ...prev, [postId]: !isVisible }));
   };
 
-  const formatTimeAgo = (timestamp: any) => {
+  const formatTimeAgo = (timestamp: string) => {
     if (!timestamp) return 'Just now';
     
-    const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+    const date = new Date(timestamp);
     const now = new Date();
     const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60));
     
@@ -357,7 +348,7 @@ const Community = () => {
                     {post.category}
                   </Badge>
                   <span className="text-sm text-gray-500">
-                    {formatTimeAgo(post.timestamp)}
+                    {formatTimeAgo(post.created_at)}
                   </span>
                 </div>
                 
@@ -452,7 +443,7 @@ const Community = () => {
                       <div key={reply.id} className="bg-purple-50 p-3 rounded-lg ml-4">
                         <p className="text-gray-700 text-sm">{reply.content}</p>
                         <span className="text-xs text-gray-500 mt-1 block">
-                          {formatTimeAgo(reply.timestamp)}
+                          {formatTimeAgo(reply.created_at)}
                         </span>
                       </div>
                     ))}
@@ -463,18 +454,6 @@ const Community = () => {
           </Card>
         ))}
       </div>
-
-      {/* Firebase Setup Notice - Show only if no config */}
-      {(!db || posts.length === 0) && (
-        <Card className="border-blue-200 bg-blue-50">
-          <CardHeader>
-            <CardTitle className="text-blue-800">Firebase Configuration</CardTitle>
-            <CardDescription className="text-blue-700">
-              Replace the placeholder config in src/lib/firebase.ts with your actual Firebase project configuration to enable community features.
-            </CardDescription>
-          </CardHeader>
-        </Card>
-      )}
     </div>
   );
 };
