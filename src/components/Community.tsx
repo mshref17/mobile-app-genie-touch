@@ -19,7 +19,8 @@ import {
   updateDoc, 
   doc, 
   increment,
-  serverTimestamp 
+  serverTimestamp,
+  getDocs
 } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
@@ -33,6 +34,13 @@ interface Post {
   attachments?: string[];
 }
 
+interface Reply {
+  id: string;
+  content: string;
+  timestamp: any;
+  postId: string;
+}
+
 const Community = () => {
   const { t } = useLanguage();
   const [posts, setPosts] = useState<Post[]>([]);
@@ -40,6 +48,10 @@ const Community = () => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [replyingTo, setReplyingTo] = useState<string | null>(null);
+  const [replyContent, setReplyContent] = useState('');
+  const [repliesVisible, setRepliesVisible] = useState<Record<string, boolean>>({});
+  const [postReplies, setPostReplies] = useState<Record<string, Reply[]>>({});
   const { toast } = useToast();
 
   // Load posts from Firebase
@@ -143,6 +155,72 @@ const Community = () => {
     } catch (error) {
       console.error('Error liking post:', error);
     }
+  };
+
+  const handleReplySubmit = async (postId: string) => {
+    if (!replyContent.trim()) return;
+    
+    try {
+      const replyData = {
+        content: replyContent,
+        timestamp: serverTimestamp(),
+        postId: postId
+      };
+      
+      // Add reply to Firestore
+      await addDoc(collection(db, 'replies'), replyData);
+      
+      // Update post reply count
+      const postRef = doc(db, 'posts', postId);
+      await updateDoc(postRef, {
+        replies: increment(1)
+      });
+      
+      setReplyContent('');
+      setReplyingTo(null);
+      
+      toast({
+        title: t("replyAdded") || "Reply Added",
+        description: t("replyAddedDescription") || "Your reply has been added to the conversation.",
+      });
+    } catch (error) {
+      console.error('Error adding reply:', error);
+      toast({
+        title: "Error",
+        description: "Failed to add reply. Please try again.",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const loadReplies = async (postId: string) => {
+    try {
+      const q = query(
+        collection(db, 'replies'),
+        orderBy('timestamp', 'asc')
+      );
+      
+      const querySnapshot = await getDocs(q);
+      const replies: Reply[] = [];
+      querySnapshot.forEach((doc) => {
+        const replyData = { id: doc.id, ...doc.data() } as Reply;
+        if (replyData.postId === postId) {
+          replies.push(replyData);
+        }
+      });
+      
+      setPostReplies(prev => ({ ...prev, [postId]: replies }));
+    } catch (error) {
+      console.error('Error loading replies:', error);
+    }
+  };
+
+  const toggleReplies = (postId: string) => {
+    const isVisible = repliesVisible[postId];
+    if (!isVisible && !postReplies[postId]) {
+      loadReplies(postId);
+    }
+    setRepliesVisible(prev => ({ ...prev, [postId]: !isVisible }));
   };
 
   const formatTimeAgo = (timestamp: any) => {
@@ -281,11 +359,68 @@ const Community = () => {
                     <Heart className="w-4 h-4 mr-1" />
                     {post.likes}
                   </Button>
-                  <Button variant="ghost" size="sm" className="text-purple-600 hover:text-purple-700">
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-purple-600 hover:text-purple-700"
+                    onClick={() => toggleReplies(post.id)}
+                  >
                     <MessageCircle className="w-4 h-4 mr-1" />
                     {post.replies} {t("replies")}
                   </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-blue-600 hover:text-blue-700"
+                    onClick={() => setReplyingTo(post.id)}
+                  >
+                    {t("reply") || "Reply"}
+                  </Button>
                 </div>
+                
+                {/* Reply Form */}
+                {replyingTo === post.id && (
+                  <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+                    <Textarea
+                      placeholder={t("writeReply") || "Write your reply..."}
+                      value={replyContent}
+                      onChange={(e) => setReplyContent(e.target.value)}
+                      className="mb-2"
+                    />
+                    <div className="flex gap-2">
+                      <Button 
+                        size="sm" 
+                        onClick={() => handleReplySubmit(post.id)}
+                        disabled={!replyContent.trim()}
+                        className="bg-purple-600 hover:bg-purple-700"
+                      >
+                        {t("submitReply") || "Submit Reply"}
+                      </Button>
+                      <Button 
+                        size="sm" 
+                        variant="outline" 
+                        onClick={() => setReplyingTo(null)}
+                      >
+                        {t("cancel") || "Cancel"}
+                      </Button>
+                    </div>
+                  </div>
+                )}
+                
+                {/* Replies List */}
+                {repliesVisible[post.id] && postReplies[post.id] && (
+                  <div className="mt-4 space-y-3">
+                    <h4 className="font-medium text-purple-800">{t("replies") || "Replies"}</h4>
+                    {postReplies[post.id].map((reply) => (
+                      <div key={reply.id} className="bg-purple-50 p-3 rounded-lg ml-4">
+                        <p className="text-gray-700 text-sm">{reply.content}</p>
+                        <span className="text-xs text-gray-500 mt-1 block">
+                          {formatTimeAgo(reply.timestamp)}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>
