@@ -81,14 +81,44 @@ const Community = () => {
   }, [replyListeners]);
 
   const uploadFiles = async (files: File[]): Promise<string[]> => {
-    const uploadPromises = files.map(async (file) => {
-      const fileName = `${Date.now()}_${file.name}`;
-      const storageRef = ref(storage, `community/${fileName}`);
-      await uploadBytes(storageRef, file);
-      return getDownloadURL(storageRef);
-    });
-    
-    return Promise.all(uploadPromises);
+    try {
+      console.log('Starting file upload for files:', files.map(f => f.name));
+      
+      const uploadPromises = files.map(async (file, index) => {
+        try {
+          console.log(`Uploading file ${index + 1}: ${file.name}`);
+          
+          // Create a unique filename with timestamp
+          const timestamp = Date.now();
+          const sanitizedName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
+          const fileName = `${timestamp}_${sanitizedName}`;
+          
+          // Create storage reference
+          const storageRef = ref(storage, `community/${fileName}`);
+          console.log(`Storage ref created for: community/${fileName}`);
+          
+          // Upload file
+          const uploadResult = await uploadBytes(storageRef, file);
+          console.log(`File uploaded successfully:`, uploadResult);
+          
+          // Get download URL
+          const downloadURL = await getDownloadURL(storageRef);
+          console.log(`Download URL obtained:`, downloadURL);
+          
+          return downloadURL;
+        } catch (error) {
+          console.error(`Error uploading file ${file.name}:`, error);
+          throw new Error(`Failed to upload ${file.name}: ${error.message}`);
+        }
+      });
+      
+      const results = await Promise.all(uploadPromises);
+      console.log('All files uploaded successfully:', results);
+      return results;
+    } catch (error) {
+      console.error('Error in uploadFiles function:', error);
+      throw error;
+    }
   };
 
   const handleSubmitPost = async () => {
