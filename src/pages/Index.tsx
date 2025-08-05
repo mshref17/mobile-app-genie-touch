@@ -17,6 +17,7 @@ import WeeklyInfo from "@/components/WeeklyInfo";
 import Community from "@/components/Community";
 import DailyTip from "@/components/DailyTip";
 import NotificationSettings from "@/components/NotificationSettings";
+import { BottomNavigation } from "@/components/BottomNavigation";
 import { NotificationService } from "@/lib/notifications";
 
 const appLogo = "/lovable-uploads/7a6df10b-0d20-4b9d-acd0-6b0536777e43.png";
@@ -29,6 +30,7 @@ const Index = () => {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [selectedDueDate, setSelectedDueDate] = useState<Date>();
   const [dueDateMode, setDueDateMode] = useState<'period' | 'duedate'>('period');
+  const [activeTab, setActiveTab] = useState('dashboard');
 
   useEffect(() => {
     const savedDate = localStorage.getItem('lastPeriodDate');
@@ -223,9 +225,9 @@ const Index = () => {
   
   
   return (
-    <div className="min-h-screen bg-gradient-to-b from-pink-50 to-purple-50">
+    <div className="min-h-screen bg-gradient-to-b from-pink-50 to-purple-50 safe-area-full">
       {/* Fixed App Header Bar */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b">
+      <div className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b safe-area-top">
         <div className="container mx-auto px-4 py-3 max-w-4xl">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -377,10 +379,10 @@ const Index = () => {
       </div>
 
       {/* Main Content with Top Padding */}
-      <div className="container mx-auto p-4 max-w-4xl pt-32 pb-24">
-        <Tabs defaultValue="dashboard" className="w-full">
+      <div className="container mx-auto p-4 max-w-4xl pt-32 pb-32">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           {/* Fixed Tabs Bar */}
-          <div className="fixed top-[73px] left-0 right-0 z-40 bg-white border-b border-gray-200">
+          <div className="fixed left-0 right-0 z-40 bg-white border-b border-gray-200" style={{ top: 'calc(73px + env(safe-area-inset-top))' }}>
             <div className="container mx-auto max-w-4xl">
               <TabsList className="grid grid-cols-3 bg-white border-b border-gray-200 rounded-none p-0 h-auto w-full">
                 <TabsTrigger value="dashboard" className="border-b-2 border-transparent data-[state=active]:border-pink-500 data-[state=active]:bg-transparent bg-transparent rounded-none py-3 px-4 text-gray-600 data-[state=active]:text-pink-600">
@@ -530,6 +532,13 @@ const Index = () => {
 
         </Tabs>
       </div>
+      
+      {/* Bottom Navigation */}
+      <BottomNavigation 
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+        onSettingsOpen={() => setIsSettingsOpen(true)}
+      />
     </div>
   );
 };
