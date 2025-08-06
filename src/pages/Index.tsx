@@ -18,6 +18,7 @@ import Community from "@/components/Community";
 import DailyTip from "@/components/DailyTip";
 import NotificationSettings from "@/components/NotificationSettings";
 import { BottomNavigation } from "@/components/BottomNavigation";
+import SplashScreen from "@/components/SplashScreen";
 import { NotificationService } from "@/lib/notifications";
 
 const appLogo = "/lovable-uploads/7a6df10b-0d20-4b9d-acd0-6b0536777e43.png";
@@ -31,6 +32,7 @@ const Index = () => {
   const [selectedDueDate, setSelectedDueDate] = useState<Date>();
   const [dueDateMode, setDueDateMode] = useState<'period' | 'duedate'>('period');
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [showSplash, setShowSplash] = useState(true);
 
   useEffect(() => {
     const savedDate = localStorage.getItem('lastPeriodDate');
@@ -223,6 +225,9 @@ const Index = () => {
   }
 
   
+  if (showSplash) {
+    return <SplashScreen onComplete={() => setShowSplash(false)} />;
+  }
   
   return (
     <div className="min-h-screen bg-gradient-to-b from-pink-50 to-purple-50 safe-area-full">
