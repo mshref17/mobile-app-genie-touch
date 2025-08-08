@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { format } from 'date-fns';
+import { ar } from 'date-fns/locale';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,7 +10,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { CalendarIcon, Baby, Users, Heart, Settings, CalendarDays, Clock, Star, Gift, Info } from "lucide-react";
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import { format, addDays, differenceInDays, differenceInWeeks, subDays } from "date-fns";
+import { addDays, differenceInDays, differenceInWeeks, subDays } from "date-fns";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -416,10 +418,10 @@ const Index = () => {
               <CardContent>
                 <div className="text-center">
                   <div className="text-2xl font-bold text-emerald-700 mb-1">
-                    {format(pregnancyInfo.dueDate, "EEEE")}
+                    {format(pregnancyInfo.dueDate, "EEEE", { locale: ar })}
                   </div>
                   <div className="text-xl text-emerald-600">
-                    {format(pregnancyInfo.dueDate, "MMMM d, yyyy")}
+                    {format(pregnancyInfo.dueDate, "d MMMM yyyy", { locale: ar })}
                   </div>
                 </div>
               </CardContent>
@@ -448,7 +450,7 @@ const Index = () => {
                     {calculatePregnancyMonth(pregnancyInfo.weeksPregnant)}
                   </div>
                   <div className="text-sm text-emerald-600 flex items-center justify-center gap-1">
-                    Month
+                    {t('month')}
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
                         <Button variant="ghost" size="sm" className="p-0 h-auto w-auto hover:bg-transparent">
@@ -457,24 +459,24 @@ const Index = () => {
                       </AlertDialogTrigger>
                       <AlertDialogContent>
                         <AlertDialogHeader>
-                          <AlertDialogTitle>How We Calculate Months</AlertDialogTitle>
+                          <AlertDialogTitle>{t('monthCalculation')}</AlertDialogTitle>
                           <AlertDialogDescription className="text-left space-y-2">
-                            <p>Pregnancy months are calculated based on pregnancy weeks:</p>
+                            <p>{t('monthCalculationDesc')}</p>
                             <ul className="list-disc list-inside space-y-1 text-sm">
-                              <li>Weeks 1-4: Month 1</li>
-                              <li>Weeks 5-8: Month 2</li>
-                              <li>Weeks 9-13: Month 3</li>
-                              <li>Weeks 14-17: Month 4</li>
-                              <li>Weeks 18-21: Month 5</li>
-                              <li>Weeks 22-26: Month 6</li>
-                              <li>Weeks 27-30: Month 7</li>
-                              <li>Weeks 31-35: Month 8</li>
-                              <li>Weeks 36-40: Month 9</li>
+                              <li>الأسابيع 1-4: الشهر 1</li>
+                              <li>الأسابيع 5-8: الشهر 2</li>
+                              <li>الأسابيع 9-13: الشهر 3</li>
+                              <li>الأسابيع 14-17: الشهر 4</li>
+                              <li>الأسابيع 18-21: الشهر 5</li>
+                              <li>الأسابيع 22-26: الشهر 6</li>
+                              <li>الأسابيع 27-30: الشهر 7</li>
+                              <li>الأسابيع 31-35: الشهر 8</li>
+                              <li>الأسابيع 36-40: الشهر 9</li>
                             </ul>
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
-                          <AlertDialogAction>Got it</AlertDialogAction>
+                          <AlertDialogAction>{t('gotIt')}</AlertDialogAction>
                         </AlertDialogFooter>
                       </AlertDialogContent>
                     </AlertDialog>
