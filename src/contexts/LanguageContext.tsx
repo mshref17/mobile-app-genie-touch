@@ -1,31 +1,23 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import translations from '@/data/translations.json';
 
-type Language = 'en' | 'ar';
+type Language = 'ar';
 
 interface LanguageContextType {
   language: Language;
-  setLanguage: (lang: Language) => void;
   t: (key: string, params?: Record<string, string | number>) => string;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [language, setLanguage] = useState<Language>('en');
+  const language: Language = 'ar';
 
   useEffect(() => {
-    const savedLanguage = localStorage.getItem('language') as Language;
-    if (savedLanguage && (savedLanguage === 'en' || savedLanguage === 'ar')) {
-      setLanguage(savedLanguage);
-    }
+    document.documentElement.dir = 'rtl';
+    document.documentElement.lang = 'ar';
+    localStorage.setItem('language', 'ar');
   }, []);
-
-  useEffect(() => {
-    localStorage.setItem('language', language);
-    document.documentElement.dir = 'ltr';
-    document.documentElement.lang = language;
-  }, [language]);
 
   const t = (key: string, params?: Record<string, string | number>): string => {
     const keys = key.split('.');
@@ -51,7 +43,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   };
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+    <LanguageContext.Provider value={{ language, t }}>
       {children}
     </LanguageContext.Provider>
   );

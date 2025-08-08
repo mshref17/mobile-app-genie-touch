@@ -24,7 +24,7 @@ import { NotificationService } from "@/lib/notifications";
 const appLogo = "/lovable-uploads/7a6df10b-0d20-4b9d-acd0-6b0536777e43.png";
 
 const Index = () => {
-  const { t, language, setLanguage } = useLanguage();
+  const { t, language } = useLanguage();
   const [lastPeriodDate, setLastPeriodDate] = useState<Date | null>(null);
   const [isFirstTime, setIsFirstTime] = useState(true);
   const [selectedDate, setSelectedDate] = useState<Date>();
@@ -253,28 +253,6 @@ const Index = () => {
                     </DialogDescription>
                   </DialogHeader>
                   <div className="space-y-6">
-                    {/* Language Settings */}
-                    <div className="space-y-3">
-                      <h4 className="text-sm font-medium">{t('language')}</h4>
-                      <div className="flex gap-2">
-                        <Button
-                          variant={language === 'en' ? 'default' : 'outline'}
-                          size="sm"
-                          onClick={() => setLanguage('en')}
-                          className="flex-1"
-                        >
-                          {t('english')}
-                        </Button>
-                        <Button
-                          variant={language === 'ar' ? 'default' : 'outline'}
-                          size="sm"
-                          onClick={() => setLanguage('ar')}
-                          className="flex-1"
-                        >
-                          {t('arabic')}
-                        </Button>
-                      </div>
-                    </div>
 
                     <div className="space-y-4">
                       <h4 className="text-sm font-medium">{t('pregnancyDates')}</h4>
