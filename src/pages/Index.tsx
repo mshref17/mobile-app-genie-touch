@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -361,159 +360,138 @@ const Index = () => {
         </div>
       </div>
 
-      {/* Main Content with Top Padding */}
-      <div className="container mx-auto p-4 max-w-4xl pt-32 pb-32">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          {/* Fixed Tabs Bar */}
-          <div className="fixed left-0 right-0 z-40 bg-white border-b border-gray-200" style={{ top: 'calc(73px + env(safe-area-inset-top))' }}>
-            <div className="container mx-auto max-w-4xl">
-              <TabsList className="grid grid-cols-3 bg-white border-b border-gray-200 rounded-none p-0 h-auto w-full">
-                <TabsTrigger value="dashboard" className="border-b-2 border-transparent data-[state=active]:border-pink-500 data-[state=active]:bg-transparent bg-transparent rounded-none py-3 px-4 text-gray-600 data-[state=active]:text-pink-600">
-                  {t('dashboard')}
-                </TabsTrigger>
-                <TabsTrigger value="weekly" className="border-b-2 border-transparent data-[state=active]:border-pink-500 data-[state=active]:bg-transparent bg-transparent rounded-none py-3 px-4 text-gray-600 data-[state=active]:text-pink-600">
-                  {t('weeklyInfo')}
-                </TabsTrigger>
-                <TabsTrigger value="community" className="border-b-2 border-transparent data-[state=active]:border-pink-500 data-[state=active]:bg-transparent bg-transparent rounded-none py-3 px-4 text-gray-600 data-[state=active]:text-pink-600">
-                  {t('community')}
-                </TabsTrigger>
-              </TabsList>
-            </div>
-          </div>
-
-          <TabsContent value="dashboard" className="space-y-6">
-            {pregnancyInfo && (
-              <>
-                {/* Hero Section with Baby Bump Progress */}
-                <div className="relative overflow-hidden bg-gradient-to-br from-pink-100 via-purple-100 to-indigo-100 rounded-3xl p-6 mb-6">
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-pink-200/30 rounded-full -translate-y-16 translate-x-16"></div>
-                  <div className="absolute bottom-0 left-0 w-24 h-24 bg-purple-200/30 rounded-full translate-y-12 -translate-x-12"></div>
-                  
-                  <div className="relative z-10">
-                    <div className="text-center mb-6">
-                      <h2 className="text-3xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent mb-2">
-                        {t('week')} {pregnancyInfo.weeksPregnant}
-                      </h2>
-                      <p className="text-gray-600 text-lg" dir="rtl">
-                        <span className="font-medium">{pregnancyInfo.daysRemaining}</span> {t('daysUntilBaby')}
-                      </p>
-                    </div>
-                    
-                    {/* Pregnancy Progress Visualization */}
-                    <div className="relative">
-                      <div className="w-full bg-white/50 rounded-full h-4 mb-4">
-                        <div 
-                          className="bg-gradient-to-r from-pink-500 to-purple-500 h-4 rounded-full transition-all duration-1000 relative overflow-hidden"
-                          style={{ width: `${Math.min((pregnancyInfo.weeksPregnant / 40) * 100, 100)}%` }}
-                        >
-                          <div className="absolute inset-0 bg-white/30 animate-pulse"></div>
-                        </div>
-                      </div>
-                      <div className="flex justify-between text-sm text-gray-600">
-                        <span>{t('week')} 1</span>
-                        <span className="font-semibold text-pink-600">
-                          {Math.round((pregnancyInfo.weeksPregnant / 40) * 100)}% {t('progressCompleted')}
-                        </span>
-                        <span>{t('week')} 40</span>
-                      </div>
+      {/* Main Content */}
+      <div className="container mx-auto p-4 max-w-4xl pt-20 pb-32">
+        {/* Render content based on activeTab */}
+        {activeTab === 'dashboard' && pregnancyInfo && (
+          <>
+            {/* Hero Section with Baby Bump Progress */}
+            <div className="relative overflow-hidden bg-gradient-to-br from-pink-100 via-purple-100 to-indigo-100 rounded-3xl p-6 mb-6">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-pink-200/30 rounded-full -translate-y-16 translate-x-16"></div>
+              <div className="absolute bottom-0 left-0 w-24 h-24 bg-purple-200/30 rounded-full translate-y-12 -translate-x-12"></div>
+              
+              <div className="relative z-10">
+                <div className="text-center mb-6">
+                  <h2 className="text-3xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent mb-2">
+                    {t('week')} {pregnancyInfo.weeksPregnant}
+                  </h2>
+                  <p className="text-gray-600 text-lg" dir="rtl">
+                    <span className="font-medium">{pregnancyInfo.daysRemaining}</span> {t('daysUntilBaby')}
+                  </p>
+                </div>
+                
+                {/* Pregnancy Progress Visualization */}
+                <div className="relative">
+                  <div className="w-full bg-white/50 rounded-full h-4 mb-4">
+                    <div 
+                      className="bg-gradient-to-r from-pink-500 to-purple-500 h-4 rounded-full transition-all duration-1000 relative overflow-hidden"
+                      style={{ width: `${Math.min((pregnancyInfo.weeksPregnant / 40) * 100, 100)}%` }}
+                    >
+                      <div className="absolute inset-0 bg-white/30 animate-pulse"></div>
                     </div>
                   </div>
+                  <div className="flex justify-between text-sm text-gray-600">
+                    <span>{t('week')} 1</span>
+                    <span className="font-semibold text-pink-600">
+                      {Math.round((pregnancyInfo.weeksPregnant / 40) * 100)}% {t('progressCompleted')}
+                    </span>
+                    <span>{t('week')} 40</span>
+                  </div>
                 </div>
+              </div>
+            </div>
 
-                <DailyTip currentDay={pregnancyInfo.totalDays} />
+            <DailyTip currentDay={pregnancyInfo.totalDays} />
 
-                {/* Due Date Card */}
-                <Card className="bg-gradient-to-br from-emerald-50 to-teal-100 border-0 shadow-lg">
-                  <CardHeader className="pb-4">
-                    <CardTitle className="flex items-center gap-3 text-emerald-800">
-                      <div className="p-2 bg-emerald-100 rounded-full">
-                        <CalendarDays className="w-5 h-5 text-emerald-600" />
-                      </div>
-                      {t('expectedDueDate')}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-center">
-                      <div className="text-2xl font-bold text-emerald-700 mb-1">
-                        {format(pregnancyInfo.dueDate, "EEEE")}
-                      </div>
-                      <div className="text-xl text-emerald-600">
-                        {format(pregnancyInfo.dueDate, "MMMM d, yyyy")}
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* Quick Stats Grid */}
-                <div className="grid grid-cols-2 gap-4">
-                  <Card className="bg-gradient-to-br from-pink-50 to-rose-100 border-0 shadow-md">
-                    <CardContent className="p-4 text-center">
-                      <div className="flex items-center justify-center mb-2">
-                        <CalendarDays className="w-6 h-6 text-pink-600" />
-                      </div>
-                      <div className="text-2xl font-bold text-pink-700">
-                        {pregnancyInfo.weeksPregnant}{t('weekAbbrev')} {pregnancyInfo.daysInCurrentWeek}{t('dayAbbrev')}
-                      </div>
-                      <div className="text-sm text-pink-600">{t('yourProgressText')}</div>
-                    </CardContent>
-                  </Card>
-
-                  <Card className="bg-gradient-to-br from-emerald-50 to-green-100 border-0 shadow-md">
-                    <CardContent className="p-4 text-center">
-                      <div className="flex items-center justify-center mb-2">
-                        <Baby className="w-6 h-6 text-emerald-600" />
-                      </div>
-                      <div className="text-2xl font-bold text-emerald-700">
-                        {calculatePregnancyMonth(pregnancyInfo.weeksPregnant)}
-                      </div>
-                      <div className="text-sm text-emerald-600 flex items-center justify-center gap-1">
-                        Month
-                        <AlertDialog>
-                          <AlertDialogTrigger asChild>
-                            <Button variant="ghost" size="sm" className="p-0 h-auto w-auto hover:bg-transparent">
-                              <Info className="w-3 h-3 text-emerald-500 hover:text-emerald-700" />
-                            </Button>
-                          </AlertDialogTrigger>
-                          <AlertDialogContent>
-                            <AlertDialogHeader>
-                              <AlertDialogTitle>How We Calculate Months</AlertDialogTitle>
-                              <AlertDialogDescription className="text-left space-y-2">
-                                <p>Pregnancy months are calculated based on pregnancy weeks:</p>
-                                <ul className="list-disc list-inside space-y-1 text-sm">
-                                  <li>Weeks 1-4: Month 1</li>
-                                  <li>Weeks 5-8: Month 2</li>
-                                  <li>Weeks 9-13: Month 3</li>
-                                  <li>Weeks 14-17: Month 4</li>
-                                  <li>Weeks 18-21: Month 5</li>
-                                  <li>Weeks 22-26: Month 6</li>
-                                  <li>Weeks 27-30: Month 7</li>
-                                  <li>Weeks 31-35: Month 8</li>
-                                  <li>Weeks 36-40: Month 9</li>
-                                </ul>
-                              </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                              <AlertDialogAction>Got it</AlertDialogAction>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
-                      </div>
-                    </CardContent>
-                  </Card>
+            {/* Due Date Card */}
+            <Card className="bg-gradient-to-br from-emerald-50 to-teal-100 border-0 shadow-lg">
+              <CardHeader className="pb-4">
+                <CardTitle className="flex items-center gap-3 text-emerald-800">
+                  <div className="p-2 bg-emerald-100 rounded-full">
+                    <CalendarDays className="w-5 h-5 text-emerald-600" />
+                  </div>
+                  {t('expectedDueDate')}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-emerald-700 mb-1">
+                    {format(pregnancyInfo.dueDate, "EEEE")}
+                  </div>
+                  <div className="text-xl text-emerald-600">
+                    {format(pregnancyInfo.dueDate, "MMMM d, yyyy")}
+                  </div>
                 </div>
-              </>
-            )}
-          </TabsContent>
+              </CardContent>
+            </Card>
 
-          <TabsContent value="weekly">
-            <WeeklyInfo currentWeek={pregnancyInfo?.weeksPregnant || 0} />
-          </TabsContent>
+            {/* Quick Stats Grid */}
+            <div className="grid grid-cols-2 gap-4">
+              <Card className="bg-gradient-to-br from-pink-50 to-rose-100 border-0 shadow-md">
+                <CardContent className="p-4 text-center">
+                  <div className="flex items-center justify-center mb-2">
+                    <CalendarDays className="w-6 h-6 text-pink-600" />
+                  </div>
+                  <div className="text-2xl font-bold text-pink-700">
+                    {pregnancyInfo.weeksPregnant}{t('weekAbbrev')} {pregnancyInfo.daysInCurrentWeek}{t('dayAbbrev')}
+                  </div>
+                  <div className="text-sm text-pink-600">{t('yourProgressText')}</div>
+                </CardContent>
+              </Card>
 
-          <TabsContent value="community">
-            <Community />
-          </TabsContent>
+              <Card className="bg-gradient-to-br from-emerald-50 to-green-100 border-0 shadow-md">
+                <CardContent className="p-4 text-center">
+                  <div className="flex items-center justify-center mb-2">
+                    <Baby className="w-6 h-6 text-emerald-600" />
+                  </div>
+                  <div className="text-2xl font-bold text-emerald-700">
+                    {calculatePregnancyMonth(pregnancyInfo.weeksPregnant)}
+                  </div>
+                  <div className="text-sm text-emerald-600 flex items-center justify-center gap-1">
+                    Month
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button variant="ghost" size="sm" className="p-0 h-auto w-auto hover:bg-transparent">
+                          <Info className="w-3 h-3 text-emerald-500 hover:text-emerald-700" />
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>How We Calculate Months</AlertDialogTitle>
+                          <AlertDialogDescription className="text-left space-y-2">
+                            <p>Pregnancy months are calculated based on pregnancy weeks:</p>
+                            <ul className="list-disc list-inside space-y-1 text-sm">
+                              <li>Weeks 1-4: Month 1</li>
+                              <li>Weeks 5-8: Month 2</li>
+                              <li>Weeks 9-13: Month 3</li>
+                              <li>Weeks 14-17: Month 4</li>
+                              <li>Weeks 18-21: Month 5</li>
+                              <li>Weeks 22-26: Month 6</li>
+                              <li>Weeks 27-30: Month 7</li>
+                              <li>Weeks 31-35: Month 8</li>
+                              <li>Weeks 36-40: Month 9</li>
+                            </ul>
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogAction>Got it</AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </>
+        )}
 
-        </Tabs>
+        {activeTab === 'weekly' && (
+          <WeeklyInfo currentWeek={pregnancyInfo?.weeksPregnant || 0} />
+        )}
+
+        {activeTab === 'community' && (
+          <Community />
+        )}
       </div>
       
       {/* Bottom Navigation */}
