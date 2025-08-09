@@ -9,6 +9,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { CalendarIcon, Baby, Users, Heart, Settings, CalendarDays, Clock, Star, Gift, Info } from "lucide-react";
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { format, addDays, differenceInDays, differenceInWeeks, subDays } from "date-fns";
+import { ar } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -165,7 +166,7 @@ const Index = () => {
                         )}
                       >
                         <CalendarIcon className="mr-2 h-4 w-4" />
-                        {selectedDate ? format(selectedDate, "PPP") : t('selectDate')}
+                        {selectedDate ? format(selectedDate, "PPP", { locale: ar }) : t('selectDate')}
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
@@ -193,7 +194,7 @@ const Index = () => {
                         )}
                       >
                         <CalendarIcon className="mr-2 h-4 w-4" />
-                        {selectedDueDate ? format(selectedDueDate, "PPP") : t('selectDueDate')}
+                        {selectedDueDate ? format(selectedDueDate, "PPP", { locale: ar }) : t('selectDueDate')}
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
@@ -285,7 +286,7 @@ const Index = () => {
                                 )}
                               >
                                 <CalendarIcon className="mr-2 h-4 w-4" />
-                                {selectedDate ? format(selectedDate, "PPP") : t('selectDate')}
+                                {selectedDate ? format(selectedDate, "PPP", { locale: ar }) : t('selectDate')}
                               </Button>
                             </PopoverTrigger>
                             <PopoverContent className="w-auto p-0" align="start">
@@ -313,7 +314,7 @@ const Index = () => {
                                 )}
                               >
                                 <CalendarIcon className="mr-2 h-4 w-4" />
-                                {selectedDueDate ? format(selectedDueDate, "PPP") : t('selectDueDate')}
+                                {selectedDueDate ? format(selectedDueDate, "PPP", { locale: ar }) : t('selectDueDate')}
                               </Button>
                             </PopoverTrigger>
                             <PopoverContent className="w-auto p-0" align="start">
@@ -418,10 +419,10 @@ const Index = () => {
               <CardContent>
                 <div className="text-center">
                   <div className="text-2xl font-bold text-emerald-700 mb-1">
-                    {format(pregnancyInfo.dueDate, "EEEE")}
+                    {format(pregnancyInfo.dueDate, "EEEE", { locale: ar })}
                   </div>
                   <div className="text-xl text-emerald-600">
-                    {format(pregnancyInfo.dueDate, "MMMM d, yyyy")}
+                    {format(pregnancyInfo.dueDate, "MMMM d, yyyy", { locale: ar })}
                   </div>
                 </div>
               </CardContent>
