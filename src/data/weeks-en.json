@@ -1,4 +1,58 @@
 {
+  "1": {
+    "title": "Week 1: The Journey Begins",
+    "babySize": "",
+    "sizeDescription": "Conception hasn't occurred yet",
+    "description": "This week marks the beginning of your pregnancy journey, even though conception hasn't happened yet.",
+    "developments": [
+      "Your body is preparing for ovulation",
+      "The lining of your uterus is thickening",
+      "Hormonal changes are beginning"
+    ],
+    "momTips": [
+      "Start taking folic acid supplements",
+      "Maintain a healthy diet",
+      "Avoid alcohol and smoking",
+      "Track your ovulation cycle"
+    ],
+    "image": "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=400&h=300&fit=crop"
+  },
+  "2": {
+    "title": "Week 2: Preparing for Conception",
+    "babySize": "",
+    "sizeDescription": "Ovulation is approaching",
+    "description": "Your body is getting ready for conception. This is typically when ovulation occurs.",
+    "developments": [
+      "Ovulation is likely to occur this week",
+      "The egg is maturing in the ovary",
+      "Your body temperature may rise slightly"
+    ],
+    "momTips": [
+      "Continue taking prenatal vitamins",
+      "Track ovulation signs",
+      "Maintain a healthy lifestyle",
+      "Reduce stress levels"
+    ],
+    "image": "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=400&h=300&fit=crop"
+  },
+  "3": {
+    "title": "Week 3: Conception Week",
+    "babySize": "Cluster of cells",
+    "sizeDescription": "Smaller than a grain of rice",
+    "description": "Conception has likely occurred this week. The fertilized egg is beginning its journey.",
+    "developments": [
+      "Fertilization occurs",
+      "The embryo begins dividing rapidly",
+      "Implantation in the uterus starts"
+    ],
+    "momTips": [
+      "Continue prenatal vitamins",
+      "Avoid alcohol and drugs",
+      "Eat a balanced diet",
+      "Get adequate rest"
+    ],
+    "image": "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=400&h=300&fit=crop"
+  },
   "4": {
     "title": "Week 4: The Beginning",
     "babySize": "Poppy Seed",
@@ -15,6 +69,63 @@
       "Schedule your first prenatal appointment"
     ],
     "image": "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=400&h=300&fit=crop"
+  },
+  "5": {
+    "title": "Week 5: Heart Development",
+    "babySize": "Sesame Seed",
+    "sizeDescription": "About 3mm",
+    "description": "Your baby's heart is beginning to form and beat, though it's still very early.",
+    "developments": [
+      "Heart begins to form",
+      "Neural tube continues developing",
+      "Arm and leg buds appear",
+      "Brain development starts"
+    ],
+    "momTips": [
+      "Continue prenatal vitamins",
+      "Stay hydrated",
+      "Eat small, frequent meals",
+      "Get plenty of rest"
+    ],
+    "image": "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=400&h=300&fit=crop"
+  },
+  "6": {
+    "title": "Week 6: Facial Features Begin",
+    "babySize": "Lentil",
+    "sizeDescription": "About 4mm",
+    "description": "Your baby's facial features are starting to form, and the heart is beating regularly.",
+    "developments": [
+      "Heart beats regularly",
+      "Facial features begin forming",
+      "Arm and leg buds grow",
+      "Brain waves can be detected"
+    ],
+    "momTips": [
+      "Combat morning sickness with crackers",
+      "Stay hydrated",
+      "Avoid strong smells if they bother you",
+      "Rest when you feel tired"
+    ],
+    "image": "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=400&h=300&fit=crop"
+  },
+  "7": {
+    "title": "Week 7: Growing Rapidly",
+    "babySize": "Blueberry",
+    "sizeDescription": "About 10mm",
+    "description": "Your baby is growing rapidly, doubling in size this week.",
+    "developments": [
+      "Hands and feet are developing",
+      "Heart has four chambers",
+      "Digestive system is forming",
+      "Eyes and ears are developing"
+    ],
+    "momTips": [
+      "Eat nutrient-rich foods",
+      "Take prenatal vitamins",
+      "Avoid raw or undercooked foods",
+      "Get regular exercise as tolerated"
+    ],
+    "image": "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=400&h=300&fit=crop"
   },
   "8": {
     "title": "Week 8: Rapid Growth",
@@ -33,6 +144,63 @@
     ],
     "image": "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=400&h=300&fit=crop"
   },
+  "9": {
+    "title": "Week 9: Basic Physiology Complete",
+    "babySize": "Grape",
+    "sizeDescription": "About 23mm",
+    "description": "Your baby's basic physiology is complete, and growth will accelerate from here.",
+    "developments": [
+      "All essential organs are present",
+      "Heart is fully formed",
+      "Muscles and bones are developing",
+      "Eyelids are forming"
+    ],
+    "momTips": [
+      "Continue prenatal care",
+      "Eat a balanced diet",
+      "Stay active with gentle exercise",
+      "Avoid stress when possible"
+    ],
+    "image": "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=400&h=300&fit=crop"
+  },
+  "10": {
+    "title": "Week 10: Entering Fetal Stage",
+    "babySize": "Strawberry",
+    "sizeDescription": "About 31mm",
+    "description": "Your baby is now officially called a fetus and is no longer an embryo.",
+    "developments": [
+      "Officially enters fetal stage",
+      "Joints are forming",
+      "Brain development accelerates",
+      "External ears are developing"
+    ],
+    "momTips": [
+      "Schedule genetic screening if desired",
+      "Maintain healthy eating habits",
+      "Get adequate sleep",
+      "Consider pregnancy support groups"
+    ],
+    "image": "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=400&h=300&fit=crop"
+  },
+  "11": {
+    "title": "Week 11: Rapid Development",
+    "babySize": "Fig",
+    "sizeDescription": "About 41mm",
+    "description": "Your baby is developing rapidly, with organs beginning to function.",
+    "developments": [
+      "Organs start to function",
+      "Hair follicles are forming",
+      "Tooth buds appear",
+      "Hands and feet are more defined"
+    ],
+    "momTips": [
+      "Prepare for prenatal screening tests",
+      "Maintain a healthy diet",
+      "Stay hydrated",
+      "Consider maternity clothes shopping"
+    ],
+    "image": "https://images.unsplash.com/photo-1535268647677-300dbf3d78d1?w=400&h=300&fit=crop"
+  },
   "12": {
     "title": "Week 12: End of First Trimester",
     "babySize": "Lime",
@@ -50,6 +218,63 @@
     ],
     "image": "https://images.unsplash.com/photo-1535268647677-300dbf3d78d1?w=400&h=300&fit=crop"
   },
+  "13": {
+    "title": "Week 13: Second Trimester Begins",
+    "babySize": "Peach",
+    "sizeDescription": "About 7.4cm",
+    "description": "Welcome to the second trimester! Many women feel better during this period.",
+    "developments": [
+      "Vocal cords are forming",
+      "Baby can suck thumb",
+      "Intestines move into abdomen",
+      "Fingerprints are developing"
+    ],
+    "momTips": [
+      "Enjoy increased energy levels",
+      "Start exercising regularly",
+      "Begin planning the nursery",
+      "Consider prenatal yoga"
+    ],
+    "image": "https://images.unsplash.com/photo-1472396961693-142e6e269027?w=400&h=300&fit=crop"
+  },
+  "14": {
+    "title": "Week 14: Growing Stronger",
+    "babySize": "Lemon",
+    "sizeDescription": "About 8.7cm",
+    "description": "Your baby is growing stronger and more active.",
+    "developments": [
+      "Facial expressions are possible",
+      "Baby can make urine",
+      "Hair begins to grow",
+      "Arms have grown longer"
+    ],
+    "momTips": [
+      "Consider genetic testing",
+      "Eat calcium-rich foods",
+      "Stay active",
+      "Start sleeping on your side"
+    ],
+    "image": "https://images.unsplash.com/photo-1472396961693-142e6e269027?w=400&h=300&fit=crop"
+  },
+  "15": {
+    "title": "Week 15: Rapid Growth Phase",
+    "babySize": "Apple",
+    "sizeDescription": "About 10.1cm",
+    "description": "Your baby is in a rapid growth phase, and you might start feeling movements.",
+    "developments": [
+      "Bones and muscles are developing",
+      "Baby can sense light",
+      "Hearing is developing",
+      "More coordinated movements"
+    ],
+    "momTips": [
+      "Eat protein-rich foods",
+      "Stay hydrated",
+      "Consider maternity photography",
+      "Plan your nursery theme"
+    ],
+    "image": "https://images.unsplash.com/photo-1472396961693-142e6e269027?w=400&h=300&fit=crop"
+  },
   "16": {
     "title": "Week 16: Second Trimester Begins",
     "babySize": "Avocado",
@@ -64,6 +289,462 @@
       "Enjoy increased energy",
       "Start thinking about baby names",
       "Consider prenatal yoga"
+    ],
+    "image": "https://images.unsplash.com/photo-1472396961693-142e6e269027?w=400&h=300&fit=crop"
+  },
+  "17": {
+    "title": "Week 17: Getting Stronger",
+    "babySize": "Turnip",
+    "sizeDescription": "About 13cm",
+    "description": "Your baby is getting stronger and more active every day.",
+    "developments": [
+      "Fat begins to form",
+      "Hearing continues developing",
+      "Baby can move joints",
+      "Sweat glands are forming"
+    ],
+    "momTips": [
+      "Start doing Kegel exercises",
+      "Wear supportive bras",
+      "Avoid sleeping on your back",
+      "Take prenatal vitamins"
+    ],
+    "image": "https://images.unsplash.com/photo-1472396961693-142e6e269027?w=400&h=300&fit=crop"
+  },
+  "18": {
+    "title": "Week 18: Anatomy Scan Week",
+    "babySize": "Bell Pepper",
+    "sizeDescription": "About 14.2cm",
+    "description": "This is often when you'll have your anatomy scan ultrasound.",
+    "developments": [
+      "Nervous system is maturing",
+      "Myelin forms around nerves",
+      "Baby can hear outside sounds",
+      "Genitals are clearly visible"
+    ],
+    "momTips": [
+      "Schedule anatomy scan",
+      "Consider finding out baby's sex",
+      "Start baby registry",
+      "Plan babymoon trip"
+    ],
+    "image": "https://images.unsplash.com/photo-1472396961693-142e6e269027?w=400&h=300&fit=crop"
+  },
+  "19": {
+    "title": "Week 19: Sensory Development",
+    "babySize": "Tomato",
+    "sizeDescription": "About 15.3cm",
+    "description": "Your baby's senses are developing rapidly this week.",
+    "developments": [
+      "Brain specializes in smell, taste, hearing, sight, and touch",
+      "Protective coating forms around nerves",
+      "Arms and legs are in proportion",
+      "Kidneys continue to make urine"
+    ],
+    "momTips": [
+      "Talk and sing to your baby",
+      "Start planning maternity leave",
+      "Consider childbirth classes",
+      "Eat brain-healthy foods"
+    ],
+    "image": "https://images.unsplash.com/photo-1472396961693-142e6e269027?w=400&h=300&fit=crop"
+  },
+  "20": {
+    "title": "Week 20: Halfway Point",
+    "babySize": "Banana",
+    "sizeDescription": "About 16.4cm",
+    "description": "Congratulations! You're halfway through your pregnancy.",
+    "developments": [
+      "Baby can now hear and respond to sounds",
+      "Hair and nails are growing",
+      "Digestive system is practicing",
+      "Baby's movements are getting stronger"
+    ],
+    "momTips": [
+      "Schedule anatomy scan if not done",
+      "Start planning the nursery",
+      "Consider baby names seriously",
+      "Take belly photos"
+    ],
+    "image": "https://images.unsplash.com/photo-1472396961693-142e6e269027?w=400&h=300&fit=crop"
+  },
+  "21": {
+    "title": "Week 21: Rapid Weight Gain",
+    "babySize": "Carrot",
+    "sizeDescription": "About 26.7cm",
+    "description": "Your baby is gaining weight rapidly from here on out.",
+    "developments": [
+      "Rapid weight gain begins",
+      "Digestive system is maturing",
+      "Bone marrow begins making blood cells",
+      "Taste buds are functioning"
+    ],
+    "momTips": [
+      "Focus on gaining healthy weight",
+      "Prepare for glucose screening",
+      "Consider pregnancy massage",
+      "Practice relaxation techniques"
+    ],
+    "image": "https://images.unsplash.com/photo-1472396961693-142e6e269027?w=400&h=300&fit=crop"
+  },
+  "22": {
+    "title": "Week 22: Active Baby",
+    "babySize": "Squash",
+    "sizeDescription": "About 27.8cm",
+    "description": "Your baby is becoming more active and you'll likely feel regular movements.",
+    "developments": [
+      "Movements are becoming regular",
+      "Eyebrows and eyelashes appear",
+      "Inner ear is fully developed",
+      "Baby can perceive light and dark"
+    ],
+    "momTips": [
+      "Start counting baby's movements",
+      "Prepare for glucose tolerance test",
+      "Consider maternity photography",
+      "Shop for maternity and nursing bras"
+    ],
+    "image": "https://images.unsplash.com/photo-1472396961693-142e6e269027?w=400&h=300&fit=crop"
+  },
+  "23": {
+    "title": "Week 23: Hearing Development",
+    "babySize": "Large Mango",
+    "sizeDescription": "About 28.9cm",
+    "description": "Your baby's hearing is becoming more sophisticated.",
+    "developments": [
+      "Hearing is more sophisticated",
+      "Baby responds to sounds",
+      "Lungs are preparing for breathing",
+      "Skin is becoming less transparent"
+    ],
+    "momTips": [
+      "Play music for your baby",
+      "Read books aloud",
+      "Monitor your blood pressure",
+      "Stay active with walking"
+    ],
+    "image": "https://images.unsplash.com/photo-1472396961693-142e6e269027?w=400&h=300&fit=crop"
+  },
+  "24": {
+    "title": "Week 24: Viability Milestone",
+    "babySize": "Ear of Corn",
+    "sizeDescription": "About 30cm",
+    "description": "Your baby reaches the milestone of viability this week.",
+    "developments": [
+      "Reaches viability milestone",
+      "Hearing is well-developed",
+      "Baby's skin is thin and red",
+      "Brain is developing rapidly"
+    ],
+    "momTips": [
+      "Take glucose tolerance test",
+      "Monitor for preterm labor signs",
+      "Start researching pediatricians",
+      "Consider creating birth plan"
+    ],
+    "image": "https://images.unsplash.com/photo-1472396961693-142e6e269027?w=400&h=300&fit=crop"
+  },
+  "25": {
+    "title": "Week 25: Growing Stronger",
+    "babySize": "Rutabaga",
+    "sizeDescription": "About 34.6cm",
+    "description": "Your baby is growing stronger and more viable each day.",
+    "developments": [
+      "Hair color and texture are set",
+      "Blood vessels are developing in lungs",
+      "Nostrils begin to open",
+      "Baby's hands are fully developed"
+    ],
+    "momTips": [
+      "Take childbirth preparation classes",
+      "Start planning maternity leave",
+      "Monitor your weight gain",
+      "Practice good posture"
+    ],
+    "image": "https://images.unsplash.com/photo-1472396961693-142e6e269027?w=400&h=300&fit=crop"
+  },
+  "26": {
+    "title": "Week 26: Brain Development",
+    "babySize": "Scallion",
+    "sizeDescription": "About 35.6cm",
+    "description": "Your baby's brain is developing rapidly this week.",
+    "developments": [
+      "Brain tissue is developing rapidly",
+      "Eyes begin to open",
+      "Immune system is developing",
+      "Baby can respond to touch"
+    ],
+    "momTips": [
+      "Monitor baby's movements",
+      "Prepare for third trimester",
+      "Consider cord blood banking",
+      "Schedule regular prenatal visits"
+    ],
+    "image": "https://images.unsplash.com/photo-1472396961693-142e6e269027?w=400&h=300&fit=crop"
+  },
+  "27": {
+    "title": "Week 27: Second Trimester Ends",
+    "babySize": "Cauliflower",
+    "sizeDescription": "About 36.6cm",
+    "description": "You're approaching the end of your second trimester.",
+    "developments": [
+      "Lungs continue to mature",
+      "Brain can control breathing",
+      "Eyelids can open and close",
+      "Sleep patterns are developing"
+    ],
+    "momTips": [
+      "Prepare for third trimester challenges",
+      "Continue monitoring movements",
+      "Plan hospital bag packing",
+      "Research breastfeeding classes"
+    ],
+    "image": "https://images.unsplash.com/photo-1472396961693-142e6e269027?w=400&h=300&fit=crop"
+  },
+  "28": {
+    "title": "Week 28: Third Trimester Begins",
+    "babySize": "Eggplant",
+    "sizeDescription": "About 37.6cm",
+    "description": "Welcome to the third trimester! Your baby's survival odds are very good now.",
+    "developments": [
+      "Survival odds are very good",
+      "Baby can dream (REM sleep)",
+      "Muscle tone is improving",
+      "Fat continues to accumulate"
+    ],
+    "momTips": [
+      "Start kick counts",
+      "Schedule more frequent appointments",
+      "Consider third trimester screening",
+      "Prepare for body changes"
+    ],
+    "image": "https://images.unsplash.com/photo-1472396961693-142e6e269027?w=400&h=300&fit=crop"
+  },
+  "29": {
+    "title": "Week 29: Rapid Brain Development",
+    "babySize": "Butternut Squash",
+    "sizeDescription": "About 38.6cm",
+    "description": "Your baby's brain is developing very rapidly now.",
+    "developments": [
+      "Brain development is very rapid",
+      "Head is growing to accommodate brain",
+      "Muscles and lungs are maturing",
+      "Baby can control body temperature better"
+    ],
+    "momTips": [
+      "Monitor for gestational diabetes",
+      "Practice breathing exercises",
+      "Start pelvic floor exercises",
+      "Prepare nursery essentials"
+    ],
+    "image": "https://images.unsplash.com/photo-1472396961693-142e6e269027?w=400&h=300&fit=crop"
+  },
+  "30": {
+    "title": "Week 30: Growing Rapidly",
+    "babySize": "Cabbage",
+    "sizeDescription": "About 39.9cm",
+    "description": "Your baby is growing rapidly and running out of room.",
+    "developments": [
+      "Growing rapidly",
+      "Running out of room in uterus",
+      "Bone marrow is forming red blood cells",
+      "Lanugo hair begins to disappear"
+    ],
+    "momTips": [
+      "Monitor for preeclampsia signs",
+      "Prepare for decreased movement space",
+      "Continue prenatal vitamins",
+      "Plan for maternity photos"
+    ],
+    "image": "https://images.unsplash.com/photo-1472396961693-142e6e269027?w=400&h=300&fit=crop"
+  },
+  "31": {
+    "title": "Week 31: Final Growth Spurt",
+    "babySize": "Coconut",
+    "sizeDescription": "About 41.1cm",
+    "description": "Your baby is entering their final major growth spurt.",
+    "developments": [
+      "Entering final major growth spurt",
+      "All five senses are working",
+      "Billions of neurons are developing",
+      "Baby's movements may feel different"
+    ],
+    "momTips": [
+      "Practice relaxation techniques",
+      "Prepare for Braxton Hicks contractions",
+      "Continue monitoring baby's movements",
+      "Start thinking about labor preferences"
+    ],
+    "image": "https://images.unsplash.com/photo-1472396961693-142e6e269027?w=400&h=300&fit=crop"
+  },
+  "32": {
+    "title": "Week 32: Immune System Development",
+    "babySize": "Jicama",
+    "sizeDescription": "About 42.4cm",
+    "description": "Your baby's immune system is getting stronger.",
+    "developments": [
+      "Immune system is getting stronger",
+      "Practicing breathing movements",
+      "Digestive system is nearly mature",
+      "Baby's bones are hardening"
+    ],
+    "momTips": [
+      "Plan for hospital tour",
+      "Discuss birth plan with provider",
+      "Start preparing siblings",
+      "Consider postpartum planning"
+    ],
+    "image": "https://images.unsplash.com/photo-1472396961693-142e6e269027?w=400&h=300&fit=crop"
+  },
+  "33": {
+    "title": "Week 33: Preparing for Birth",
+    "babySize": "Pineapple",
+    "sizeDescription": "About 43.7cm",
+    "description": "Your baby is starting to prepare for birth.",
+    "developments": [
+      "Starting to prepare for birth",
+      "Skull bones are not yet fused",
+      "Baby's movements are less vigorous",
+      "Lungs are rapidly maturing"
+    ],
+    "momTips": [
+      "Pack hospital bag",
+      "Finalize birth plan",
+      "Prepare for baby's arrival",
+      "Practice breathing techniques"
+    ],
+    "image": "https://images.unsplash.com/photo-1472396961693-142e6e269027?w=400&h=300&fit=crop"
+  },
+  "34": {
+    "title": "Week 34: Final Preparations",
+    "babySize": "Cantaloupe",
+    "sizeDescription": "About 45cm",
+    "description": "Your baby is making final preparations for life outside the womb.",
+    "developments": [
+      "Making final preparations for outside life",
+      "Central nervous system is maturing",
+      "Lungs are producing surfactant",
+      "Baby's fingernails reach fingertips"
+    ],
+    "momTips": [
+      "Complete baby preparations",
+      "Stock up on postpartum supplies",
+      "Arrange newborn care",
+      "Get plenty of rest"
+    ],
+    "image": "https://images.unsplash.com/photo-1472396961693-142e6e269027?w=400&h=300&fit=crop"
+  },
+  "35": {
+    "title": "Week 35: Lungs Maturing",
+    "babySize": "Honeydew Melon",
+    "sizeDescription": "About 46.2cm",
+    "description": "Your baby's lungs are rapidly maturing now.",
+    "developments": [
+      "Lungs are rapidly maturing",
+      "Baby's kidneys are fully developed",
+      "Liver can process waste products",
+      "Most babies are head-down by now"
+    ],
+    "momTips": [
+      "Monitor for signs of preterm labor",
+      "Complete nursery setup",
+      "Install car seat",
+      "Review labor and delivery plans"
+    ],
+    "image": "https://images.unsplash.com/photo-1472396961693-142e6e269027?w=400&h=300&fit=crop"
+  },
+  "36": {
+    "title": "Week 36: Full Term Approaching",
+    "babySize": "Romaine Lettuce",
+    "sizeDescription": "About 47.4cm",
+    "description": "Your baby is approaching full term and could arrive soon.",
+    "developments": [
+      "Approaching full term",
+      "Could arrive any time",
+      "Digestive system is ready",
+      "Baby is gaining about 1 ounce per day"
+    ],
+    "momTips": [
+      "Baby could arrive any time",
+      "Have hospital bag ready",
+      "Know signs of labor",
+      "Rest as much as possible"
+    ],
+    "image": "https://images.unsplash.com/photo-1472396961693-142e6e269027?w=400&h=300&fit=crop"
+  },
+  "37": {
+    "title": "Week 37: Full Term",
+    "babySize": "Swiss Chard",
+    "sizeDescription": "About 48.6cm",
+    "description": "Congratulations! Your baby is now considered full term.",
+    "developments": [
+      "Baby is now considered full term",
+      "Lungs are mature enough for breathing",
+      "Baby's head may be engaged in pelvis",
+      "Continued brain development"
+    ],
+    "momTips": [
+      "Be ready for labor at any time",
+      "Know your birth plan",
+      "Have support system in place",
+      "Stay calm and patient"
+    ],
+    "image": "https://images.unsplash.com/photo-1472396961693-142e6e269027?w=400&h=300&fit=crop"
+  },
+  "38": {
+    "title": "Week 38: Ready for Birth",
+    "babySize": "Leek",
+    "sizeDescription": "About 49.8cm",
+    "description": "Your baby is ready for birth and gaining final weight.",
+    "developments": [
+      "Ready for birth",
+      "Gaining final weight",
+      "Shedding vernix and lanugo",
+      "Baby's grip is getting stronger"
+    ],
+    "momTips": [
+      "Labor could start any day",
+      "Watch for signs of labor",
+      "Get plenty of rest",
+      "Stay active with walking"
+    ],
+    "image": "https://images.unsplash.com/photo-1472396961693-142e6e269027?w=400&h=300&fit=crop"
+  },
+  "39": {
+    "title": "Week 39: Almost Time",
+    "babySize": "Mini Watermelon",
+    "sizeDescription": "About 50.7cm",
+    "description": "Your baby is almost ready to meet you!",
+    "developments": [
+      "Almost ready to meet you",
+      "Brain is still developing",
+      "Baby's movements may decrease",
+      "Lungs are fully mature"
+    ],
+    "momTips": [
+      "Labor is likely to start soon",
+      "Stay alert for labor signs",
+      "Rest and prepare mentally",
+      "Trust your body's process"
+    ],
+    "image": "https://images.unsplash.com/photo-1472396961693-142e6e269027?w=400&h=300&fit=crop"
+  },
+  "40": {
+    "title": "Week 40: Due Date",
+    "babySize": "Small Pumpkin",
+    "sizeDescription": "About 51.2cm",
+    "description": "Congratulations! You've reached your due date.",
+    "developments": [
+      "Due date has arrived",
+      "Baby is fully developed",
+      "May have strong fingernails",
+      "Ready for life outside the womb"
+    ],
+    "momTips": [
+      "Baby may arrive any day now",
+      "Stay patient and calm",
+      "Trust the process",
+      "Prepare to meet your baby!"
     ],
     "image": "https://images.unsplash.com/photo-1472396961693-142e6e269027?w=400&h=300&fit=crop"
   }
