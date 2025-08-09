@@ -401,10 +401,12 @@ const Index = () => {
               </div>
             </div>
 
-            <DailyTip currentDay={pregnancyInfo.totalDays} />
+            <div className="mb-6">
+              <DailyTip currentDay={pregnancyInfo.totalDays} />
+            </div>
 
             {/* Due Date Card */}
-            <Card className="bg-gradient-to-br from-emerald-50 to-teal-100 border-0 shadow-lg">
+            <Card className="bg-gradient-to-br from-emerald-50 to-teal-100 border-0 shadow-lg mb-6">
               <CardHeader className="pb-4">
                 <CardTitle className="flex items-center gap-3 text-emerald-800">
                   <div className="p-2 bg-emerald-100 rounded-full">
