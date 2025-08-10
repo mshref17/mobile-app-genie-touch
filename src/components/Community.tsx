@@ -40,6 +40,7 @@ interface Reply {
   content: string;
   timestamp: any;
   postId: string;
+  attachments?: string[];
 }
 
 const Community = () => {
@@ -51,6 +52,8 @@ const Community = () => {
   const [uploading, setUploading] = useState(false);
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
   const [replyContent, setReplyContent] = useState('');
+  const [replyFiles, setReplyFiles] = useState<File[]>([]);
+  const [replyUploading, setReplyUploading] = useState(false);
   const [repliesVisible, setRepliesVisible] = useState<Record<string, boolean>>({});
   const [postReplies, setPostReplies] = useState<Record<string, Reply[]>>({});
   const [replyListeners, setReplyListeners] = useState<Record<string, () => void>>({});
@@ -190,6 +193,25 @@ const Community = () => {
     setSelectedFiles(validFiles);
   };
 
+  const handleReplyFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(event.target.files || []);
+    const validFiles = files.filter(file => {
+      const isValidType = file.type.startsWith('image/') || file.type.startsWith('video/');
+      const isValidSize = file.size <= 10 * 1024 * 1024; // 10MB limit
+      return isValidType && isValidSize;
+    });
+    
+    if (validFiles.length !== files.length) {
+      toast({
+        title: t("filesSkipped"),
+        description: t("filesSkippedDescription"),
+        variant: "destructive"
+      });
+    }
+    
+    setReplyFiles(validFiles);
+  };
+
   const handleLikePost = async (postId: string) => {
     try {
       const postRef = doc(db, 'posts', postId);
@@ -204,11 +226,21 @@ const Community = () => {
   const handleReplySubmit = async (postId: string) => {
     if (!replyContent.trim()) return;
     
+    setReplyUploading(true);
     try {
+      let attachments: string[] = [];
+      
+      // Upload files if any
+      if (replyFiles.length > 0) {
+        console.log('Uploading reply files:', replyFiles);
+        attachments = await uploadFiles(replyFiles);
+      }
+      
       const replyData = {
         content: replyContent,
         timestamp: serverTimestamp(),
-        postId: postId
+        postId: postId,
+        attachments: attachments
       };
       
       // Add reply to Firestore
@@ -221,6 +253,7 @@ const Community = () => {
       });
       
       setReplyContent('');
+      setReplyFiles([]);
       setReplyingTo(null);
       
       toast({
@@ -234,6 +267,8 @@ const Community = () => {
         description: "Failed to add reply. Please try again.",
         variant: "destructive"
       });
+    } finally {
+      setReplyUploading(false);
     }
   };
 
@@ -460,19 +495,57 @@ const Community = () => {
                       onChange={(e) => setReplyContent(e.target.value)}
                       className="mb-2"
                     />
+                    
+                    <div className="flex items-center gap-4 mb-3">
+                      <div className="flex items-center gap-2">
+                        <Input
+                          type="file"
+                          id={`reply-file-upload-${post.id}`}
+                          multiple
+                          accept="image/*,video/*"
+                          onChange={handleReplyFileSelect}
+                          className="hidden"
+                        />
+                        <Label htmlFor={`reply-file-upload-${post.id}`} className="cursor-pointer">
+                          <div className="flex items-center gap-2 px-3 py-2 border rounded-md hover:bg-gray-100">
+                            <Camera className="w-4 h-4" />
+                            <span className="text-sm">{t("photo")}</span>
+                          </div>
+                        </Label>
+                      </div>
+                    </div>
+                    
+                    {replyFiles.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mb-3">
+                        {replyFiles.map((file, index) => (
+                          <Badge key={index} variant="secondary">
+                            {file.name}
+                          </Badge>
+                        ))}
+                      </div>
+                    )}
+                    
                     <div className="flex gap-2">
                       <Button 
                         size="sm" 
                         onClick={() => handleReplySubmit(post.id)}
-                        disabled={!replyContent.trim()}
+                        disabled={!replyContent.trim() || replyUploading}
                         className="bg-purple-600 hover:bg-purple-700"
                       >
-                        {t("submitReply") || "Submit Reply"}
+                        {replyUploading ? (
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        ) : null}
+                        {replyUploading ? t("submitting") || "Submitting..." : t("submitReply") || "Submit Reply"}
                       </Button>
                       <Button 
                         size="sm" 
                         variant="outline" 
-                        onClick={() => setReplyingTo(null)}
+                        onClick={() => {
+                          setReplyingTo(null);
+                          setReplyContent('');
+                          setReplyFiles([]);
+                        }}
+                        disabled={replyUploading}
                       >
                         {t("cancel") || "Cancel"}
                       </Button>
@@ -487,6 +560,30 @@ const Community = () => {
                     {postReplies[post.id].map((reply) => (
                       <div key={reply.id} className="bg-purple-50 p-3 rounded-lg ml-4">
                         <p className="text-gray-700 text-sm">{reply.content}</p>
+                        
+                        {/* Display reply attachments */}
+                        {reply.attachments && reply.attachments.length > 0 && (
+                          <div className="flex flex-wrap gap-2 mt-2">
+                            {reply.attachments.map((url, index) => (
+                              <div key={index} className="relative">
+                                {url.includes('video') ? (
+                                  <video 
+                                    src={url} 
+                                    controls 
+                                    className="max-w-xs rounded-lg"
+                                  />
+                                ) : (
+                                  <img 
+                                    src={url} 
+                                    alt={`Reply attachment ${index + 1}`}
+                                    className="max-w-xs rounded-lg"
+                                  />
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                        
                         <span className="text-xs text-gray-500 mt-1 block">
                           {formatTimeAgo(reply.timestamp)}
                         </span>
