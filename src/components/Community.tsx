@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Heart, MessageCircle, Camera, Video, Send, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { Skeleton } from "@/components/ui/skeleton";
 import { db, storage } from "@/lib/firebase";
 import { 
   collection, 
@@ -46,7 +47,7 @@ const Community = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [newPost, setNewPost] = useState('');
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
   const [replyContent, setReplyContent] = useState('');
@@ -64,6 +65,7 @@ const Community = () => {
         postsData.push({ id: doc.id, ...doc.data() } as Post);
       });
       setPosts(postsData);
+      setLoading(false);
     });
 
     return () => {
@@ -354,7 +356,35 @@ const Community = () => {
       <div className="space-y-4">
         <h3 className="text-xl font-semibold text-pink-800">{t("communityQuestions")}</h3>
         
-        {posts.map((post) => (
+        {loading ? (
+          // Facebook-style loading skeleton
+          <div className="space-y-4">
+            {[...Array(3)].map((_, index) => (
+              <Card key={index}>
+                <CardContent className="pt-6">
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <Skeleton className="h-5 w-16 rounded-full" />
+                      <Skeleton className="h-4 w-12" />
+                    </div>
+                    <div className="space-y-2">
+                      <Skeleton className="h-4 w-full" />
+                      <Skeleton className="h-4 w-3/4" />
+                      <Skeleton className="h-4 w-1/2" />
+                    </div>
+                    <Skeleton className="h-32 w-full rounded-lg" />
+                    <div className="flex items-center gap-4 pt-2">
+                      <Skeleton className="h-8 w-16" />
+                      <Skeleton className="h-8 w-20" />
+                      <Skeleton className="h-8 w-16" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        ) : (
+          posts.map((post) => (
           <Card key={post.id}>
             <CardContent className="pt-6">
               <div className="space-y-3">
@@ -467,7 +497,7 @@ const Community = () => {
               </div>
             </CardContent>
           </Card>
-        ))}
+        )))}
       </div>
 
       {/* Firebase Setup Notice - Show only if no config */}
