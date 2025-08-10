@@ -1,12 +1,12 @@
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Heart, MessageCircle, Camera, Video, Send, Loader2 } from "lucide-react";
+import { Heart, MessageCircle, Camera, Video, Send, Loader2, TrendingUp, Clock, MessageSquare, Shuffle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -43,6 +43,14 @@ interface Reply {
   attachments?: string[];
 }
 
+type SortAlgorithm = 'smart' | 'latest' | 'most-liked' | 'most-replied';
+
+interface AlgorithmInfo {
+  name: string;
+  icon: any;
+  description: string;
+}
+
 const Community = () => {
   const { t } = useLanguage();
   const [posts, setPosts] = useState<Post[]>([]);
@@ -57,7 +65,68 @@ const Community = () => {
   const [repliesVisible, setRepliesVisible] = useState<Record<string, boolean>>({});
   const [postReplies, setPostReplies] = useState<Record<string, Reply[]>>({});
   const [replyListeners, setReplyListeners] = useState<Record<string, () => void>>({});
+  const [currentAlgorithm, setCurrentAlgorithm] = useState<SortAlgorithm>('smart');
+  const [touchStartY, setTouchStartY] = useState<number>(0);
   const { toast } = useToast();
+
+  const algorithms: Record<SortAlgorithm, AlgorithmInfo> = {
+    smart: { name: 'Smart Feed', icon: Shuffle, description: 'Mixed algorithm' },
+    latest: { name: 'Latest', icon: Clock, description: 'Newest posts first' },
+    'most-liked': { name: 'Popular', icon: TrendingUp, description: 'Most liked posts' },
+    'most-replied': { name: 'Discussed', icon: MessageSquare, description: 'Most replies' }
+  };
+
+  // Filter and sort posts based on current algorithm
+  const sortedPosts = useMemo(() => {
+    // Filter posts from today only
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    const todaysPosts = posts.filter(post => {
+      if (!post.timestamp) return false;
+      const postDate = post.timestamp.toDate ? post.timestamp.toDate() : new Date(post.timestamp);
+      postDate.setHours(0, 0, 0, 0);
+      return postDate.getTime() >= today.getTime();
+    });
+
+    switch (currentAlgorithm) {
+      case 'latest':
+        return [...todaysPosts].sort((a, b) => {
+          const timeA = a.timestamp?.toDate ? a.timestamp.toDate().getTime() : new Date(a.timestamp).getTime();
+          const timeB = b.timestamp?.toDate ? b.timestamp.toDate().getTime() : new Date(b.timestamp).getTime();
+          return timeB - timeA;
+        });
+      
+      case 'most-liked':
+        return [...todaysPosts].sort((a, b) => (b.likes || 0) - (a.likes || 0));
+      
+      case 'most-replied':
+        return [...todaysPosts].sort((a, b) => (b.replies || 0) - (a.replies || 0));
+      
+      case 'smart':
+      default:
+        // Smart algorithm: weighted score based on likes, replies, and recency
+        return [...todaysPosts].sort((a, b) => {
+          const now = Date.now();
+          const timeA = a.timestamp?.toDate ? a.timestamp.toDate().getTime() : new Date(a.timestamp).getTime();
+          const timeB = b.timestamp?.toDate ? b.timestamp.toDate().getTime() : new Date(b.timestamp).getTime();
+          
+          // Calculate recency score (higher for newer posts)
+          const recencyA = Math.max(0, 1 - (now - timeA) / (24 * 60 * 60 * 1000)); // 24 hours decay
+          const recencyB = Math.max(0, 1 - (now - timeB) / (24 * 60 * 60 * 1000));
+          
+          // Calculate engagement score
+          const engagementA = (a.likes || 0) * 0.5 + (a.replies || 0) * 1;
+          const engagementB = (b.likes || 0) * 0.5 + (b.replies || 0) * 1;
+          
+          // Combined score with some randomness
+          const scoreA = (engagementA * 0.6 + recencyA * 0.4) + Math.random() * 0.1;
+          const scoreB = (engagementB * 0.6 + recencyB * 0.4) + Math.random() * 0.1;
+          
+          return scoreB - scoreA;
+        });
+    }
+  }, [posts, currentAlgorithm]);
 
   // Load posts from Firebase
   useEffect(() => {
@@ -210,6 +279,35 @@ const Community = () => {
     }
     
     setReplyFiles(validFiles);
+  };
+
+  // Handle swipe to change algorithm
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStartY(e.touches[0].clientY);
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const touchEndY = e.changedTouches[0].clientY;
+    const diffY = touchStartY - touchEndY;
+    
+    // If swipe down (negative diff) and significant distance
+    if (diffY < -50) {
+      cycleAlgorithm();
+    }
+  };
+
+  const cycleAlgorithm = () => {
+    const algorithmList: SortAlgorithm[] = ['smart', 'latest', 'most-liked', 'most-replied'];
+    const currentIndex = algorithmList.indexOf(currentAlgorithm);
+    const nextIndex = (currentIndex + 1) % algorithmList.length;
+    setCurrentAlgorithm(algorithmList[nextIndex]);
+    
+    const algorithmInfo = algorithms[algorithmList[nextIndex]];
+    toast({
+      title: `Switched to ${algorithmInfo.name}`,
+      description: algorithmInfo.description,
+      duration: 2000,
+    });
   };
 
   const handleLikePost = async (postId: string) => {
@@ -388,8 +486,23 @@ const Community = () => {
       </Card>
 
       {/* Posts Feed */}
-      <div className="space-y-4">
-        <h3 className="text-xl font-semibold text-pink-800">{t("communityQuestions")}</h3>
+      <div 
+        className="space-y-4" 
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
+        <div className="flex items-center justify-between">
+          <h3 className="text-xl font-semibold text-pink-800">{t("communityQuestions")}</h3>
+          <div className="flex items-center gap-2">
+            <Badge variant="outline" className="text-purple-600 border-purple-200">
+              {React.createElement(algorithms[currentAlgorithm].icon, { className: "w-3 h-3 mr-1" })}
+              {algorithms[currentAlgorithm].name}
+            </Badge>
+            <Badge variant="secondary" className="text-xs">
+              Swipe down to change
+            </Badge>
+          </div>
+        </div>
         
         {loading ? (
           // Facebook-style loading skeleton
@@ -418,183 +531,191 @@ const Community = () => {
               </Card>
             ))}
           </div>
-        ) : (
-          posts.map((post) => (
-          <Card key={post.id}>
-            <CardContent className="pt-6">
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <Badge variant="outline" className="text-pink-600 border-pink-200">
-                    {post.category}
-                  </Badge>
-                  <span className="text-sm text-gray-500">
-                    {formatTimeAgo(post.timestamp)}
-                  </span>
-                </div>
-                
-                <p className="text-gray-700">{post.content}</p>
-                
-                {/* Display attachments */}
-                {post.attachments && post.attachments.length > 0 && (
-                  <div className="flex flex-wrap gap-2 mt-3">
-                    {post.attachments.map((url, index) => (
-                      <div key={index} className="relative">
-                        {url.includes('video') ? (
-                          <video 
-                            src={url} 
-                            controls 
-                            className="max-w-xs rounded-lg"
-                          />
-                        ) : (
-                          <img 
-                            src={url} 
-                            alt={`Attachment ${index + 1}`}
-                            className="max-w-xs rounded-lg"
-                          />
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                )}
-                
-                <div className="flex items-center gap-4 pt-2">
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="text-pink-600 hover:text-pink-700"
-                    onClick={() => handleLikePost(post.id)}
-                  >
-                    <Heart className="w-4 h-4 mr-1" />
-                    {post.likes}
-                  </Button>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="text-purple-600 hover:text-purple-700"
-                    onClick={() => toggleReplies(post.id)}
-                  >
-                    <MessageCircle className="w-4 h-4 mr-1" />
-                    {post.replies} {t("replies")}
-                  </Button>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="text-blue-600 hover:text-blue-700"
-                    onClick={() => setReplyingTo(post.id)}
-                  >
-                    {t("reply") || "Reply"}
-                  </Button>
-                </div>
-                
-                {/* Reply Form */}
-                {replyingTo === post.id && (
-                  <div className="mt-4 p-4 bg-gray-50 rounded-lg">
-                    <Textarea
-                      placeholder={t("writeReply") || "Write your reply..."}
-                      value={replyContent}
-                      onChange={(e) => setReplyContent(e.target.value)}
-                      className="mb-2"
-                    />
-                    
-                    <div className="flex items-center gap-4 mb-3">
-                      <div className="flex items-center gap-2">
-                        <Input
-                          type="file"
-                          id={`reply-file-upload-${post.id}`}
-                          multiple
-                          accept="image/*,video/*"
-                          onChange={handleReplyFileSelect}
-                          className="hidden"
-                        />
-                        <Label htmlFor={`reply-file-upload-${post.id}`} className="cursor-pointer">
-                          <div className="flex items-center gap-2 px-3 py-2 border rounded-md hover:bg-gray-100">
-                            <Camera className="w-4 h-4" />
-                            <span className="text-sm">{t("photo")}</span>
-                          </div>
-                        </Label>
-                      </div>
-                    </div>
-                    
-                    {replyFiles.length > 0 && (
-                      <div className="flex flex-wrap gap-2 mb-3">
-                        {replyFiles.map((file, index) => (
-                          <Badge key={index} variant="secondary">
-                            {file.name}
-                          </Badge>
-                        ))}
-                      </div>
-                    )}
-                    
-                    <div className="flex gap-2">
-                      <Button 
-                        size="sm" 
-                        onClick={() => handleReplySubmit(post.id)}
-                        disabled={!replyContent.trim() || replyUploading}
-                        className="bg-purple-600 hover:bg-purple-700"
-                      >
-                        {replyUploading ? (
-                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                        ) : null}
-                        {replyUploading ? t("submitting") || "Submitting..." : t("submitReply") || "Submit Reply"}
-                      </Button>
-                      <Button 
-                        size="sm" 
-                        variant="outline" 
-                        onClick={() => {
-                          setReplyingTo(null);
-                          setReplyContent('');
-                          setReplyFiles([]);
-                        }}
-                        disabled={replyUploading}
-                      >
-                        {t("cancel") || "Cancel"}
-                      </Button>
-                    </div>
-                  </div>
-                )}
-                
-                {/* Replies List */}
-                {repliesVisible[post.id] && postReplies[post.id] && (
-                  <div className="mt-4 space-y-3">
-                    <h4 className="font-medium text-purple-800">{t("replies") || "Replies"}</h4>
-                    {postReplies[post.id].map((reply) => (
-                      <div key={reply.id} className="bg-purple-50 p-3 rounded-lg ml-4">
-                        <p className="text-gray-700 text-sm">{reply.content}</p>
-                        
-                        {/* Display reply attachments */}
-                        {reply.attachments && reply.attachments.length > 0 && (
-                          <div className="flex flex-wrap gap-2 mt-2">
-                            {reply.attachments.map((url, index) => (
-                              <div key={index} className="relative">
-                                {url.includes('video') ? (
-                                  <video 
-                                    src={url} 
-                                    controls 
-                                    className="max-w-xs rounded-lg"
-                                  />
-                                ) : (
-                                  <img 
-                                    src={url} 
-                                    alt={`Reply attachment ${index + 1}`}
-                                    className="max-w-xs rounded-lg"
-                                  />
-                                )}
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                        
-                        <span className="text-xs text-gray-500 mt-1 block">
-                          {formatTimeAgo(reply.timestamp)}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
+        ) : sortedPosts.length === 0 ? (
+          <Card className="text-center py-8">
+            <CardContent>
+              <p className="text-gray-500 mb-2">No posts from today yet</p>
+              <p className="text-sm text-gray-400">Be the first to share something with the community!</p>
             </CardContent>
           </Card>
-        )))}
+        ) : (
+          sortedPosts.map((post) => (
+            <Card key={post.id}>
+              <CardContent className="pt-6">
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <Badge variant="outline" className="text-pink-600 border-pink-200">
+                      {post.category}
+                    </Badge>
+                    <span className="text-sm text-gray-500">
+                      {formatTimeAgo(post.timestamp)}
+                    </span>
+                  </div>
+                  
+                  <p className="text-gray-700">{post.content}</p>
+                  
+                  {/* Display attachments */}
+                  {post.attachments && post.attachments.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mt-3">
+                      {post.attachments.map((url, index) => (
+                        <div key={index} className="relative">
+                          {url.includes('video') ? (
+                            <video 
+                              src={url} 
+                              controls 
+                              className="max-w-xs rounded-lg"
+                            />
+                          ) : (
+                            <img 
+                              src={url} 
+                              alt={`Attachment ${index + 1}`}
+                              className="max-w-xs rounded-lg"
+                            />
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  
+                  <div className="flex items-center gap-4 pt-2">
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="text-pink-600 hover:text-pink-700"
+                      onClick={() => handleLikePost(post.id)}
+                    >
+                      <Heart className="w-4 h-4 mr-1" />
+                      {post.likes}
+                    </Button>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="text-purple-600 hover:text-purple-700"
+                      onClick={() => toggleReplies(post.id)}
+                    >
+                      <MessageCircle className="w-4 h-4 mr-1" />
+                      {post.replies} {t("replies")}
+                    </Button>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="text-blue-600 hover:text-blue-700"
+                      onClick={() => setReplyingTo(post.id)}
+                    >
+                      {t("reply") || "Reply"}
+                    </Button>
+                  </div>
+                  
+                  {/* Reply Form */}
+                  {replyingTo === post.id && (
+                    <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+                      <Textarea
+                        placeholder={t("writeReply") || "Write your reply..."}
+                        value={replyContent}
+                        onChange={(e) => setReplyContent(e.target.value)}
+                        className="mb-2"
+                      />
+                      
+                      <div className="flex items-center gap-4 mb-3">
+                        <div className="flex items-center gap-2">
+                          <Input
+                            type="file"
+                            id={`reply-file-upload-${post.id}`}
+                            multiple
+                            accept="image/*,video/*"
+                            onChange={handleReplyFileSelect}
+                            className="hidden"
+                          />
+                          <Label htmlFor={`reply-file-upload-${post.id}`} className="cursor-pointer">
+                            <div className="flex items-center gap-2 px-3 py-2 border rounded-md hover:bg-gray-100">
+                              <Camera className="w-4 h-4" />
+                              <span className="text-sm">{t("photo")}</span>
+                            </div>
+                          </Label>
+                        </div>
+                      </div>
+                      
+                      {replyFiles.length > 0 && (
+                        <div className="flex flex-wrap gap-2 mb-3">
+                          {replyFiles.map((file, index) => (
+                            <Badge key={index} variant="secondary">
+                              {file.name}
+                            </Badge>
+                          ))}
+                        </div>
+                      )}
+                      
+                      <div className="flex gap-2">
+                        <Button 
+                          size="sm" 
+                          onClick={() => handleReplySubmit(post.id)}
+                          disabled={!replyContent.trim() || replyUploading}
+                          className="bg-purple-600 hover:bg-purple-700"
+                        >
+                          {replyUploading ? (
+                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                          ) : null}
+                          {replyUploading ? t("submitting") || "Submitting..." : t("submitReply") || "Submit Reply"}
+                        </Button>
+                        <Button 
+                          size="sm" 
+                          variant="outline" 
+                          onClick={() => {
+                            setReplyingTo(null);
+                            setReplyContent('');
+                            setReplyFiles([]);
+                          }}
+                          disabled={replyUploading}
+                        >
+                          {t("cancel") || "Cancel"}
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Replies List */}
+                  {repliesVisible[post.id] && postReplies[post.id] && (
+                    <div className="mt-4 space-y-3">
+                      <h4 className="font-medium text-purple-800">{t("replies") || "Replies"}</h4>
+                      {postReplies[post.id].map((reply) => (
+                        <div key={reply.id} className="bg-purple-50 p-3 rounded-lg ml-4">
+                          <p className="text-gray-700 text-sm">{reply.content}</p>
+                          
+                          {/* Display reply attachments */}
+                          {reply.attachments && reply.attachments.length > 0 && (
+                            <div className="flex flex-wrap gap-2 mt-2">
+                              {reply.attachments.map((url, index) => (
+                                <div key={index} className="relative">
+                                  {url.includes('video') ? (
+                                    <video 
+                                      src={url} 
+                                      controls 
+                                      className="max-w-xs rounded-lg"
+                                    />
+                                  ) : (
+                                    <img 
+                                      src={url} 
+                                      alt={`Reply attachment ${index + 1}`}
+                                      className="max-w-xs rounded-lg"
+                                    />
+                                  )}
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                          
+                          <span className="text-xs text-gray-500 mt-1 block">
+                            {formatTimeAgo(reply.timestamp)}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          ))
+        )}
       </div>
 
       {/* Firebase Setup Notice - Show only if no config */}
