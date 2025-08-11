@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -21,7 +21,8 @@ import {
   doc, 
   increment,
   serverTimestamp,
-  getDocs
+  getDocs,
+  limit
 } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
@@ -53,7 +54,11 @@ interface AlgorithmInfo {
 
 const Community = () => {
   const { t } = useLanguage();
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [allPosts, setAllPosts] = useState<Post[]>([]);
+  const [displayedPosts, setDisplayedPosts] = useState<Post[]>([]);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
   const [newPost, setNewPost] = useState('');
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [loading, setLoading] = useState(true);
@@ -69,6 +74,8 @@ const Community = () => {
   const [touchStartY, setTouchStartY] = useState<number>(0);
   const { toast } = useToast();
 
+  const POSTS_PER_PAGE = 5;
+
   const algorithms: Record<SortAlgorithm, AlgorithmInfo> = {
     smart: { name: 'Smart Feed', icon: Shuffle, description: 'Mixed algorithm' },
     latest: { name: 'Latest', icon: Clock, description: 'Newest posts first' },
@@ -76,57 +83,134 @@ const Community = () => {
     'most-replied': { name: 'Discussed', icon: MessageSquare, description: 'Most replies' }
   };
 
-  // Filter and sort posts based on current algorithm
+  // Sort all posts based on current algorithm
   const sortedPosts = useMemo(() => {
-    // Filter posts from today only
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     
-    const todaysPosts = posts.filter(post => {
-      if (!post.timestamp) return false;
-      const postDate = post.timestamp.toDate ? post.timestamp.toDate() : new Date(post.timestamp);
-      postDate.setHours(0, 0, 0, 0);
-      return postDate.getTime() >= today.getTime();
-    });
-
     switch (currentAlgorithm) {
       case 'latest':
-        return [...todaysPosts].sort((a, b) => {
+        // Show today's latest posts first, then older posts
+        const todaysLatest = allPosts.filter(post => {
+          if (!post.timestamp) return false;
+          const postDate = post.timestamp.toDate ? post.timestamp.toDate() : new Date(post.timestamp);
+          postDate.setHours(0, 0, 0, 0);
+          return postDate.getTime() >= today.getTime();
+        });
+        const olderPosts = allPosts.filter(post => {
+          if (!post.timestamp) return false;
+          const postDate = post.timestamp.toDate ? post.timestamp.toDate() : new Date(post.timestamp);
+          postDate.setHours(0, 0, 0, 0);
+          return postDate.getTime() < today.getTime();
+        });
+        return [...todaysLatest, ...olderPosts].sort((a, b) => {
           const timeA = a.timestamp?.toDate ? a.timestamp.toDate().getTime() : new Date(a.timestamp).getTime();
           const timeB = b.timestamp?.toDate ? b.timestamp.toDate().getTime() : new Date(b.timestamp).getTime();
           return timeB - timeA;
         });
       
       case 'most-liked':
-        return [...todaysPosts].sort((a, b) => (b.likes || 0) - (a.likes || 0));
+        // Show today's most liked first, then all posts by likes
+        const todaysMostLiked = allPosts.filter(post => {
+          if (!post.timestamp) return false;
+          const postDate = post.timestamp.toDate ? post.timestamp.toDate() : new Date(post.timestamp);
+          postDate.setHours(0, 0, 0, 0);
+          return postDate.getTime() >= today.getTime();
+        }).sort((a, b) => (b.likes || 0) - (a.likes || 0));
+        const otherPosts = allPosts.filter(post => {
+          if (!post.timestamp) return false;
+          const postDate = post.timestamp.toDate ? post.timestamp.toDate() : new Date(post.timestamp);
+          postDate.setHours(0, 0, 0, 0);
+          return postDate.getTime() < today.getTime();
+        }).sort((a, b) => (b.likes || 0) - (a.likes || 0));
+        return [...todaysMostLiked, ...otherPosts];
       
       case 'most-replied':
-        return [...todaysPosts].sort((a, b) => (b.replies || 0) - (a.replies || 0));
+        // Show today's most replied first, then all posts by replies
+        const todaysMostReplied = allPosts.filter(post => {
+          if (!post.timestamp) return false;
+          const postDate = post.timestamp.toDate ? post.timestamp.toDate() : new Date(post.timestamp);
+          postDate.setHours(0, 0, 0, 0);
+          return postDate.getTime() >= today.getTime();
+        }).sort((a, b) => (b.replies || 0) - (a.replies || 0));
+        const otherReplied = allPosts.filter(post => {
+          if (!post.timestamp) return false;
+          const postDate = post.timestamp.toDate ? post.timestamp.toDate() : new Date(post.timestamp);
+          postDate.setHours(0, 0, 0, 0);
+          return postDate.getTime() < today.getTime();
+        }).sort((a, b) => (b.replies || 0) - (a.replies || 0));
+        return [...todaysMostReplied, ...otherReplied];
       
       case 'smart':
       default:
-        // Smart algorithm: weighted score based on likes, replies, and recency
-        return [...todaysPosts].sort((a, b) => {
+        // Random mix of all posts with weighted scoring
+        return [...allPosts].sort(() => Math.random() - 0.5).sort((a, b) => {
           const now = Date.now();
           const timeA = a.timestamp?.toDate ? a.timestamp.toDate().getTime() : new Date(a.timestamp).getTime();
           const timeB = b.timestamp?.toDate ? b.timestamp.toDate().getTime() : new Date(b.timestamp).getTime();
           
           // Calculate recency score (higher for newer posts)
-          const recencyA = Math.max(0, 1 - (now - timeA) / (24 * 60 * 60 * 1000)); // 24 hours decay
-          const recencyB = Math.max(0, 1 - (now - timeB) / (24 * 60 * 60 * 1000));
+          const recencyA = Math.max(0, 1 - (now - timeA) / (7 * 24 * 60 * 60 * 1000)); // 7 days decay
+          const recencyB = Math.max(0, 1 - (now - timeB) / (7 * 24 * 60 * 60 * 1000));
           
           // Calculate engagement score
           const engagementA = (a.likes || 0) * 0.5 + (a.replies || 0) * 1;
           const engagementB = (b.likes || 0) * 0.5 + (b.replies || 0) * 1;
           
-          // Combined score with some randomness
-          const scoreA = (engagementA * 0.6 + recencyA * 0.4) + Math.random() * 0.1;
-          const scoreB = (engagementB * 0.6 + recencyB * 0.4) + Math.random() * 0.1;
+          // Combined score with randomness
+          const scoreA = (engagementA * 0.4 + recencyA * 0.3) + Math.random() * 0.3;
+          const scoreB = (engagementB * 0.4 + recencyB * 0.3) + Math.random() * 0.3;
           
           return scoreB - scoreA;
         });
     }
-  }, [posts, currentAlgorithm]);
+  }, [allPosts, currentAlgorithm]);
+
+  // Load posts in batches for lazy loading
+  const loadMorePosts = useCallback(() => {
+    if (loadingMore || !hasMore) return;
+    
+    setLoadingMore(true);
+    const startIndex = currentPage * POSTS_PER_PAGE;
+    const endIndex = startIndex + POSTS_PER_PAGE;
+    const nextBatch = sortedPosts.slice(startIndex, endIndex);
+    
+    if (nextBatch.length === 0) {
+      setHasMore(false);
+    } else {
+      setDisplayedPosts(prev => [...prev, ...nextBatch]);
+      setCurrentPage(prev => prev + 1);
+    }
+    
+    setLoadingMore(false);
+  }, [currentPage, sortedPosts, loadingMore, hasMore]);
+
+  // Reset pagination when algorithm changes
+  useEffect(() => {
+    setCurrentPage(0);
+    setDisplayedPosts([]);
+    setHasMore(true);
+    // Load first batch
+    const firstBatch = sortedPosts.slice(0, POSTS_PER_PAGE);
+    setDisplayedPosts(firstBatch);
+    setCurrentPage(1);
+    setHasMore(sortedPosts.length > POSTS_PER_PAGE);
+  }, [currentAlgorithm, sortedPosts]);
+
+  // Infinite scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      if (
+        window.innerHeight + document.documentElement.scrollTop + 1000 >=
+        document.documentElement.offsetHeight
+      ) {
+        loadMorePosts();
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [loadMorePosts]);
 
   // Load posts from Firebase
   useEffect(() => {
@@ -136,7 +220,7 @@ const Community = () => {
       querySnapshot.forEach((doc) => {
         postsData.push({ id: doc.id, ...doc.data() } as Post);
       });
-      setPosts(postsData);
+      setAllPosts(postsData);
       setLoading(false);
     });
 
@@ -531,15 +615,16 @@ const Community = () => {
               </Card>
             ))}
           </div>
-        ) : sortedPosts.length === 0 ? (
+        ) : displayedPosts.length === 0 ? (
           <Card className="text-center py-8">
             <CardContent>
-              <p className="text-gray-500 mb-2">No posts from today yet</p>
+              <p className="text-gray-500 mb-2">No posts available</p>
               <p className="text-sm text-gray-400">Be the first to share something with the community!</p>
             </CardContent>
           </Card>
         ) : (
-          sortedPosts.map((post) => (
+          <>
+            {displayedPosts.map((post) => (
             <Card key={post.id}>
               <CardContent className="pt-6">
                 <div className="space-y-3">
@@ -714,12 +799,39 @@ const Community = () => {
                 </div>
               </CardContent>
             </Card>
-          ))
+            ))}
+            
+            {/* Load More Button / Loading */}
+            {hasMore && (
+              <div className="text-center py-4">
+                {loadingMore ? (
+                  <div className="flex items-center justify-center gap-2">
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span className="text-sm text-gray-500">Loading more posts...</span>
+                  </div>
+                ) : (
+                  <Button 
+                    variant="outline" 
+                    onClick={loadMorePosts}
+                    className="text-purple-600 border-purple-200 hover:bg-purple-50"
+                  >
+                    Load More Posts
+                  </Button>
+                )}
+              </div>
+            )}
+            
+            {!hasMore && displayedPosts.length > 0 && (
+              <div className="text-center py-4">
+                <p className="text-sm text-gray-500">No more posts to load</p>
+              </div>
+            )}
+          </>
         )}
       </div>
 
       {/* Firebase Setup Notice - Show only if no config */}
-      {(!db || posts.length === 0) && (
+      {(!db || allPosts.length === 0) && (
         <Card className="border-blue-200 bg-blue-50">
           <CardHeader>
             <CardTitle className="text-blue-800">Firebase Configuration</CardTitle>
