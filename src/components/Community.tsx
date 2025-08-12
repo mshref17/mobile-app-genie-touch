@@ -25,6 +25,7 @@ import {
   limit
 } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { LocalNotifications } from '@capacitor/local-notifications';
 
 interface Post {
   id: string;
@@ -34,6 +35,8 @@ interface Post {
   replies: number;
   category: string;
   attachments?: string[];
+  nickname: string;
+  authorId: string;
 }
 
 interface Reply {
@@ -42,6 +45,8 @@ interface Reply {
   timestamp: any;
   postId: string;
   attachments?: string[];
+  nickname: string;
+  authorId: string;
 }
 
 type SortAlgorithm = 'smart' | 'latest' | 'most-liked' | 'most-replied';
@@ -60,11 +65,13 @@ const Community = () => {
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [newPost, setNewPost] = useState('');
+  const [nickname, setNickname] = useState('');
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
   const [replyContent, setReplyContent] = useState('');
+  const [replyNickname, setReplyNickname] = useState('');
   const [replyFiles, setReplyFiles] = useState<File[]>([]);
   const [replyUploading, setReplyUploading] = useState(false);
   const [repliesVisible, setRepliesVisible] = useState<Record<string, boolean>>({});
@@ -75,6 +82,31 @@ const Community = () => {
   const { toast } = useToast();
 
   const POSTS_PER_PAGE = 5;
+
+  // Trigger notification for post author when someone replies
+  const triggerReplyNotification = async (postAuthorId: string, replierNickname: string) => {
+    try {
+      await LocalNotifications.schedule({
+        notifications: [
+          {
+            title: 'New Reply',
+            body: `${replierNickname} replied to your post`,
+            id: Date.now(),
+            schedule: { at: new Date(Date.now() + 1000) }, // 1 second delay
+            sound: 'default',
+            attachments: [],
+            actionTypeId: '',
+            extra: {
+              postAuthorId,
+              replierNickname
+            }
+          }
+        ]
+      });
+    } catch (error) {
+      console.error('Error scheduling notification:', error);
+    }
+  };
 
   const algorithms: Record<SortAlgorithm, AlgorithmInfo> = {
     smart: { name: 'Smart Feed', icon: Shuffle, description: 'Mixed algorithm' },
@@ -299,7 +331,9 @@ const Community = () => {
         likes: 0,
         replies: 0,
         category: t("general") || "General",
-        attachments: attachments
+        attachments: attachments,
+        nickname: nickname,
+        authorId: `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
       };
       
       console.log('Adding post to Firestore:', postData);
@@ -309,6 +343,7 @@ const Community = () => {
       console.log('Post added successfully with ID:', docRef.id);
       
       setNewPost('');
+      setNickname('');
       setSelectedFiles([]);
       
       toast({
@@ -422,7 +457,9 @@ const Community = () => {
         content: replyContent,
         timestamp: serverTimestamp(),
         postId: postId,
-        attachments: attachments
+        attachments: attachments,
+        nickname: replyNickname,
+        authorId: `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
       };
       
       // Add reply to Firestore
@@ -435,8 +472,15 @@ const Community = () => {
       });
       
       setReplyContent('');
+      setReplyNickname('');
       setReplyFiles([]);
       setReplyingTo(null);
+      
+      // Trigger notification for post author
+      const postAuthor = allPosts.find(p => p.id === postId)?.authorId;
+      if (postAuthor) {
+        triggerReplyNotification(postAuthor, replyNickname || 'Someone');
+      }
       
       toast({
         title: t("replyAdded") || "Reply Added",
@@ -518,12 +562,24 @@ const Community = () => {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <Textarea
-            placeholder={t("communityPlaceholder")}
-            value={newPost}
-            onChange={(e) => setNewPost(e.target.value)}
-            className="min-h-[100px]"
-          />
+          <div className="space-y-3">
+            <div>
+              <Label htmlFor="nickname">{t("nickname") || "Nickname"}</Label>
+              <Input
+                id="nickname"
+                placeholder={t("enterNickname") || "Enter your nickname"}
+                value={nickname}
+                onChange={(e) => setNickname(e.target.value)}
+                className="mt-1"
+              />
+            </div>
+            <Textarea
+              placeholder={t("communityPlaceholder")}
+              value={newPost}
+              onChange={(e) => setNewPost(e.target.value)}
+              className="min-h-[100px]"
+            />
+          </div>
           
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
@@ -545,7 +601,7 @@ const Community = () => {
             
             <Button 
               onClick={handleSubmitPost}
-              disabled={!newPost.trim() || uploading}
+              disabled={!newPost.trim() || !nickname.trim() || uploading}
               className="bg-pink-600 hover:bg-pink-700 ml-auto"
             >
               {uploading ? (
@@ -627,15 +683,20 @@ const Community = () => {
             {displayedPosts.map((post) => (
             <Card key={post.id}>
               <CardContent className="pt-6">
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <Badge variant="outline" className="text-pink-600 border-pink-200">
-                      {post.category}
-                    </Badge>
-                    <span className="text-sm text-gray-500">
-                      {formatTimeAgo(post.timestamp)}
-                    </span>
-                  </div>
+                 <div className="space-y-3">
+                   <div className="flex items-center justify-between">
+                     <div className="flex items-center gap-2">
+                       <Badge variant="outline" className="text-pink-600 border-pink-200">
+                         {post.category}
+                       </Badge>
+                       <span className="text-sm font-medium text-purple-700">
+                         {post.nickname || "Anonymous"}
+                       </span>
+                     </div>
+                     <span className="text-sm text-gray-500">
+                       {formatTimeAgo(post.timestamp)}
+                     </span>
+                   </div>
                   
                   <p className="text-gray-700">{post.content}</p>
                   
@@ -691,15 +752,26 @@ const Community = () => {
                     </Button>
                   </div>
                   
-                  {/* Reply Form */}
-                  {replyingTo === post.id && (
-                    <div className="mt-4 p-4 bg-gray-50 rounded-lg">
-                      <Textarea
-                        placeholder={t("writeReply") || "Write your reply..."}
-                        value={replyContent}
-                        onChange={(e) => setReplyContent(e.target.value)}
-                        className="mb-2"
-                      />
+                   {/* Reply Form */}
+                   {replyingTo === post.id && (
+                     <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+                       <div className="space-y-3 mb-3">
+                         <div>
+                           <Label htmlFor={`reply-nickname-${post.id}`}>{t("nickname") || "Nickname"}</Label>
+                           <Input
+                             id={`reply-nickname-${post.id}`}
+                             placeholder={t("enterNickname") || "Enter your nickname"}
+                             value={replyNickname}
+                             onChange={(e) => setReplyNickname(e.target.value)}
+                             className="mt-1"
+                           />
+                         </div>
+                         <Textarea
+                           placeholder={t("writeReply") || "Write your reply..."}
+                           value={replyContent}
+                           onChange={(e) => setReplyContent(e.target.value)}
+                         />
+                       </div>
                       
                       <div className="flex items-center gap-4 mb-3">
                         <div className="flex items-center gap-2">
@@ -731,12 +803,12 @@ const Community = () => {
                       )}
                       
                       <div className="flex gap-2">
-                        <Button 
-                          size="sm" 
-                          onClick={() => handleReplySubmit(post.id)}
-                          disabled={!replyContent.trim() || replyUploading}
-                          className="bg-purple-600 hover:bg-purple-700"
-                        >
+                         <Button 
+                           size="sm" 
+                           onClick={() => handleReplySubmit(post.id)}
+                           disabled={!replyContent.trim() || !replyNickname.trim() || replyUploading}
+                           className="bg-purple-600 hover:bg-purple-700"
+                         >
                           {replyUploading ? (
                             <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                           ) : null}
@@ -745,11 +817,12 @@ const Community = () => {
                         <Button 
                           size="sm" 
                           variant="outline" 
-                          onClick={() => {
-                            setReplyingTo(null);
-                            setReplyContent('');
-                            setReplyFiles([]);
-                          }}
+                           onClick={() => {
+                             setReplyingTo(null);
+                             setReplyContent('');
+                             setReplyNickname('');
+                             setReplyFiles([]);
+                           }}
                           disabled={replyUploading}
                         >
                           {t("cancel") || "Cancel"}
@@ -763,8 +836,16 @@ const Community = () => {
                     <div className="mt-4 space-y-3">
                       <h4 className="font-medium text-purple-800">{t("replies") || "Replies"}</h4>
                       {postReplies[post.id].map((reply) => (
-                        <div key={reply.id} className="bg-purple-50 p-3 rounded-lg ml-4">
-                          <p className="text-gray-700 text-sm">{reply.content}</p>
+                         <div key={reply.id} className="bg-purple-50 p-3 rounded-lg ml-4">
+                           <div className="flex items-center gap-2 mb-2">
+                             <span className="text-xs font-medium text-purple-700">
+                               {reply.nickname || "Anonymous"}
+                             </span>
+                             <span className="text-xs text-gray-500">
+                               {formatTimeAgo(reply.timestamp)}
+                             </span>
+                           </div>
+                           <p className="text-gray-700 text-sm">{reply.content}</p>
                           
                           {/* Display reply attachments */}
                           {reply.attachments && reply.attachments.length > 0 && (
@@ -788,10 +869,6 @@ const Community = () => {
                               ))}
                             </div>
                           )}
-                          
-                          <span className="text-xs text-gray-500 mt-1 block">
-                            {formatTimeAgo(reply.timestamp)}
-                          </span>
                         </div>
                       ))}
                     </div>
