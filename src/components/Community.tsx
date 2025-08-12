@@ -685,14 +685,9 @@ const Community = () => {
               <CardContent className="pt-6">
                  <div className="space-y-3">
                    <div className="flex items-center justify-between">
-                     <div className="flex items-center gap-2">
-                       <Badge variant="outline" className="text-pink-600 border-pink-200">
-                         {post.category}
-                       </Badge>
-                       <span className="text-sm font-medium text-purple-700">
-                         {post.nickname || "Anonymous"}
-                       </span>
-                     </div>
+                     <span className="text-sm font-medium text-purple-700">
+                       {post.nickname || "Anonymous"}
+                     </span>
                      <span className="text-sm text-gray-500">
                        {formatTimeAgo(post.timestamp)}
                      </span>
