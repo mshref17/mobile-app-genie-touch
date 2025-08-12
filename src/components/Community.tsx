@@ -25,7 +25,7 @@ import {
   limit
 } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { LocalNotifications } from '@capacitor/local-notifications';
+
 
 interface Post {
   id: string;
@@ -82,30 +82,6 @@ const Community = () => {
 
   const POSTS_PER_PAGE = 5;
 
-  // Trigger notification for post author when someone replies
-  const triggerReplyNotification = async (postAuthorId: string, replierNickname: string) => {
-    try {
-      await LocalNotifications.schedule({
-        notifications: [
-          {
-            title: 'New Reply',
-            body: `${replierNickname} replied to your post`,
-            id: Date.now(),
-            schedule: { at: new Date(Date.now() + 1000) }, // 1 second delay
-            sound: 'default',
-            attachments: [],
-            actionTypeId: '',
-            extra: {
-              postAuthorId,
-              replierNickname
-            }
-          }
-        ]
-      });
-    } catch (error) {
-      console.error('Error scheduling notification:', error);
-    }
-  };
 
   const algorithms: Record<SortAlgorithm, AlgorithmInfo> = {
     smart: { name: 'Smart Feed', icon: Shuffle, description: 'Mixed algorithm' },
@@ -474,11 +450,6 @@ const Community = () => {
       setReplyFiles([]);
       setReplyingTo(null);
       
-      // Trigger notification for post author
-      const postAuthor = allPosts.find(p => p.id === postId)?.authorId;
-      if (postAuthor) {
-        triggerReplyNotification(postAuthor, replyNickname || 'Someone');
-      }
       
       toast({
         title: t("replyAdded") || "Reply Added",
