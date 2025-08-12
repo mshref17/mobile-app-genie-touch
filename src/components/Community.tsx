@@ -33,7 +33,6 @@ interface Post {
   timestamp: any;
   likes: number;
   replies: number;
-  category: string;
   attachments?: string[];
   nickname: string;
   authorId: string;
@@ -330,7 +329,6 @@ const Community = () => {
         timestamp: serverTimestamp(),
         likes: 0,
         replies: 0,
-        category: t("general") || "General",
         attachments: attachments,
         nickname: nickname,
         authorId: `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
