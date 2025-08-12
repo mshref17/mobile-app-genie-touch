@@ -1,14 +1,13 @@
-import { Home, Baby, Users, Settings } from "lucide-react";
+import { Home, Baby, Users } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 
 interface BottomNavigationProps {
   activeTab: string;
   onTabChange: (tab: string) => void;
-  onSettingsOpen: () => void;
 }
 
-export function BottomNavigation({ activeTab, onTabChange, onSettingsOpen }: BottomNavigationProps) {
+export function BottomNavigation({ activeTab, onTabChange }: BottomNavigationProps) {
   const { t } = useLanguage();
 
   const tabs = [
@@ -32,18 +31,8 @@ export function BottomNavigation({ activeTab, onTabChange, onSettingsOpen }: Bot
           >
             <tab.icon className="h-5 w-5" />
             <span className="text-xs">{tab.label}</span>
-          </Button>
-        ))}
-        
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={onSettingsOpen}
-          className="flex flex-col items-center gap-1 p-3 h-auto text-gray-500"
-        >
-          <Settings className="h-5 w-5" />
-          <span className="text-xs">{t('settings')}</span>
         </Button>
+        ))}
       </div>
     </div>
   );

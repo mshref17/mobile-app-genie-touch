@@ -501,7 +501,6 @@ const Index = () => {
       <BottomNavigation 
         activeTab={activeTab}
         onTabChange={setActiveTab}
-        onSettingsOpen={() => setIsSettingsOpen(true)}
       />
     </div>
   );
