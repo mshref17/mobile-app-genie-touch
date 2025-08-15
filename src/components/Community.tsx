@@ -374,22 +374,31 @@ const Community = () => {
     setReplyFiles(validFiles);
   };
 
-  // Handle swipe to change algorithm (only at top of page)
+  // Handle pull-to-refresh gesture (only at top of scroll)
   const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchStartY(e.touches[0].clientY);
+    const scrollContainer = e.currentTarget.closest('[data-scroll-container]') || window;
+    const scrollTop = scrollContainer === window ? window.scrollY : (scrollContainer as HTMLElement).scrollTop;
+    
+    // Only start tracking if we're at the very top
+    if (scrollTop === 0) {
+      setTouchStartY(e.touches[0].clientY);
+    } else {
+      setTouchStartY(null);
+    }
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartY === null) return;
+    
     const touchEndY = e.changedTouches[0].clientY;
-    const diffY = touchStartY - touchEndY;
+    const diffY = touchEndY - touchStartY; // Positive when swiping down
     
-    // Only trigger if user is at the top of the page and swipes down significantly
-    const isAtTop = window.scrollY === 0;
-    const isSwipeDown = diffY < -100; // Increased threshold for more intentional gesture
-    
-    if (isAtTop && isSwipeDown) {
+    // Only trigger if significant downward swipe from top
+    if (diffY > 80) {
       cycleAlgorithm();
     }
+    
+    setTouchStartY(null);
   };
 
   const cycleAlgorithm = () => {
