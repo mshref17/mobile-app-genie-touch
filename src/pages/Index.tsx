@@ -409,7 +409,7 @@ const Index = () => {
             {/* Due Date Card */}
             <Card className="bg-gradient-to-br from-emerald-50 to-teal-100 border-0 shadow-lg mb-6">
               <CardHeader className="pb-4">
-                <CardTitle className="flex items-center gap-3 text-emerald-800">
+                <CardTitle className="flex items-center gap-3 text-emerald-800 text-base">
                   <div className="p-2 bg-emerald-100 rounded-full">
                     <CalendarDays className="w-5 h-5 text-emerald-600" />
                   </div>
