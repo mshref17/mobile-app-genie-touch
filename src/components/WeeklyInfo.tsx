@@ -121,7 +121,7 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
           disabled={selectedWeek <= 1}
           className="h-10 w-10 bg-white rounded-full shadow hover:shadow-md disabled:opacity-30 disabled:cursor-not-allowed"
         >
-          <ChevronLeft className="h-5 w-5 text-pink-600" />
+          <ChevronRight className="h-5 w-5 text-pink-600" />
         </Button>
 
         <div className="flex flex-col items-center">
@@ -140,7 +140,7 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
           disabled={selectedWeek >= 40}
           className="h-10 w-10 bg-white rounded-full shadow hover:shadow-md disabled:opacity-30 disabled:cursor-not-allowed"
         >
-          <ChevronRight className="h-5 w-5 text-pink-600" />
+          <ChevronLeft className="h-5 w-5 text-pink-600" />
         </Button>
       </div>
 
