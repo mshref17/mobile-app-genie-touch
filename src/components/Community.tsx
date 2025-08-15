@@ -374,7 +374,7 @@ const Community = () => {
     setReplyFiles(validFiles);
   };
 
-  // Handle swipe to change algorithm
+  // Handle swipe to change algorithm (only at top of page)
   const handleTouchStart = (e: React.TouchEvent) => {
     setTouchStartY(e.touches[0].clientY);
   };
@@ -383,8 +383,11 @@ const Community = () => {
     const touchEndY = e.changedTouches[0].clientY;
     const diffY = touchStartY - touchEndY;
     
-    // If swipe down (negative diff) and significant distance
-    if (diffY < -50) {
+    // Only trigger if user is at the top of the page and swipes down significantly
+    const isAtTop = window.scrollY === 0;
+    const isSwipeDown = diffY < -100; // Increased threshold for more intentional gesture
+    
+    if (isAtTop && isSwipeDown) {
       cycleAlgorithm();
     }
   };
