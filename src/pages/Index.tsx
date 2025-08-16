@@ -451,7 +451,7 @@ const Index = () => {
                     {calculatePregnancyMonth(pregnancyInfo.weeksPregnant)}
                   </div>
                   <div className="text-sm text-emerald-600 flex items-center justify-center gap-1">
-                    Month
+                    {t('month')}
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
                         <Button variant="ghost" size="sm" className="p-0 h-auto w-auto hover:bg-transparent">
@@ -460,24 +460,24 @@ const Index = () => {
                       </AlertDialogTrigger>
                       <AlertDialogContent>
                         <AlertDialogHeader>
-                          <AlertDialogTitle>How We Calculate Months</AlertDialogTitle>
+                          <AlertDialogTitle>{t('monthCalculationTitle')}</AlertDialogTitle>
                           <AlertDialogDescription className="text-left space-y-2">
-                            <p>Pregnancy months are calculated based on pregnancy weeks:</p>
+                            <p>{t('monthCalculationDescription')}</p>
                             <ul className="list-disc list-inside space-y-1 text-sm">
-                              <li>Weeks 1-4: Month 1</li>
-                              <li>Weeks 5-8: Month 2</li>
-                              <li>Weeks 9-13: Month 3</li>
-                              <li>Weeks 14-17: Month 4</li>
-                              <li>Weeks 18-21: Month 5</li>
-                              <li>Weeks 22-26: Month 6</li>
-                              <li>Weeks 27-30: Month 7</li>
-                              <li>Weeks 31-35: Month 8</li>
-                              <li>Weeks 36-40: Month 9</li>
+                              <li>{t('monthWeeks1')}</li>
+                              <li>{t('monthWeeks2')}</li>
+                              <li>{t('monthWeeks3')}</li>
+                              <li>{t('monthWeeks4')}</li>
+                              <li>{t('monthWeeks5')}</li>
+                              <li>{t('monthWeeks6')}</li>
+                              <li>{t('monthWeeks7')}</li>
+                              <li>{t('monthWeeks8')}</li>
+                              <li>{t('monthWeeks9')}</li>
                             </ul>
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
-                          <AlertDialogAction>Got it</AlertDialogAction>
+                          <AlertDialogAction>{t('gotIt')}</AlertDialogAction>
                         </AlertDialogFooter>
                       </AlertDialogContent>
                     </AlertDialog>

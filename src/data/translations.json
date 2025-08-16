@@ -67,7 +67,20 @@
     "filesSkippedDescription": "Only images and videos under 10MB are allowed.",
     "general": "General",
     "firstTrimester": "First Trimester",
-    "fitness": "Fitness"
+    "fitness": "Fitness",
+    "month": "Month",
+    "monthCalculationTitle": "How We Calculate Months",
+    "monthCalculationDescription": "Pregnancy months are calculated based on pregnancy weeks:",
+    "monthWeeks1": "Weeks 1-4: Month 1",
+    "monthWeeks2": "Weeks 5-8: Month 2",
+    "monthWeeks3": "Weeks 9-13: Month 3", 
+    "monthWeeks4": "Weeks 14-17: Month 4",
+    "monthWeeks5": "Weeks 18-21: Month 5",
+    "monthWeeks6": "Weeks 22-26: Month 6",
+    "monthWeeks7": "Weeks 27-30: Month 7",
+    "monthWeeks8": "Weeks 31-35: Month 8",
+    "monthWeeks9": "Weeks 36-40: Month 9",
+    "gotIt": "Got it"
   },
   "ar": {
     "appName": "دليل حملي",
@@ -137,6 +150,19 @@
     "filesSkippedDescription": "يُسمح فقط بالصور ومقاطع الفيديو أقل من 10 ميجابايت.",
     "general": "عام",
     "firstTrimester": "الثلث الأول",
-    "fitness": "اللياقة البدنية"
+    "fitness": "اللياقة البدنية",
+    "month": "شهر",
+    "monthCalculationTitle": "كيف نحسب الأشهر",
+    "monthCalculationDescription": "تُحسب أشهر الحمل بناءً على أسابيع الحمل:",
+    "monthWeeks1": "الأسابيع 1-4: الشهر الأول",
+    "monthWeeks2": "الأسابيع 5-8: الشهر الثاني", 
+    "monthWeeks3": "الأسابيع 9-13: الشهر الثالث",
+    "monthWeeks4": "الأسابيع 14-17: الشهر الرابع",
+    "monthWeeks5": "الأسابيع 18-21: الشهر الخامس",
+    "monthWeeks6": "الأسابيع 22-26: الشهر السادس",
+    "monthWeeks7": "الأسابيع 27-30: الشهر السابع",
+    "monthWeeks8": "الأسابيع 31-35: الشهر الثامن",
+    "monthWeeks9": "الأسابيع 36-40: الشهر التاسع",
+    "gotIt": "فهمت"
   }
 }
