@@ -366,122 +366,128 @@ const Index = () => {
         {/* Render content based on activeTab */}
         {activeTab === 'dashboard' && pregnancyInfo && (
           <>
-            {/* Hero Section with Baby Bump Progress */}
-            <div className="relative overflow-hidden bg-gradient-to-br from-pink-100 via-purple-100 to-indigo-100 rounded-3xl p-6 mb-6">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-pink-200/30 rounded-full -translate-y-16 translate-x-16"></div>
-              <div className="absolute bottom-0 left-0 w-24 h-24 bg-purple-200/30 rounded-full translate-y-12 -translate-x-12"></div>
-              
-              <div className="relative z-10">
-                <div className="text-center mb-6">
-                  <h2 className="text-3xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent mb-2">
-                    {t('week')} {pregnancyInfo.weeksPregnant}
-                  </h2>
-                  <p className="text-gray-600 text-lg" dir="rtl">
-                    <span className="font-medium">{pregnancyInfo.daysRemaining}</span> {t('daysUntilBaby')}
-                  </p>
+            {/* Hero Banner */}
+            <div className="relative mb-8">
+              <div className="bg-gradient-to-r from-primary/10 via-primary/5 to-primary/10 rounded-2xl p-8 relative overflow-hidden">
+                <div className="absolute inset-0 opacity-30">
+                  <div className="absolute top-4 right-4 w-20 h-20 bg-primary/10 rounded-full"></div>
+                  <div className="absolute bottom-4 left-4 w-16 h-16 bg-primary/10 rounded-full"></div>
+                  <div className="absolute top-1/2 left-1/2 w-12 h-12 bg-primary/5 rounded-full -translate-x-1/2 -translate-y-1/2"></div>
                 </div>
                 
-                {/* Pregnancy Progress Visualization */}
-                <div className="relative">
-                  <div className="w-full bg-white/50 rounded-full h-4 mb-4">
-                    <div 
-                      className="bg-gradient-to-r from-pink-500 to-purple-500 h-4 rounded-full transition-all duration-1000 relative overflow-hidden"
-                      style={{ width: `${Math.min((pregnancyInfo.weeksPregnant / 40) * 100, 100)}%` }}
-                    >
-                      <div className="absolute inset-0 bg-white/30 animate-pulse"></div>
-                    </div>
+                <div className="relative z-10 text-center">
+                  <div className="inline-flex items-center gap-2 bg-primary/10 px-4 py-2 rounded-full mb-4">
+                    <Baby className="w-5 h-5 text-primary" />
+                    <span className="text-primary font-medium">{t('week')} {pregnancyInfo.weeksPregnant}</span>
                   </div>
-                  <div className="flex justify-between text-sm text-gray-600">
-                    <span>{t('week')} 1</span>
-                    <span className="font-semibold text-pink-600">
-                      {Math.round((pregnancyInfo.weeksPregnant / 40) * 100)}% {t('progressCompleted')}
-                    </span>
-                    <span>{t('week')} 40</span>
+                  
+                  <h2 className="text-3xl font-bold text-foreground mb-2">
+                    {t('weekAbbrev')} {pregnancyInfo.weeksPregnant} {pregnancyInfo.daysInCurrentWeek} {t('dayAbbrev')}
+                  </h2>
+                  
+                  <p className="text-muted-foreground text-lg mb-6">
+                    <span className="font-semibold text-primary">{pregnancyInfo.daysRemaining}</span> {t('daysUntilBaby')}
+                  </p>
+                  
+                  {/* Progress Bar */}
+                  <div className="max-w-md mx-auto">
+                    <div className="flex justify-between text-sm text-muted-foreground mb-2">
+                      <span>{t('week')} 1</span>
+                      <span className="font-medium text-primary">
+                        {Math.round((pregnancyInfo.weeksPregnant / 40) * 100)}% {t('progressCompleted')}
+                      </span>
+                      <span>{t('week')} 40</span>
+                    </div>
+                    <div className="w-full bg-muted rounded-full h-3">
+                      <div 
+                        className="h-3 bg-gradient-to-r from-primary to-primary/70 rounded-full transition-all duration-1000 relative overflow-hidden"
+                        style={{ width: `${Math.min((pregnancyInfo.weeksPregnant / 40) * 100, 100)}%` }}
+                      >
+                        <div className="absolute inset-0 bg-white/20 animate-pulse"></div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="mb-6">
+            {/* Daily Tip */}
+            <div className="mb-8">
               <DailyTip currentDay={pregnancyInfo.totalDays} />
             </div>
 
             {/* Due Date Card */}
-            <Card className="bg-gradient-to-br from-emerald-50 to-teal-100 border-0 shadow-lg mb-6">
-              <CardHeader className="pb-4">
+            <Card className="border-0 shadow-lg bg-gradient-to-br from-emerald-50 to-teal-50 mb-8">
+              <CardHeader>
                 <CardTitle className="flex items-center gap-3 text-emerald-800">
-                  <div className="p-2 bg-emerald-100 rounded-full">
-                    <CalendarDays className="w-5 h-5 text-emerald-600" />
+                  <div className="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center">
+                    <CalendarDays className="w-6 h-6 text-emerald-600" />
                   </div>
-                  {t('expectedDueDate')}
+                  <div>
+                    <div className="text-xl">{t('expectedDueDate')}</div>
+                    <div className="text-sm text-emerald-600 font-normal">
+                      {format(pregnancyInfo.dueDate, "EEEE, MMMM d, yyyy", { locale: ar })}
+                    </div>
+                  </div>
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-emerald-700 mb-1">
-                    {format(pregnancyInfo.dueDate, "EEEE", { locale: ar })}
-                  </div>
-                  <div className="text-xl text-emerald-600">
-                    {format(pregnancyInfo.dueDate, "MMMM d, yyyy", { locale: ar })}
-                  </div>
-                </div>
-              </CardContent>
             </Card>
 
-            {/* Quick Stats Grid */}
-            <div className="grid grid-cols-2 gap-4">
-              <Card className="bg-gradient-to-br from-pink-50 to-rose-100 border-0 shadow-md">
-                <CardContent className="p-4 text-center">
-                  <div className="flex items-center justify-center mb-2">
-                    <CalendarDays className="w-6 h-6 text-pink-600" />
+            {/* Stats Cards */}
+            <div className="grid grid-cols-2 gap-4 mb-8">
+              <Card className="border-0 shadow-lg bg-gradient-to-br from-blue-50 to-blue-100/50">
+                <CardContent className="p-6 text-center">
+                  <div className="w-12 h-12 mx-auto mb-3 bg-blue-100 rounded-full flex items-center justify-center">
+                    <CalendarDays className="w-6 h-6 text-blue-600" />
                   </div>
-                  <div className="text-2xl font-bold text-pink-700">
-                    {t('weekAbbrev')} {pregnancyInfo.weeksPregnant} {pregnancyInfo.daysInCurrentWeek} {t('dayAbbrev')}
+                  <div className="text-2xl font-bold text-blue-800 mb-1">
+                    {t('weekAbbrev')} {pregnancyInfo.weeksPregnant}
                   </div>
-                  <div className="text-sm text-pink-600">{t('yourProgressText')}</div>
+                  <div className="text-lg font-semibold text-blue-700 mb-1">
+                    {pregnancyInfo.daysInCurrentWeek} {t('dayAbbrev')}
+                  </div>
+                  <div className="text-sm text-blue-600">{t('yourProgressText')}</div>
                 </CardContent>
               </Card>
 
-              <Card className="bg-gradient-to-br from-emerald-50 to-green-100 border-0 shadow-md">
-                <CardContent className="p-4 text-center">
-                  <div className="flex items-center justify-center mb-2">
-                    <Baby className="w-6 h-6 text-emerald-600" />
+              <Card className="border-0 shadow-lg bg-gradient-to-br from-purple-50 to-purple-100/50">
+                <CardContent className="p-6 text-center">
+                  <div className="w-12 h-12 mx-auto mb-3 bg-purple-100 rounded-full flex items-center justify-center">
+                    <Baby className="w-6 h-6 text-purple-600" />
                   </div>
-                  <div className="text-2xl font-bold text-emerald-700">
-                    {calculatePregnancyMonth(pregnancyInfo.weeksPregnant)}
+                  <div className="text-2xl font-bold text-purple-800 mb-1">
+                    {t('month')} {calculatePregnancyMonth(pregnancyInfo.weeksPregnant)}
                   </div>
-                  <div className="text-sm text-emerald-600 flex items-center justify-center gap-1">
-                    {t('month')}
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <Button variant="ghost" size="sm" className="p-0 h-auto w-auto hover:bg-transparent">
-                          <Info className="w-3 h-3 text-emerald-500 hover:text-emerald-700" />
-                        </Button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>{t('monthCalculationTitle')}</AlertDialogTitle>
-                          <AlertDialogDescription className="text-left space-y-2">
-                            <p>{t('monthCalculationDescription')}</p>
-                            <ul className="list-disc list-inside space-y-1 text-sm">
-                              <li>{t('monthWeeks1')}</li>
-                              <li>{t('monthWeeks2')}</li>
-                              <li>{t('monthWeeks3')}</li>
-                              <li>{t('monthWeeks4')}</li>
-                              <li>{t('monthWeeks5')}</li>
-                              <li>{t('monthWeeks6')}</li>
-                              <li>{t('monthWeeks7')}</li>
-                              <li>{t('monthWeeks8')}</li>
-                              <li>{t('monthWeeks9')}</li>
-                            </ul>
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogAction>{t('gotIt')}</AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
-                  </div>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button variant="ghost" size="sm" className="text-purple-600 hover:text-purple-700 p-0 h-auto">
+                        <Info className="w-4 h-4 mr-1" />
+                        {t('monthInfoButton') || 'معلومات'}
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>{t('monthCalculationTitle')}</AlertDialogTitle>
+                        <AlertDialogDescription className="text-left space-y-2">
+                          <p>{t('monthCalculationDescription')}</p>
+                          <ul className="list-disc list-inside space-y-1 text-sm">
+                            <li>{t('monthWeeks1')}</li>
+                            <li>{t('monthWeeks2')}</li>
+                            <li>{t('monthWeeks3')}</li>
+                            <li>{t('monthWeeks4')}</li>
+                            <li>{t('monthWeeks5')}</li>
+                            <li>{t('monthWeeks6')}</li>
+                            <li>{t('monthWeeks7')}</li>
+                            <li>{t('monthWeeks8')}</li>
+                            <li>{t('monthWeeks9')}</li>
+                          </ul>
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogAction>{t('gotIt')}</AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </CardContent>
               </Card>
             </div>
