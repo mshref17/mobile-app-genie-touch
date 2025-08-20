@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { CalendarIcon, Baby, Users, Heart, Settings, CalendarDays, Clock, Star, Gift, Info, Sparkles, Crown, TrendingUp } from "lucide-react";
+import { CalendarIcon, Baby, Users, Heart, Settings, CalendarDays, Clock, Star, Gift, Info } from "lucide-react";
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { format, addDays, differenceInDays, differenceInWeeks, subDays } from "date-fns";
 import { ar } from "date-fns/locale";
@@ -123,35 +123,35 @@ const Index = () => {
 
   if (isFirstTime) {
     return (
-      <div className="min-h-screen bg-[var(--gradient-hero)] p-4 flex items-center justify-center safe-area-full">
-        <Card className="w-full max-w-md shadow-[var(--shadow-medium)] border-0">
+      <div className="min-h-screen bg-gradient-to-b from-pink-50 to-purple-50 p-4 flex items-center justify-center safe-area-full">
+        <Card className="w-full max-w-md">
           <CardHeader className="text-center">
-            <div className="mx-auto mb-4 w-16 h-16 bg-[var(--gradient-primary)] rounded-2xl flex items-center justify-center shadow-[var(--shadow-soft)]">
-              <Baby className="w-8 h-8 text-primary-foreground" />
+            <div className="mx-auto mb-4 w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center">
+              <Baby className="w-8 h-8 text-pink-600" />
             </div>
-            <CardTitle className="text-2xl text-foreground font-bold">{t('welcomeTitle')}</CardTitle>
-            <CardDescription className="text-muted-foreground">
+            <CardTitle className="text-2xl text-pink-800">{t('welcomeTitle')}</CardTitle>
+            <CardDescription>
               {t('welcomeDescription')}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="space-y-4">
-              <div className="flex gap-2">
-                <Button
-                  variant={dueDateMode === 'period' ? 'default' : 'outline'}
-                  onClick={() => setDueDateMode('period')}
-                  className="flex-1 rounded-xl"
-                >
-                  {t('lastPeriodOption')}
-                </Button>
-                <Button
-                  variant={dueDateMode === 'duedate' ? 'default' : 'outline'}
-                  onClick={() => setDueDateMode('duedate')}
-                  className="flex-1 rounded-xl"
-                >
-                  {t('dueDateOption')}
-                </Button>
-              </div>
+                      <div className="flex gap-2">
+                        <Button
+                          variant={dueDateMode === 'period' ? 'default' : 'outline'}
+                          onClick={() => setDueDateMode('period')}
+                          className="flex-1"
+                        >
+                          {t('lastPeriodOption')}
+                        </Button>
+                        <Button
+                          variant={dueDateMode === 'duedate' ? 'default' : 'outline'}
+                          onClick={() => setDueDateMode('duedate')}
+                          className="flex-1"
+                        >
+                          {t('dueDateOption')}
+                        </Button>
+                      </div>
 
               {dueDateMode === 'period' ? (
                 <div className="space-y-2">
@@ -161,7 +161,7 @@ const Index = () => {
                       <Button
                         variant="outline"
                         className={cn(
-                          "w-full justify-start text-left font-normal rounded-xl",
+                          "w-full justify-start text-left font-normal",
                           !selectedDate && "text-muted-foreground"
                         )}
                       >
@@ -189,7 +189,7 @@ const Index = () => {
                       <Button
                         variant="outline"
                         className={cn(
-                          "w-full justify-start text-left font-normal rounded-xl",
+                          "w-full justify-start text-left font-normal",
                           !selectedDueDate && "text-muted-foreground"
                         )}
                       >
@@ -214,7 +214,7 @@ const Index = () => {
             <Button 
               onClick={handleDateSubmit} 
               disabled={dueDateMode === 'period' ? !selectedDate : !selectedDueDate}
-              className="w-full rounded-xl h-12 bg-[var(--gradient-primary)] border-0 shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-medium)] transition-all duration-300"
+              className="w-full bg-pink-600 hover:bg-pink-700"
             >
               {t('startTracking')}
             </Button>
@@ -230,25 +230,22 @@ const Index = () => {
   }
   
   return (
-    <div className="min-h-screen bg-[var(--gradient-hero)] safe-area-full">
-      {/* Floating Header */}
-      <div className="fixed top-0 left-0 right-0 z-50 safe-area-top">
-        <div className="container mx-auto px-4 py-4 max-w-4xl">
-          <div className="bg-card/80 backdrop-blur-xl rounded-2xl px-6 py-4 shadow-[var(--shadow-soft)] border border-border/50">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-[var(--gradient-primary)] rounded-xl flex items-center justify-center shadow-[var(--shadow-soft)]">
-                  <img src={appLogo} alt={t('appLogoAlt')} className="w-6 h-6 rounded" />
-                </div>
-                <h1 className="text-xl font-bold bg-[var(--gradient-primary)] bg-clip-text text-transparent">{t('appName')}</h1>
-              </div>
-              <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
-                <DialogTrigger asChild>
-                  <Button variant="ghost" size="icon" className="rounded-xl hover:bg-accent/50">
-                    <Settings className="h-5 w-5 text-muted-foreground" />
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-md rounded-2xl">
+    <div className="min-h-screen bg-gradient-to-b from-pink-50 to-purple-50 safe-area-full">
+      {/* Fixed App Header Bar */}
+      <div className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b safe-area-top">
+        <div className="container mx-auto px-4 py-3 max-w-4xl">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <img src={appLogo} alt={t('appLogoAlt')} className="w-8 h-8 rounded-lg" />
+              <h1 className="text-xl font-semibold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">{t('appName')}</h1>
+            </div>
+            <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
+              <DialogTrigger asChild>
+                <Button variant="ghost" size="icon" className="hover:bg-pink-50">
+                  <Settings className="h-6 w-6 text-gray-600 hover:text-pink-600" />
+                </Button>
+              </DialogTrigger>
+                <DialogContent className="sm:max-w-md">
                   <DialogHeader>
                     <DialogTitle>{t('settings')}</DialogTitle>
                     <DialogDescription>
@@ -263,14 +260,14 @@ const Index = () => {
                         <Button
                           variant={dueDateMode === 'period' ? 'default' : 'outline'}
                           onClick={() => setDueDateMode('period')}
-                          className="flex-1 rounded-xl"
+                          className="flex-1"
                         >
                           {t('lastPeriodDate')}
                         </Button>
                         <Button
                           variant={dueDateMode === 'duedate' ? 'default' : 'outline'}
                           onClick={() => setDueDateMode('duedate')}
-                          className="flex-1 rounded-xl"
+                          className="flex-1"
                         >
                           {t('dueDate')}
                         </Button>
@@ -284,7 +281,7 @@ const Index = () => {
                               <Button
                                 variant="outline"
                                 className={cn(
-                                  "w-full justify-start text-left font-normal rounded-xl",
+                                  "w-full justify-start text-left font-normal",
                                   !selectedDate && "text-muted-foreground"
                                 )}
                               >
@@ -312,7 +309,7 @@ const Index = () => {
                               <Button
                                 variant="outline"
                                 className={cn(
-                                  "w-full justify-start text-left font-normal rounded-xl",
+                                  "w-full justify-start text-left font-normal",
                                   !selectedDueDate && "text-muted-foreground"
                                 )}
                               >
@@ -346,13 +343,13 @@ const Index = () => {
                     )}
                     
                     <div className="flex gap-2">
-                      <Button variant="outline" onClick={() => setIsSettingsOpen(false)} className="flex-1 rounded-xl">
+                      <Button variant="outline" onClick={() => setIsSettingsOpen(false)} className="flex-1">
                         {t('cancel')}
                       </Button>
                       <Button 
                         onClick={handleSettingsUpdate}
                         disabled={dueDateMode === 'period' ? !selectedDate : !selectedDueDate}
-                        className="flex-1 rounded-xl bg-[var(--gradient-primary)] border-0"
+                        className="flex-1 bg-pink-600 hover:bg-pink-700"
                       >
                         {t('update')}
                       </Button>
@@ -360,134 +357,135 @@ const Index = () => {
                   </div>
                 </DialogContent>
               </Dialog>
-            </div>
           </div>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 max-w-4xl pt-24 pb-32">
+      <div className="container mx-auto p-4 max-w-4xl pt-20 pb-32">
         {/* Render content based on activeTab */}
         {activeTab === 'dashboard' && pregnancyInfo && (
-          <div className="space-y-6">
-            {/* Modern Hero Card */}
-            <Card className="border-0 shadow-[var(--shadow-medium)] overflow-hidden bg-[var(--gradient-card)]">
-              <div className="relative p-8">
-                {/* Decorative Elements */}
-                <div className="absolute top-4 right-4 w-20 h-20 bg-primary/5 rounded-full blur-sm"></div>
-                <div className="absolute bottom-4 left-4 w-16 h-16 bg-primary/10 rounded-full blur-lg"></div>
-                <div className="absolute top-1/2 left-1/2 w-12 h-12 bg-primary/5 rounded-full -translate-x-1/2 -translate-y-1/2"></div>
+          <>
+            {/* Hero Section with Baby Bump Progress */}
+            <div className="relative overflow-hidden bg-gradient-to-br from-pink-100 via-purple-100 to-indigo-100 rounded-3xl p-6 mb-6">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-pink-200/30 rounded-full -translate-y-16 translate-x-16"></div>
+              <div className="absolute bottom-0 left-0 w-24 h-24 bg-purple-200/30 rounded-full translate-y-12 -translate-x-12"></div>
+              
+              <div className="relative z-10">
+                <div className="text-center mb-6">
+                  <h2 className="text-3xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent mb-2">
+                    {t('week')} {pregnancyInfo.weeksPregnant}
+                  </h2>
+                  <p className="text-gray-600 text-lg" dir="rtl">
+                    <span className="font-medium">{pregnancyInfo.daysRemaining}</span> {t('daysUntilBaby')}
+                  </p>
+                </div>
                 
-                <div className="relative z-10 text-center">
-                  <div className="inline-flex items-center gap-3 bg-primary/10 px-6 py-3 rounded-2xl mb-6 shadow-[var(--shadow-soft)]">
-                    <Crown className="w-6 h-6 text-primary" />
-                    <span className="text-primary font-bold text-lg">{t('week')} {pregnancyInfo.weeksPregnant}</span>
-                  </div>
-                  
-                  <div className="mb-6">
-                    <h2 className="text-4xl font-bold text-foreground mb-2">
-                      {t('weekAbbrev')} {pregnancyInfo.weeksPregnant} {pregnancyInfo.daysInCurrentWeek} {t('dayAbbrev')}
-                    </h2>
-                    <p className="text-muted-foreground text-lg">
-                      {Math.round((pregnancyInfo.weeksPregnant / 40) * 100)}% {t('journeyComplete')}
-                    </p>
-                  </div>
-
-                  {/* Progress Bar */}
-                  <div className="relative w-full h-3 bg-muted rounded-full overflow-hidden mb-6">
+                {/* Pregnancy Progress Visualization */}
+                <div className="relative">
+                  <div className="w-full bg-white/50 rounded-full h-4 mb-4">
                     <div 
-                      className="absolute left-0 top-0 h-full bg-[var(--gradient-primary)] rounded-full transition-all duration-1000 ease-out shadow-[var(--shadow-soft)]"
+                      className="bg-gradient-to-r from-pink-500 to-purple-500 h-4 rounded-full transition-all duration-1000 relative overflow-hidden"
                       style={{ width: `${Math.min((pregnancyInfo.weeksPregnant / 40) * 100, 100)}%` }}
-                    />
+                    >
+                      <div className="absolute inset-0 bg-white/30 animate-pulse"></div>
+                    </div>
                   </div>
-
-                  <div className="grid grid-cols-2 gap-4 text-center">
-                    <div className="bg-background/50 rounded-xl p-4 shadow-[var(--shadow-soft)]">
-                      <CalendarDays className="w-6 h-6 text-primary mx-auto mb-2" />
-                      <p className="text-2xl font-bold text-foreground">{pregnancyInfo.daysRemaining}</p>
-                      <p className="text-sm text-muted-foreground">{t('daysRemaining')}</p>
-                    </div>
-                    <div className="bg-background/50 rounded-xl p-4 shadow-[var(--shadow-soft)]">
-                      <Sparkles className="w-6 h-6 text-primary mx-auto mb-2" />
-                      <p className="text-2xl font-bold text-foreground">{calculatePregnancyMonth(pregnancyInfo.weeksPregnant)}</p>
-                      <p className="text-sm text-muted-foreground">{t('pregnancyMonth')}</p>
-                    </div>
+                  <div className="flex justify-between text-sm text-gray-600">
+                    <span>{t('week')} 1</span>
+                    <span className="font-semibold text-pink-600">
+                      {Math.round((pregnancyInfo.weeksPregnant / 40) * 100)}% {t('progressCompleted')}
+                    </span>
+                    <span>{t('week')} 40</span>
                   </div>
                 </div>
               </div>
-            </Card>
-
-            {/* Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Card className="border-0 shadow-[var(--shadow-soft)] bg-[var(--gradient-card)]">
-                <CardContent className="p-6 text-center">
-                  <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-4">
-                    <TrendingUp className="w-6 h-6 text-primary" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-foreground mb-2">{pregnancyInfo.totalDays}</h3>
-                  <p className="text-sm text-muted-foreground">{t('totalDaysPregnant')}</p>
-                </CardContent>
-              </Card>
-
-              <Card className="border-0 shadow-[var(--shadow-soft)] bg-[var(--gradient-card)]">
-                <CardContent className="p-6 text-center">
-                  <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-4">
-                    <Heart className="w-6 h-6 text-primary" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-foreground mb-2">{format(pregnancyInfo.dueDate, 'dd/MM', { locale: ar })}</h3>
-                  <p className="text-sm text-muted-foreground">{t('expectedDueDate')}</p>
-                </CardContent>
-              </Card>
-
-              <Card className="border-0 shadow-[var(--shadow-soft)] bg-[var(--gradient-card)]">
-                <CardContent className="p-6 text-center">
-                  <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-4">
-                    <Star className="w-6 h-6 text-primary" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-foreground mb-2">{40 - pregnancyInfo.weeksPregnant}</h3>
-                  <p className="text-sm text-muted-foreground">{t('weeksRemaining')}</p>
-                </CardContent>
-              </Card>
             </div>
 
-            {/* Daily Tip */}
-            <DailyTip currentDay={pregnancyInfo.totalDays} />
+            <div className="mb-6">
+              <DailyTip currentDay={pregnancyInfo.totalDays} />
+            </div>
 
             {/* Due Date Card */}
-            <Card className="border-0 shadow-[var(--shadow-soft)] bg-[var(--gradient-card)]">
-              <CardContent className="p-6">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center">
-                    <Gift className="w-6 h-6 text-primary" />
+            <Card className="bg-gradient-to-br from-emerald-50 to-teal-100 border-0 shadow-lg mb-6">
+              <CardHeader className="pb-4">
+                <CardTitle className="flex items-center gap-3 text-emerald-800">
+                  <div className="p-2 bg-emerald-100 rounded-full">
+                    <CalendarDays className="w-5 h-5 text-emerald-600" />
                   </div>
-                  <div className="flex-1">
-                    <h3 className="font-bold text-foreground mb-1">{t('dueDate')}</h3>
-                    <p className="text-sm text-muted-foreground">
-                      {format(pregnancyInfo.dueDate, 'EEEE، dd MMMM yyyy', { locale: ar })}
-                    </p>
+                  {t('expectedDueDate')}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-emerald-700 mb-1">
+                    {format(pregnancyInfo.dueDate, "EEEE", { locale: ar })}
                   </div>
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <Button variant="ghost" size="icon" className="rounded-xl hover:bg-primary/10">
-                        <Info className="h-5 w-5 text-primary" />
-                      </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent className="rounded-2xl">
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>{t('aboutDueDate')}</AlertDialogTitle>
-                        <AlertDialogDescription>
-                          {t('dueDateExplanation')}
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogAction className="rounded-xl">{t('understood')}</AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
+                  <div className="text-xl text-emerald-600">
+                    {format(pregnancyInfo.dueDate, "MMMM d, yyyy", { locale: ar })}
+                  </div>
                 </div>
               </CardContent>
             </Card>
-          </div>
+
+            {/* Quick Stats Grid */}
+            <div className="grid grid-cols-2 gap-4">
+              <Card className="bg-gradient-to-br from-pink-50 to-rose-100 border-0 shadow-md">
+                <CardContent className="p-4 text-center">
+                  <div className="flex items-center justify-center mb-2">
+                    <CalendarDays className="w-6 h-6 text-pink-600" />
+                  </div>
+                  <div className="text-2xl font-bold text-pink-700">
+                    {t('weekAbbrev')} {pregnancyInfo.weeksPregnant} {pregnancyInfo.daysInCurrentWeek} {t('dayAbbrev')}
+                  </div>
+                  <div className="text-sm text-pink-600">{t('yourProgressText')}</div>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-gradient-to-br from-emerald-50 to-green-100 border-0 shadow-md">
+                <CardContent className="p-4 text-center">
+                  <div className="flex items-center justify-center mb-2">
+                    <Baby className="w-6 h-6 text-emerald-600" />
+                  </div>
+                  <div className="text-2xl font-bold text-emerald-700">
+                    {calculatePregnancyMonth(pregnancyInfo.weeksPregnant)}
+                  </div>
+                  <div className="text-sm text-emerald-600 flex items-center justify-center gap-1">
+                    {t('month')}
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button variant="ghost" size="sm" className="p-0 h-auto w-auto hover:bg-transparent">
+                          <Info className="w-3 h-3 text-emerald-500 hover:text-emerald-700" />
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>{t('monthCalculationTitle')}</AlertDialogTitle>
+                          <AlertDialogDescription className="text-left space-y-2">
+                            <p>{t('monthCalculationDescription')}</p>
+                            <ul className="list-disc list-inside space-y-1 text-sm">
+                              <li>{t('monthWeeks1')}</li>
+                              <li>{t('monthWeeks2')}</li>
+                              <li>{t('monthWeeks3')}</li>
+                              <li>{t('monthWeeks4')}</li>
+                              <li>{t('monthWeeks5')}</li>
+                              <li>{t('monthWeeks6')}</li>
+                              <li>{t('monthWeeks7')}</li>
+                              <li>{t('monthWeeks8')}</li>
+                              <li>{t('monthWeeks9')}</li>
+                            </ul>
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogAction>{t('gotIt')}</AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </>
         )}
 
         {activeTab === 'weekly' && (
@@ -498,8 +496,12 @@ const Index = () => {
           <Community />
         )}
       </div>
-
-      <BottomNavigation activeTab={activeTab} onTabChange={setActiveTab} />
+      
+      {/* Bottom Navigation */}
+      <BottomNavigation 
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+      />
     </div>
   );
 };
