@@ -436,7 +436,7 @@ const Index = () => {
                     <CalendarDays className="w-6 h-6 text-pink-600" />
                   </div>
                   <div className="text-2xl font-bold text-pink-700">
-                    {t('weekAbbrev')} {pregnancyInfo.weeksPregnant} {pregnancyInfo.daysInCurrentWeek} {t('dayAbbrev')}
+                    {t('weekAbbrev')} {pregnancyInfo.weeksPregnant} {t('and')} {pregnancyInfo.daysInCurrentWeek} {t('dayAbbrev')}
                   </div>
                   <div className="text-sm text-pink-600">{t('yourProgressText')}</div>
                 </CardContent>

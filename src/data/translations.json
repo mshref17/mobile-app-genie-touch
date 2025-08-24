@@ -80,6 +80,7 @@
     "monthWeeks7": "Weeks 27-30: Month 7",
     "monthWeeks8": "Weeks 31-35: Month 8",
     "monthWeeks9": "Weeks 36-40: Month 9",
+    "and": "and",
     "gotIt": "Got it"
   },
   "ar": {
@@ -163,6 +164,7 @@
     "monthWeeks7": "الأسابيع 27-30: الشهر السابع",
     "monthWeeks8": "الأسابيع 31-35: الشهر الثامن",
     "monthWeeks9": "الأسابيع 36-40: الشهر التاسع",
+    "and": "و",
     "gotIt": "فهمت"
   }
 }
