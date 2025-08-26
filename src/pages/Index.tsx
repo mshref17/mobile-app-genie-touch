@@ -12,7 +12,6 @@ import { format, addDays, differenceInDays, differenceInWeeks, subDays } from "d
 import { ar } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
-import AdMobBanner from "@/components/AdMobBanner";
 
 import WeeklyInfo from "@/components/WeeklyInfo";
 import Community from "@/components/Community";
@@ -232,11 +231,8 @@ const Index = () => {
   
   return (
     <div className="min-h-screen bg-gradient-to-b from-pink-50 to-purple-50 safe-area-full">
-      {/* AdMob Banner */}
-      <AdMobBanner />
-      
       {/* Fixed App Header Bar */}
-      <div className="fixed top-[50px] left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b safe-area-top">
+      <div className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b safe-area-top">
         <div className="container mx-auto px-4 py-3 max-w-4xl">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -366,7 +362,7 @@ const Index = () => {
       </div>
 
       {/* Main Content */}
-      <div className="container mx-auto p-4 max-w-4xl pt-[120px] pb-32">
+      <div className="container mx-auto p-4 max-w-4xl pt-20 pb-32">
         {/* Render content based on activeTab */}
         {activeTab === 'dashboard' && pregnancyInfo && (
           <>
