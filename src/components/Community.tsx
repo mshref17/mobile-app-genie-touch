@@ -22,7 +22,10 @@ import {
   increment,
   serverTimestamp,
   getDocs,
-  limit
+  limit,
+  startAfter,
+  QueryDocumentSnapshot,
+  DocumentData
 } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
@@ -58,11 +61,10 @@ interface AlgorithmInfo {
 
 const Community = () => {
   const { t } = useLanguage();
-  const [allPosts, setAllPosts] = useState<Post[]>([]);
   const [displayedPosts, setDisplayedPosts] = useState<Post[]>([]);
-  const [currentPage, setCurrentPage] = useState(0);
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
+  const [lastDoc, setLastDoc] = useState<QueryDocumentSnapshot<DocumentData> | null>(null);
   const [newPost, setNewPost] = useState('');
   const [nickname, setNickname] = useState('');
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
@@ -80,8 +82,7 @@ const Community = () => {
   const [touchStartY, setTouchStartY] = useState<number>(0);
   const { toast } = useToast();
 
-  const POSTS_PER_PAGE = 5;
-
+  const POSTS_PER_PAGE = 10;
 
   const algorithms: Record<SortAlgorithm, AlgorithmInfo> = {
     smart: { name: 'Smart Feed', icon: Shuffle, description: 'Mixed algorithm' },
@@ -90,119 +91,119 @@ const Community = () => {
     'most-replied': { name: 'Discussed', icon: MessageSquare, description: 'Most replies' }
   };
 
-  // Sort all posts based on current algorithm
-  const sortedPosts = useMemo(() => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    
-    switch (currentAlgorithm) {
-      case 'latest':
-        // Show today's latest posts first, then older posts
-        const todaysLatest = allPosts.filter(post => {
-          if (!post.timestamp) return false;
-          const postDate = post.timestamp.toDate ? post.timestamp.toDate() : new Date(post.timestamp);
-          postDate.setHours(0, 0, 0, 0);
-          return postDate.getTime() >= today.getTime();
-        });
-        const olderPosts = allPosts.filter(post => {
-          if (!post.timestamp) return false;
-          const postDate = post.timestamp.toDate ? post.timestamp.toDate() : new Date(post.timestamp);
-          postDate.setHours(0, 0, 0, 0);
-          return postDate.getTime() < today.getTime();
-        });
-        return [...todaysLatest, ...olderPosts].sort((a, b) => {
-          const timeA = a.timestamp?.toDate ? a.timestamp.toDate().getTime() : new Date(a.timestamp).getTime();
-          const timeB = b.timestamp?.toDate ? b.timestamp.toDate().getTime() : new Date(b.timestamp).getTime();
-          return timeB - timeA;
-        });
+  // Load initial posts
+  const loadInitialPosts = useCallback(async () => {
+    try {
+      setLoading(true);
+      let q;
       
-      case 'most-liked':
-        // Show today's most liked first, then all posts by likes
-        const todaysMostLiked = allPosts.filter(post => {
-          if (!post.timestamp) return false;
-          const postDate = post.timestamp.toDate ? post.timestamp.toDate() : new Date(post.timestamp);
-          postDate.setHours(0, 0, 0, 0);
-          return postDate.getTime() >= today.getTime();
-        }).sort((a, b) => (b.likes || 0) - (a.likes || 0));
-        const otherPosts = allPosts.filter(post => {
-          if (!post.timestamp) return false;
-          const postDate = post.timestamp.toDate ? post.timestamp.toDate() : new Date(post.timestamp);
-          postDate.setHours(0, 0, 0, 0);
-          return postDate.getTime() < today.getTime();
-        }).sort((a, b) => (b.likes || 0) - (a.likes || 0));
-        return [...todaysMostLiked, ...otherPosts];
+      switch (currentAlgorithm) {
+        case 'latest':
+          q = query(collection(db, 'posts'), orderBy('timestamp', 'desc'), limit(POSTS_PER_PAGE));
+          break;
+        case 'most-liked':
+          q = query(collection(db, 'posts'), orderBy('likes', 'desc'), orderBy('timestamp', 'desc'), limit(POSTS_PER_PAGE));
+          break;
+        case 'most-replied':
+          q = query(collection(db, 'posts'), orderBy('replies', 'desc'), orderBy('timestamp', 'desc'), limit(POSTS_PER_PAGE));
+          break;
+        case 'smart':
+        default:
+          q = query(collection(db, 'posts'), orderBy('timestamp', 'desc'), limit(POSTS_PER_PAGE));
+          break;
+      }
       
-      case 'most-replied':
-        // Show today's most replied first, then all posts by replies
-        const todaysMostReplied = allPosts.filter(post => {
-          if (!post.timestamp) return false;
-          const postDate = post.timestamp.toDate ? post.timestamp.toDate() : new Date(post.timestamp);
-          postDate.setHours(0, 0, 0, 0);
-          return postDate.getTime() >= today.getTime();
-        }).sort((a, b) => (b.replies || 0) - (a.replies || 0));
-        const otherReplied = allPosts.filter(post => {
-          if (!post.timestamp) return false;
-          const postDate = post.timestamp.toDate ? post.timestamp.toDate() : new Date(post.timestamp);
-          postDate.setHours(0, 0, 0, 0);
-          return postDate.getTime() < today.getTime();
-        }).sort((a, b) => (b.replies || 0) - (a.replies || 0));
-        return [...todaysMostReplied, ...otherReplied];
+      const querySnapshot = await getDocs(q);
+      const posts: Post[] = [];
+      querySnapshot.forEach((doc) => {
+        const data = doc.data() as any;
+        if (data) {
+          posts.push({ 
+            id: doc.id, 
+            content: data.content || '',
+            timestamp: data.timestamp,
+            likes: data.likes || 0,
+            replies: data.replies || 0,
+            attachments: data.attachments || [],
+            nickname: data.nickname || '',
+            authorId: data.authorId || ''
+          } as Post);
+        }
+      });
       
-      case 'smart':
-      default:
-        // Random mix of all posts with weighted scoring
-        return [...allPosts].sort(() => Math.random() - 0.5).sort((a, b) => {
-          const now = Date.now();
-          const timeA = a.timestamp?.toDate ? a.timestamp.toDate().getTime() : new Date(a.timestamp).getTime();
-          const timeB = b.timestamp?.toDate ? b.timestamp.toDate().getTime() : new Date(b.timestamp).getTime();
-          
-          // Calculate recency score (higher for newer posts)
-          const recencyA = Math.max(0, 1 - (now - timeA) / (7 * 24 * 60 * 60 * 1000)); // 7 days decay
-          const recencyB = Math.max(0, 1 - (now - timeB) / (7 * 24 * 60 * 60 * 1000));
-          
-          // Calculate engagement score
-          const engagementA = (a.likes || 0) * 0.5 + (a.replies || 0) * 1;
-          const engagementB = (b.likes || 0) * 0.5 + (b.replies || 0) * 1;
-          
-          // Combined score with randomness
-          const scoreA = (engagementA * 0.4 + recencyA * 0.3) + Math.random() * 0.3;
-          const scoreB = (engagementB * 0.4 + recencyB * 0.3) + Math.random() * 0.3;
-          
-          return scoreB - scoreA;
-        });
+      setDisplayedPosts(posts);
+      setLastDoc(querySnapshot.docs[querySnapshot.docs.length - 1] || null);
+      setHasMore(querySnapshot.docs.length === POSTS_PER_PAGE);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error loading initial posts:', error);
+      setLoading(false);
     }
-  }, [allPosts, currentAlgorithm]);
+  }, [currentAlgorithm]);
 
-  // Load posts in batches for lazy loading
-  const loadMorePosts = useCallback(() => {
-    if (loadingMore || !hasMore) return;
+  // Load more posts
+  const loadMorePosts = useCallback(async () => {
+    if (loadingMore || !hasMore || !lastDoc) return;
     
     setLoadingMore(true);
-    const startIndex = currentPage * POSTS_PER_PAGE;
-    const endIndex = startIndex + POSTS_PER_PAGE;
-    const nextBatch = sortedPosts.slice(startIndex, endIndex);
-    
-    if (nextBatch.length === 0) {
-      setHasMore(false);
-    } else {
-      setDisplayedPosts(prev => [...prev, ...nextBatch]);
-      setCurrentPage(prev => prev + 1);
+    try {
+      let q;
+      
+      switch (currentAlgorithm) {
+        case 'latest':
+          q = query(collection(db, 'posts'), orderBy('timestamp', 'desc'), startAfter(lastDoc), limit(POSTS_PER_PAGE));
+          break;
+        case 'most-liked':
+          q = query(collection(db, 'posts'), orderBy('likes', 'desc'), orderBy('timestamp', 'desc'), startAfter(lastDoc), limit(POSTS_PER_PAGE));
+          break;
+        case 'most-replied':
+          q = query(collection(db, 'posts'), orderBy('replies', 'desc'), orderBy('timestamp', 'desc'), startAfter(lastDoc), limit(POSTS_PER_PAGE));
+          break;
+        case 'smart':
+        default:
+          q = query(collection(db, 'posts'), orderBy('timestamp', 'desc'), startAfter(lastDoc), limit(POSTS_PER_PAGE));
+          break;
+      }
+      
+      const querySnapshot = await getDocs(q);
+      const newPosts: Post[] = [];
+      querySnapshot.forEach((doc) => {
+        const data = doc.data() as any;
+        if (data) {
+          newPosts.push({ 
+            id: doc.id, 
+            content: data.content || '',
+            timestamp: data.timestamp,
+            likes: data.likes || 0,
+            replies: data.replies || 0,
+            attachments: data.attachments || [],
+            nickname: data.nickname || '',
+            authorId: data.authorId || ''
+          } as Post);
+        }
+      });
+      
+      if (newPosts.length > 0) {
+        setDisplayedPosts(prev => [...prev, ...newPosts]);
+        setLastDoc(querySnapshot.docs[querySnapshot.docs.length - 1]);
+        setHasMore(querySnapshot.docs.length === POSTS_PER_PAGE);
+      } else {
+        setHasMore(false);
+      }
+    } catch (error) {
+      console.error('Error loading more posts:', error);
+    } finally {
+      setLoadingMore(false);
     }
-    
-    setLoadingMore(false);
-  }, [currentPage, sortedPosts, loadingMore, hasMore]);
+  }, [loadingMore, hasMore, lastDoc, currentAlgorithm]);
 
-  // Reset pagination when algorithm changes
+  // Reset and load posts when algorithm changes
   useEffect(() => {
-    setCurrentPage(0);
     setDisplayedPosts([]);
+    setLastDoc(null);
     setHasMore(true);
-    // Load first batch
-    const firstBatch = sortedPosts.slice(0, POSTS_PER_PAGE);
-    setDisplayedPosts(firstBatch);
-    setCurrentPage(1);
-    setHasMore(sortedPosts.length > POSTS_PER_PAGE);
-  }, [currentAlgorithm, sortedPosts]);
+    loadInitialPosts();
+  }, [currentAlgorithm, loadInitialPosts]);
 
   // Infinite scroll
   useEffect(() => {
@@ -219,24 +220,15 @@ const Community = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [loadMorePosts]);
 
-  // Load posts from Firebase
+  // Load initial posts on mount
   useEffect(() => {
-    const q = query(collection(db, 'posts'), orderBy('timestamp', 'desc'));
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const postsData: Post[] = [];
-      querySnapshot.forEach((doc) => {
-        postsData.push({ id: doc.id, ...doc.data() } as Post);
-      });
-      setAllPosts(postsData);
-      setLoading(false);
-    });
-
+    loadInitialPosts();
+    
     return () => {
-      unsubscribe();
       // Clean up all reply listeners
       Object.values(replyListeners).forEach(unsubscribe => unsubscribe());
     };
-  }, []);
+  }, [loadInitialPosts]);
 
   // Cleanup reply listeners on unmount
   useEffect(() => {
@@ -884,7 +876,7 @@ const Community = () => {
       </div>
 
       {/* Firebase Setup Notice - Show only if no config */}
-      {(!db || allPosts.length === 0) && (
+      {(!db || displayedPosts.length === 0) && !loading && (
         <Card className="border-blue-200 bg-blue-50">
           <CardHeader>
             <CardTitle className="text-blue-800">Firebase Configuration</CardTitle>
