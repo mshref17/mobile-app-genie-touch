@@ -88,7 +88,7 @@ const Index = () => {
 
     const today = new Date();
     const daysPregnant = differenceInDays(today, periodDate) + 1; // Add 1 to include the start date
-    const weeksPregnant = Math.floor(daysPregnant / 7); // Remove the +1 here
+    const weeksPregnant = Math.ceil(daysPregnant / 7); // Use ceil to start from week 1
     const daysInCurrentWeek = daysPregnant % 7;
     const dueDate = addDays(periodDate, 280); // 40 weeks
     const daysRemaining = differenceInDays(dueDate, today) + 1; // Add 1 to include today
