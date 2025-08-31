@@ -88,8 +88,17 @@ const Index = () => {
 
     const today = new Date();
     const daysPregnant = differenceInDays(today, periodDate) + 1; // Add 1 to include the start date
-    const weeksPregnant = Math.floor((daysPregnant - 1) / 7) + 1; // Days 1-7 = week 1, 8-14 = week 2, etc.
-    const daysInCurrentWeek = ((daysPregnant - 1) % 7) + 1; // Days 1-7 in current week
+    
+    // Days 1-14 = week 1, then every 7 days after that
+    let weeksPregnant, daysInCurrentWeek;
+    if (daysPregnant <= 14) {
+      weeksPregnant = 1;
+      daysInCurrentWeek = daysPregnant;
+    } else {
+      weeksPregnant = Math.floor((daysPregnant - 15) / 7) + 2; // Start from week 2 after day 14
+      daysInCurrentWeek = ((daysPregnant - 15) % 7) + 1;
+    }
+    
     const dueDate = addDays(periodDate, 280); // 40 weeks
     const daysRemaining = differenceInDays(dueDate, today) + 1; // Add 1 to include today
 
