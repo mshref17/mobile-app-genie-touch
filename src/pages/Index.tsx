@@ -132,53 +132,53 @@ const Index = () => {
 
   if (isFirstTime) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-6 safe-area-full">
-        <Card className="w-full max-w-md glass-card">
+      <div className="min-h-screen bg-gradient-to-b from-pink-50 to-purple-50 p-4 flex items-center justify-center safe-area-full">
+        <Card className="w-full max-w-md">
           <CardHeader className="text-center">
-            <div className="mx-auto mb-6 w-20 h-20 bg-gradient-to-br from-primary to-accent rounded-3xl flex items-center justify-center animate-scale-pulse">
-              <Baby className="w-10 h-10 text-white" />
+            <div className="mx-auto mb-4 w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center">
+              <Baby className="w-8 h-8 text-pink-600" />
             </div>
-            <CardTitle className="text-3xl gradient-text">{t('welcomeTitle')}</CardTitle>
-            <CardDescription className="text-lg">
+            <CardTitle className="text-2xl text-pink-800">{t('welcomeTitle')}</CardTitle>
+            <CardDescription>
               {t('welcomeDescription')}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="space-y-4">
-              <div className="flex gap-3">
-                <Button
-                  variant={dueDateMode === 'period' ? 'default' : 'outline'}
-                  onClick={() => setDueDateMode('period')}
-                  className="flex-1 rounded-2xl"
-                >
-                  {t('lastPeriodOption')}
-                </Button>
-                <Button
-                  variant={dueDateMode === 'duedate' ? 'default' : 'outline'}
-                  onClick={() => setDueDateMode('duedate')}
-                  className="flex-1 rounded-2xl"
-                >
-                  {t('dueDateOption')}
-                </Button>
-              </div>
+                      <div className="flex gap-2">
+                        <Button
+                          variant={dueDateMode === 'period' ? 'default' : 'outline'}
+                          onClick={() => setDueDateMode('period')}
+                          className="flex-1"
+                        >
+                          {t('lastPeriodOption')}
+                        </Button>
+                        <Button
+                          variant={dueDateMode === 'duedate' ? 'default' : 'outline'}
+                          onClick={() => setDueDateMode('duedate')}
+                          className="flex-1"
+                        >
+                          {t('dueDateOption')}
+                        </Button>
+                      </div>
 
               {dueDateMode === 'period' ? (
-                <div className="space-y-3">
-                  <Label htmlFor="last-period" className="text-base">{t('firstDayLastPeriod')}</Label>
+                <div className="space-y-2">
+                  <Label htmlFor="last-period">{t('firstDayLastPeriod')}</Label>
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button
                         variant="outline"
                         className={cn(
-                          "w-full justify-start text-left font-normal rounded-2xl h-12",
+                          "w-full justify-start text-left font-normal",
                           !selectedDate && "text-muted-foreground"
                         )}
                       >
-                        <CalendarIcon className="mr-3 h-5 w-5" />
+                        <CalendarIcon className="mr-2 h-4 w-4" />
                         {selectedDate ? format(selectedDate, "PPP", { locale: ar }) : t('selectDate')}
                       </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0 glass-card" align="start">
+                    <PopoverContent className="w-auto p-0" align="start">
                       <Calendar
                         mode="single"
                         selected={selectedDate}
@@ -191,22 +191,22 @@ const Index = () => {
                   </Popover>
                 </div>
               ) : (
-                <div className="space-y-3">
-                  <Label htmlFor="due-date" className="text-base">{t('expectedDueDate')}</Label>
+                <div className="space-y-2">
+                  <Label htmlFor="due-date">{t('expectedDueDate')}</Label>
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button
                         variant="outline"
                         className={cn(
-                          "w-full justify-start text-left font-normal rounded-2xl h-12",
+                          "w-full justify-start text-left font-normal",
                           !selectedDueDate && "text-muted-foreground"
                         )}
                       >
-                        <CalendarIcon className="mr-3 h-5 w-5" />
+                        <CalendarIcon className="mr-2 h-4 w-4" />
                         {selectedDueDate ? format(selectedDueDate, "PPP", { locale: ar }) : t('selectDueDate')}
                       </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0 glass-card" align="start">
+                    <PopoverContent className="w-auto p-0" align="start">
                       <Calendar
                         mode="single"
                         selected={selectedDueDate}
@@ -223,7 +223,7 @@ const Index = () => {
             <Button 
               onClick={handleDateSubmit} 
               disabled={dueDateMode === 'period' ? !selectedDate : !selectedDueDate}
-              className="w-full h-12 rounded-2xl bg-primary hover:bg-primary/90 text-lg font-semibold"
+              className="w-full bg-pink-600 hover:bg-pink-700"
             >
               {t('startTracking')}
             </Button>
@@ -239,26 +239,24 @@ const Index = () => {
   }
   
   return (
-    <div className="min-h-screen safe-area-full overflow-x-hidden">
+    <div className="min-h-screen bg-gradient-to-b from-pink-50 to-purple-50 safe-area-full">
       {/* Fixed App Header Bar */}
-      <div className="fixed top-0 left-0 right-0 z-50 glass-card border-b-0 safe-area-top">
-        <div className="container mx-auto px-6 py-4 max-w-6xl">
+      <div className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b safe-area-top">
+        <div className="container mx-auto px-4 py-3 max-w-4xl">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center animate-scale-pulse">
-                <img src={appLogo} alt={t('appLogoAlt')} className="w-8 h-8 rounded-lg" />
-              </div>
-              <h1 className="text-2xl font-bold gradient-text">{t('appName')}</h1>
+            <div className="flex items-center gap-3">
+              <img src={appLogo} alt={t('appLogoAlt')} className="w-8 h-8 rounded-lg" />
+              <h1 className="text-xl font-semibold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">{t('appName')}</h1>
             </div>
             <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
               <DialogTrigger asChild>
-                <Button variant="ghost" size="icon" className="hover:bg-primary-soft rounded-2xl">
-                  <Settings className="h-6 w-6 text-muted-foreground hover:text-primary" />
+                <Button variant="ghost" size="icon" className="hover:bg-pink-50">
+                  <Settings className="h-6 w-6 text-gray-600 hover:text-pink-600" />
                 </Button>
               </DialogTrigger>
-                <DialogContent className="sm:max-w-md glass-card">
+                <DialogContent className="sm:max-w-md">
                   <DialogHeader>
-                    <DialogTitle className="gradient-text">{t('settings')}</DialogTitle>
+                    <DialogTitle>{t('settings')}</DialogTitle>
                     <DialogDescription>
                       {t('updatePregnancyDates')}
                     </DialogDescription>
@@ -271,14 +269,14 @@ const Index = () => {
                         <Button
                           variant={dueDateMode === 'period' ? 'default' : 'outline'}
                           onClick={() => setDueDateMode('period')}
-                          className="flex-1 rounded-2xl"
+                          className="flex-1"
                         >
                           {t('lastPeriodDate')}
                         </Button>
                         <Button
                           variant={dueDateMode === 'duedate' ? 'default' : 'outline'}
                           onClick={() => setDueDateMode('duedate')}
-                          className="flex-1 rounded-2xl"
+                          className="flex-1"
                         >
                           {t('dueDate')}
                         </Button>
@@ -292,7 +290,7 @@ const Index = () => {
                               <Button
                                 variant="outline"
                                 className={cn(
-                                  "w-full justify-start text-left font-normal rounded-2xl",
+                                  "w-full justify-start text-left font-normal",
                                   !selectedDate && "text-muted-foreground"
                                 )}
                               >
@@ -300,7 +298,7 @@ const Index = () => {
                                 {selectedDate ? format(selectedDate, "PPP", { locale: ar }) : t('selectDate')}
                               </Button>
                             </PopoverTrigger>
-                            <PopoverContent className="w-auto p-0 glass-card" align="start">
+                            <PopoverContent className="w-auto p-0" align="start">
                               <Calendar
                                 mode="single"
                                 selected={selectedDate}
@@ -320,7 +318,7 @@ const Index = () => {
                               <Button
                                 variant="outline"
                                 className={cn(
-                                  "w-full justify-start text-left font-normal rounded-2xl",
+                                  "w-full justify-start text-left font-normal",
                                   !selectedDueDate && "text-muted-foreground"
                                 )}
                               >
@@ -328,7 +326,7 @@ const Index = () => {
                                 {selectedDueDate ? format(selectedDueDate, "PPP", { locale: ar }) : t('selectDueDate')}
                               </Button>
                             </PopoverTrigger>
-                            <PopoverContent className="w-auto p-0 glass-card" align="start">
+                            <PopoverContent className="w-auto p-0" align="start">
                               <Calendar
                                 mode="single"
                                 selected={selectedDueDate}
@@ -353,14 +351,14 @@ const Index = () => {
                       </div>
                     )}
                     
-                    <div className="flex gap-3">
-                      <Button variant="outline" onClick={() => setIsSettingsOpen(false)} className="flex-1 rounded-2xl">
+                    <div className="flex gap-2">
+                      <Button variant="outline" onClick={() => setIsSettingsOpen(false)} className="flex-1">
                         {t('cancel')}
                       </Button>
                       <Button 
                         onClick={handleSettingsUpdate}
                         disabled={dueDateMode === 'period' ? !selectedDate : !selectedDueDate}
-                        className="flex-1 rounded-2xl bg-primary hover:bg-primary/90"
+                        className="flex-1 bg-pink-600 hover:bg-pink-700"
                       >
                         {t('update')}
                       </Button>
@@ -373,162 +371,146 @@ const Index = () => {
       </div>
 
       {/* Main Content */}
-      <div className="container mx-auto px-6 max-w-6xl pt-24 pb-32">
+      <div className="container mx-auto p-4 max-w-4xl pt-20 pb-32">
         {/* Render content based on activeTab */}
         {activeTab === 'dashboard' && pregnancyInfo && (
-          <div className="space-y-8">
-            {/* Hero Section with Modern Layout */}
-            <div className="relative">
-              {/* Floating Background Elements */}
-              <div className="absolute -top-10 -right-10 w-40 h-40 bg-gradient-to-br from-primary-glow to-accent-glow rounded-full opacity-20 animate-float blur-xl"></div>
-              <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-gradient-to-br from-secondary to-accent rounded-full opacity-20 animate-float" style={{ animationDelay: '2s' }}></div>
+          <>
+            {/* Hero Section with Baby Bump Progress */}
+            <div className="relative overflow-hidden bg-gradient-to-br from-pink-100 via-purple-100 to-indigo-100 rounded-3xl p-6 mb-6">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-pink-200/30 rounded-full -translate-y-16 translate-x-16"></div>
+              <div className="absolute bottom-0 left-0 w-24 h-24 bg-purple-200/30 rounded-full translate-y-12 -translate-x-12"></div>
               
-              {/* Main Hero Card */}
-              <div className="floating-card rounded-3xl p-8 relative overflow-hidden animate-slide-up">
-                {/* Gradient Background Pattern */}
-                <div className="absolute inset-0 bg-gradient-to-br from-primary-soft/50 via-transparent to-accent-glow/50 opacity-60"></div>
-                <div className="absolute top-0 right-0 w-48 h-48 bg-gradient-to-bl from-primary/10 to-transparent rounded-full -translate-y-24 translate-x-24"></div>
+              <div className="relative z-10">
+                <div className="text-center mb-6">
+                  <h2 className="text-3xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent mb-2">
+                    {t('week')} {pregnancyInfo.weeksPregnant}
+                  </h2>
+                  <p className="text-gray-600 text-lg" dir="rtl">
+                    <span className="font-medium">{pregnancyInfo.daysRemaining}</span> {t('daysUntilBaby')}
+                  </p>
+                </div>
                 
-                <div className="relative z-10">
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-                    {/* Left Side - Week Info */}
-                    <div className="text-center lg:text-right space-y-6">
-                      <div className="space-y-2">
-                        <h2 className="text-5xl lg:text-6xl font-bold gradient-text">
-                          {t('week')} {pregnancyInfo.weeksPregnant}
-                        </h2>
-                        <p className="text-xl text-muted-foreground">
-                          {t('pregnancyMonth')} {calculatePregnancyMonth(pregnancyInfo.weeksPregnant)}
-                        </p>
-                      </div>
-                      
-                      {/* Days Counter */}
-                      <div className="glass-card rounded-2xl p-6 pulse-glow">
-                        <div className="text-center space-y-2">
-                          <p className="text-3xl font-bold text-primary">{pregnancyInfo.daysRemaining}</p>
-                          <p className="text-sm text-muted-foreground">{t('daysUntilBaby')}</p>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Right Side - Circular Progress */}
-                    <div className="flex justify-center lg:justify-start">
-                      <div className="relative w-64 h-64">
-                        {/* Outer Circle */}
-                        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary to-accent opacity-20"></div>
-                        
-                        {/* Progress Ring */}
-                        <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-                          <circle
-                            cx="50"
-                            cy="50"
-                            r="45"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            fill="none"
-                            className="text-border"
-                          />
-                          <circle
-                            cx="50"
-                            cy="50"
-                            r="45"
-                            stroke="url(#gradient)"
-                            strokeWidth="3"
-                            fill="none"
-                            strokeDasharray={`${(pregnancyInfo.weeksPregnant / 40) * 283} 283`}
-                            className="transition-all duration-1000 ease-out"
-                            strokeLinecap="round"
-                          />
-                          <defs>
-                            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                              <stop offset="0%" stopColor="hsl(var(--primary))" />
-                              <stop offset="100%" stopColor="hsl(var(--accent))" />
-                            </linearGradient>
-                          </defs>
-                        </svg>
-
-                        {/* Center Content */}
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="text-center space-y-2">
-                            <Baby className="w-12 h-12 mx-auto text-primary animate-scale-pulse" />
-                            <p className="text-sm text-muted-foreground">{Math.round((pregnancyInfo.weeksPregnant / 40) * 100)}% {t('complete')}</p>
-                          </div>
-                        </div>
-                      </div>
+                {/* Pregnancy Progress Visualization */}
+                <div className="relative">
+                  <div className="w-full bg-white/50 rounded-full h-4 mb-4">
+                    <div 
+                      className="bg-gradient-to-r from-pink-500 to-purple-500 h-4 rounded-full transition-all duration-1000 relative overflow-hidden"
+                      style={{ width: `${Math.min((pregnancyInfo.weeksPregnant / 40) * 100, 100)}%` }}
+                    >
+                      <div className="absolute inset-0 bg-white/30 animate-pulse"></div>
                     </div>
                   </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {/* Due Date Card */}
-              <div className="floating-card rounded-2xl p-6 animate-slide-up" style={{ animationDelay: '0.1s' }}>
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-primary-glow flex items-center justify-center">
-                    <CalendarDays className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">{t('dueDate')}</p>
-                    <p className="font-semibold">{format(pregnancyInfo.dueDate, "MMM dd, yyyy")}</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Days in Week Card */}
-              <div className="floating-card rounded-2xl p-6 animate-slide-up" style={{ animationDelay: '0.2s' }}>
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-secondary-dark to-secondary flex items-center justify-center">
-                    <Clock className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">{t('daysThisWeek')}</p>
-                    <p className="font-semibold">{pregnancyInfo.daysInCurrentWeek}/14</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Total Days Card */}
-              <div className="floating-card rounded-2xl p-6 animate-slide-up" style={{ animationDelay: '0.3s' }}>
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-accent to-accent-glow flex items-center justify-center">
-                    <Heart className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">{t('totalDays')}</p>
-                    <p className="font-semibold">{pregnancyInfo.totalDays}</p>
+                  <div className="flex justify-between text-sm text-gray-600">
+                    <span>{t('week')} 1</span>
+                    <span className="font-semibold text-pink-600">
+                      {Math.round((pregnancyInfo.weeksPregnant / 40) * 100)}% {t('progressCompleted')}
+                    </span>
+                    <span>{t('week')} 40</span>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Weekly Info with Modern Design */}
-            <div className="floating-card rounded-3xl p-8 animate-slide-up" style={{ animationDelay: '0.4s' }}>
-              <WeeklyInfo currentWeek={pregnancyInfo.weeksPregnant} />
-            </div>
-
-            {/* Daily Tip with Creative Layout */}
-            <div className="floating-card rounded-3xl p-8 animate-slide-up" style={{ animationDelay: '0.5s' }}>
+            <div className="mb-6">
               <DailyTip currentDay={pregnancyInfo.totalDays} />
             </div>
 
-            {/* Community Section */}
-            <div className="floating-card rounded-3xl p-8 animate-slide-up" style={{ animationDelay: '0.6s' }}>
-              <Community />
+            {/* Due Date Card */}
+            <Card className="bg-gradient-to-br from-emerald-50 to-teal-100 border-0 shadow-lg mb-6">
+              <CardHeader className="pb-4">
+                <CardTitle className="flex items-center gap-3 text-emerald-800">
+                  <div className="p-2 bg-emerald-100 rounded-full">
+                    <CalendarDays className="w-5 h-5 text-emerald-600" />
+                  </div>
+                  {t('expectedDueDate')}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-emerald-700 mb-1">
+                    {format(pregnancyInfo.dueDate, "EEEE", { locale: ar })}
+                  </div>
+                  <div className="text-xl text-emerald-600">
+                    {format(pregnancyInfo.dueDate, "MMMM d, yyyy", { locale: ar })}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Quick Stats Grid */}
+            <div className="grid grid-cols-2 gap-4">
+              <Card className="bg-gradient-to-br from-pink-50 to-rose-100 border-0 shadow-md">
+                <CardContent className="p-4 text-center">
+                  <div className="flex items-center justify-center mb-2">
+                    <CalendarDays className="w-6 h-6 text-pink-600" />
+                  </div>
+                  <div className="text-2xl font-bold text-pink-700">
+                    {t('weekAbbrev')} {pregnancyInfo.weeksPregnant} {t('and')} {pregnancyInfo.daysInCurrentWeek} {t('dayAbbrev')}
+                  </div>
+                  <div className="text-sm text-pink-600">{t('yourProgressText')}</div>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-gradient-to-br from-emerald-50 to-green-100 border-0 shadow-md">
+                <CardContent className="p-4 text-center">
+                  <div className="flex items-center justify-center mb-2">
+                    <Baby className="w-6 h-6 text-emerald-600" />
+                  </div>
+                  <div className="text-2xl font-bold text-emerald-700">
+                    {calculatePregnancyMonth(pregnancyInfo.weeksPregnant)}
+                  </div>
+                  <div className="text-sm text-emerald-600 flex items-center justify-center gap-1">
+                    {t('month')}
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button variant="ghost" size="sm" className="p-0 h-auto w-auto hover:bg-transparent">
+                          <Info className="w-3 h-3 text-emerald-500 hover:text-emerald-700" />
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>{t('monthCalculationTitle')}</AlertDialogTitle>
+                          <AlertDialogDescription className="text-left space-y-2">
+                            <p>{t('monthCalculationDescription')}</p>
+                            <ul className="list-disc list-inside space-y-1 text-sm">
+                              <li>{t('monthWeeks1')}</li>
+                              <li>{t('monthWeeks2')}</li>
+                              <li>{t('monthWeeks3')}</li>
+                              <li>{t('monthWeeks4')}</li>
+                              <li>{t('monthWeeks5')}</li>
+                              <li>{t('monthWeeks6')}</li>
+                              <li>{t('monthWeeks7')}</li>
+                              <li>{t('monthWeeks8')}</li>
+                              <li>{t('monthWeeks9')}</li>
+                            </ul>
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogAction>{t('gotIt')}</AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
-          </div>
+          </>
+        )}
+
+        {activeTab === 'weekly' && (
+          <WeeklyInfo currentWeek={pregnancyInfo?.weeksPregnant || 0} />
         )}
 
         {activeTab === 'community' && (
-          <div className="animate-slide-up">
-            <Community />
-          </div>
+          <Community />
         )}
       </div>
-
+      
       {/* Bottom Navigation */}
-      <BottomNavigation activeTab={activeTab} onTabChange={setActiveTab} />
+      <BottomNavigation 
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+      />
     </div>
   );
 };
