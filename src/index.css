@@ -17,35 +17,53 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Modern Creative Color Palette */
+    --background: 330 36% 97%;
+    --foreground: 240 10% 15%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 240 10% 15%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 240 10% 15%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Primary: Warm Rose */
+    --primary: 340 75% 55%;
+    --primary-foreground: 0 0% 98%;
+    --primary-soft: 340 60% 92%;
+    --primary-glow: 340 75% 70%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Secondary: Soft Lavender */
+    --secondary: 280 45% 85%;
+    --secondary-foreground: 240 10% 15%;
+    --secondary-dark: 280 45% 55%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Accent: Golden Peach */
+    --accent: 25 75% 75%;
+    --accent-foreground: 240 10% 15%;
+    --accent-glow: 25 85% 85%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --muted: 300 15% 95%;
+    --muted-foreground: 240 5% 65%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 300 15% 90%;
+    --input: 300 15% 95%;
+    --ring: 340 75% 55%;
 
-    --radius: 0.5rem;
+    /* Creative Design Tokens */
+    --gradient-primary: linear-gradient(135deg, hsl(340 75% 55%) 0%, hsl(280 45% 55%) 100%);
+    --gradient-soft: linear-gradient(180deg, hsl(340 60% 98%) 0%, hsl(280 30% 96%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(340 75% 55%) 0%, hsl(25 75% 75%) 50%, hsl(280 45% 55%) 100%);
+    --gradient-card: linear-gradient(145deg, hsla(0, 0%, 100%, 0.9) 0%, hsla(340, 60%, 98%, 0.7) 100%);
+    
+    --shadow-soft: 0 4px 20px hsla(340, 60%, 70%, 0.15);
+    --shadow-glow: 0 8px 40px hsla(340, 75%, 55%, 0.25);
+    --shadow-floating: 0 12px 40px hsla(340, 60%, 70%, 0.2);
+
+    --radius: 1rem;
 
     --sidebar-background: 0 0% 98%;
 
@@ -110,6 +128,52 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground font-arabic;
+    background: linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--muted)) 100%);
+    min-height: 100vh;
+  }
+  
+  /* Creative UI Elements */
+  .glass-card {
+    background: linear-gradient(145deg, hsla(0, 0%, 100%, 0.85) 0%, hsla(340, 60%, 98%, 0.65) 100%);
+    backdrop-filter: blur(20px);
+    border: 1px solid hsla(340, 60%, 90%, 0.3);
+  }
+  
+  .floating-card {
+    background: var(--gradient-card);
+    box-shadow: var(--shadow-floating);
+    transform: translateY(0);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .floating-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-glow);
+  }
+  
+  .gradient-text {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite alternate;
+  }
+  
+  @keyframes pulse-glow {
+    from { box-shadow: var(--shadow-soft); }
+    to { box-shadow: var(--shadow-glow); }
+  }
+  
+  .rotate-slow {
+    animation: rotate-slow 20s linear infinite;
+  }
+  
+  @keyframes rotate-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
   }
 
   /* Mobile safe area support */
