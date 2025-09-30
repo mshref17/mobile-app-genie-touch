@@ -222,6 +222,34 @@ const Community = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [loadMorePosts]);
 
+  // Real-time updates for displayed posts
+  useEffect(() => {
+    if (displayedPosts.length === 0) return;
+
+    const unsubscribes: (() => void)[] = [];
+
+    displayedPosts.forEach(post => {
+      const postRef = doc(db, 'posts', post.id);
+      const unsubscribe = onSnapshot(postRef, (docSnapshot) => {
+        if (docSnapshot.exists()) {
+          const data = docSnapshot.data();
+          setDisplayedPosts(prev => 
+            prev.map(p => 
+              p.id === post.id 
+                ? { ...p, likes: data.likes || 0, replies: data.replies || 0 }
+                : p
+            )
+          );
+        }
+      });
+      unsubscribes.push(unsubscribe);
+    });
+
+    return () => {
+      unsubscribes.forEach(unsub => unsub());
+    };
+  }, [displayedPosts.map(p => p.id).join(',')]);
+
   // Load initial posts on mount
   useEffect(() => {
     loadInitialPosts();
