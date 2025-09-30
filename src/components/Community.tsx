@@ -6,10 +6,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Heart, MessageCircle, Camera, Video, Send, Loader2, TrendingUp, Clock, MessageSquare, Shuffle } from "lucide-react";
+import { Heart, MessageCircle, Camera, Video, Send, Loader2, TrendingUp, Clock, MessageSquare, Shuffle, Plus } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { db, storage } from "@/lib/firebase";
 import { 
   collection, 
@@ -80,6 +81,7 @@ const Community = () => {
   const [replyListeners, setReplyListeners] = useState<Record<string, () => void>>({});
   const [currentAlgorithm, setCurrentAlgorithm] = useState<SortAlgorithm>('smart');
   const [touchStartY, setTouchStartY] = useState<number>(0);
+  const [isCreatePostOpen, setIsCreatePostOpen] = useState(false);
   const { toast } = useToast();
 
   const POSTS_PER_PAGE = 10;
@@ -311,6 +313,7 @@ const Community = () => {
       setNewPost('');
       setNickname('');
       setSelectedFiles([]);
+      setIsCreatePostOpen(false);
       
       toast({
         title: t("postShared") || "Post Shared",
@@ -525,78 +528,88 @@ const Community = () => {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Create Post */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-pink-800">{t("shareWithCommunity")}</CardTitle>
-          <CardDescription>
-            {t("communityDescription")}
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-3">
-            <div>
-              <Label htmlFor="nickname">{t("nickname") || "Nickname"}</Label>
-              <Input
-                id="nickname"
-                placeholder={t("enterNickname") || "Enter your nickname"}
-                value={nickname}
-                onChange={(e) => setNickname(e.target.value)}
-                className="mt-1"
+    <div className="space-y-6 relative">
+      {/* Floating Action Button */}
+      <Dialog open={isCreatePostOpen} onOpenChange={setIsCreatePostOpen}>
+        <DialogTrigger asChild>
+          <Button 
+            className="fixed bottom-20 right-6 h-14 w-14 rounded-full shadow-lg bg-pink-600 hover:bg-pink-700 z-50"
+            size="icon"
+          >
+            <Plus className="h-6 w-6" />
+          </Button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle className="text-pink-800">{t("shareWithCommunity")}</DialogTitle>
+            <DialogDescription>
+              {t("communityDescription")}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 mt-4">
+            <div className="space-y-3">
+              <div>
+                <Label htmlFor="nickname">{t("nickname") || "Nickname"}</Label>
+                <Input
+                  id="nickname"
+                  placeholder={t("enterNickname") || "Enter your nickname"}
+                  value={nickname}
+                  onChange={(e) => setNickname(e.target.value)}
+                  className="mt-1"
+                />
+              </div>
+              <Textarea
+                placeholder={t("communityPlaceholder")}
+                value={newPost}
+                onChange={(e) => setNewPost(e.target.value)}
+                className="min-h-[100px]"
               />
-            </div>
-            <Textarea
-              placeholder={t("communityPlaceholder")}
-              value={newPost}
-              onChange={(e) => setNewPost(e.target.value)}
-              className="min-h-[100px]"
-            />
-          </div>
-          
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2">
-              <Input
-                type="file"
-                id="file-upload"
-                multiple
-                accept="image/*,video/*"
-                onChange={handleFileSelect}
-                className="hidden"
-              />
-              <Label htmlFor="file-upload" className="cursor-pointer">
-                <div className="flex items-center gap-2 px-3 py-2 border rounded-md hover:bg-gray-50">
-                  <Camera className="w-4 h-4" />
-                  <span className="text-sm">{t("photo")}</span>
-                </div>
-              </Label>
             </div>
             
-            <Button 
-              onClick={handleSubmitPost}
-              disabled={!newPost.trim() || !nickname.trim() || uploading}
-              className="bg-pink-600 hover:bg-pink-700 ml-auto"
-            >
-              {uploading ? (
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              ) : (
-                <Send className="w-4 h-4 mr-2" />
-              )}
-              {uploading ? t("sharing") || "Sharing..." : t("share")}
-            </Button>
-          </div>
-          
-          {selectedFiles.length > 0 && (
-            <div className="flex flex-wrap gap-2">
-              {selectedFiles.map((file, index) => (
-                <Badge key={index} variant="secondary">
-                  {file.name}
-                </Badge>
-              ))}
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <Input
+                  type="file"
+                  id="file-upload"
+                  multiple
+                  accept="image/*,video/*"
+                  onChange={handleFileSelect}
+                  className="hidden"
+                />
+                <Label htmlFor="file-upload" className="cursor-pointer">
+                  <div className="flex items-center gap-2 px-3 py-2 border rounded-md hover:bg-gray-50">
+                    <Camera className="w-4 h-4" />
+                    <span className="text-sm">{t("photo")}</span>
+                  </div>
+                </Label>
+              </div>
+              
+              <Button 
+                onClick={handleSubmitPost}
+                disabled={!newPost.trim() || !nickname.trim() || uploading}
+                className="bg-pink-600 hover:bg-pink-700 ml-auto"
+              >
+                {uploading ? (
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                ) : (
+                  <Send className="w-4 h-4 mr-2" />
+                )}
+                {uploading ? t("sharing") || "Sharing..." : t("share")}
+              </Button>
             </div>
-          )}
-        </CardContent>
-      </Card>
+            
+            {selectedFiles.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {selectedFiles.map((file, index) => (
+                  <Badge key={index} variant="secondary">
+                    {file.name}
+                  </Badge>
+                ))}
+              </div>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Posts Feed */}
       <div 
