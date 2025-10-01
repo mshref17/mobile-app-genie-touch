@@ -25,6 +25,7 @@ const appLogo = "/lovable-uploads/7a6df10b-0d20-4b9d-acd0-6b0536777e43.png";
 
 const Index = () => {
   const { t, language } = useLanguage();
+  const [trackingMode, setTrackingMode] = useState<'pregnant' | 'period' | null>(null);
   const [lastPeriodDate, setLastPeriodDate] = useState<Date | null>(null);
   const [isFirstTime, setIsFirstTime] = useState(true);
   const [selectedDate, setSelectedDate] = useState<Date>();
@@ -33,39 +34,60 @@ const Index = () => {
   const [dueDateMode, setDueDateMode] = useState<'period' | 'duedate'>('period');
   const [activeTab, setActiveTab] = useState('dashboard');
   const [showSplash, setShowSplash] = useState(true);
+  const [cycleLength, setCycleLength] = useState<number>(28);
+  const [periodDuration, setPeriodDuration] = useState<number>(5);
 
   useEffect(() => {
     const savedDate = localStorage.getItem('lastPeriodDate');
     const savedMode = localStorage.getItem('dueDateMode') as 'period' | 'duedate' || 'period';
+    const savedTrackingMode = localStorage.getItem('trackingMode') as 'pregnant' | 'period' || null;
+    const savedCycleLength = localStorage.getItem('cycleLength');
+    const savedPeriodDuration = localStorage.getItem('periodDuration');
     
-    if (savedDate) {
+    if (savedDate && savedTrackingMode) {
       const date = new Date(savedDate);
       setLastPeriodDate(date);
       setIsFirstTime(false);
       setDueDateMode(savedMode);
+      setTrackingMode(savedTrackingMode);
+      
+      if (savedCycleLength) setCycleLength(parseInt(savedCycleLength));
+      if (savedPeriodDuration) setPeriodDuration(parseInt(savedPeriodDuration));
       
       // Initialize notifications when app loads
-      const pregnancyInfo = calculatePregnancyInfoForDate(date);
-      if (pregnancyInfo) {
-        NotificationService.scheduleWeeklyNotification(pregnancyInfo.weeksPregnant, date);
-        NotificationService.scheduleDailyTipNotification();
+      if (savedTrackingMode === 'pregnant') {
+        const pregnancyInfo = calculatePregnancyInfoForDate(date);
+        if (pregnancyInfo) {
+          NotificationService.scheduleWeeklyNotification(pregnancyInfo.weeksPregnant, date);
+          NotificationService.scheduleDailyTipNotification();
+        }
       }
     }
   }, []);
 
   const handleDateSubmit = () => {
-    if (dueDateMode === 'period' && selectedDate) {
+    if (trackingMode === 'period' && selectedDate) {
       setLastPeriodDate(selectedDate);
       localStorage.setItem('lastPeriodDate', selectedDate.toISOString());
-      localStorage.setItem('dueDateMode', 'period');
+      localStorage.setItem('trackingMode', 'period');
+      localStorage.setItem('cycleLength', cycleLength.toString());
+      localStorage.setItem('periodDuration', periodDuration.toString());
       setIsFirstTime(false);
-    } else if (dueDateMode === 'duedate' && selectedDueDate) {
-      // Calculate last period date from due date (subtract 280 days)
-      const calculatedLastPeriod = subDays(selectedDueDate, 280);
-      setLastPeriodDate(calculatedLastPeriod);
-      localStorage.setItem('lastPeriodDate', calculatedLastPeriod.toISOString());
-      localStorage.setItem('dueDateMode', 'duedate');
-      setIsFirstTime(false);
+    } else if (trackingMode === 'pregnant') {
+      if (dueDateMode === 'period' && selectedDate) {
+        setLastPeriodDate(selectedDate);
+        localStorage.setItem('lastPeriodDate', selectedDate.toISOString());
+        localStorage.setItem('dueDateMode', 'period');
+        localStorage.setItem('trackingMode', 'pregnant');
+        setIsFirstTime(false);
+      } else if (dueDateMode === 'duedate' && selectedDueDate) {
+        const calculatedLastPeriod = subDays(selectedDueDate, 280);
+        setLastPeriodDate(calculatedLastPeriod);
+        localStorage.setItem('lastPeriodDate', calculatedLastPeriod.toISOString());
+        localStorage.setItem('dueDateMode', 'duedate');
+        localStorage.setItem('trackingMode', 'pregnant');
+        setIsFirstTime(false);
+      }
     }
   };
 
@@ -128,7 +150,36 @@ const Index = () => {
     return calculatePregnancyInfoForDate(lastPeriodDate);
   };
 
-  const pregnancyInfo = calculatePregnancyInfo();
+  const calculatePeriodInfo = () => {
+    if (!lastPeriodDate) return null;
+    
+    const today = new Date();
+    const daysSinceLastPeriod = differenceInDays(today, lastPeriodDate);
+    const daysUntilNextPeriod = cycleLength - daysSinceLastPeriod;
+    const nextPeriodDate = addDays(lastPeriodDate, cycleLength);
+    
+    // Ovulation typically occurs 14 days before next period
+    const ovulationDate = subDays(nextPeriodDate, 14);
+    // Fertile window is typically 5 days before ovulation to 1 day after
+    const fertileWindowStart = subDays(ovulationDate, 5);
+    const fertileWindowEnd = addDays(ovulationDate, 1);
+    
+    const daysSinceOvulation = differenceInDays(today, ovulationDate);
+    const isInFertileWindow = today >= fertileWindowStart && today <= fertileWindowEnd;
+    
+    return {
+      nextPeriodDate,
+      daysUntilNextPeriod: Math.max(0, daysUntilNextPeriod),
+      ovulationDate,
+      fertileWindowStart,
+      fertileWindowEnd,
+      isInFertileWindow,
+      cycleDay: (daysSinceLastPeriod % cycleLength) + 1
+    };
+  };
+
+  const pregnancyInfo = trackingMode === 'pregnant' ? calculatePregnancyInfo() : null;
+  const periodInfo = trackingMode === 'period' ? calculatePeriodInfo() : null;
 
   if (isFirstTime) {
     return (
@@ -144,27 +195,139 @@ const Index = () => {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            <div className="space-y-4">
-                      <div className="flex gap-2">
-                        <Button
-                          variant={dueDateMode === 'period' ? 'default' : 'outline'}
-                          onClick={() => setDueDateMode('period')}
-                          className="flex-1"
-                        >
-                          {t('lastPeriodOption')}
-                        </Button>
-                        <Button
-                          variant={dueDateMode === 'duedate' ? 'default' : 'outline'}
-                          onClick={() => setDueDateMode('duedate')}
-                          className="flex-1"
-                        >
-                          {t('dueDateOption')}
-                        </Button>
-                      </div>
+            {/* Step 1: Choose tracking mode */}
+            {!trackingMode && (
+              <div className="space-y-4">
+                <Label className="text-center block">{t('selectTrackingMode')}</Label>
+                <div className="flex flex-col gap-3">
+                  <Button
+                    variant="outline"
+                    onClick={() => setTrackingMode('pregnant')}
+                    className="w-full h-auto py-4 flex flex-col items-center gap-2"
+                  >
+                    <Baby className="w-6 h-6" />
+                    <span>{t('pregnancyTracking')}</span>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => setTrackingMode('period')}
+                    className="w-full h-auto py-4 flex flex-col items-center gap-2"
+                  >
+                    <CalendarDays className="w-6 h-6" />
+                    <span>{t('periodTracking')}</span>
+                  </Button>
+                </div>
+              </div>
+            )}
 
-              {dueDateMode === 'period' ? (
+            {/* Step 2: Pregnancy tracking setup */}
+            {trackingMode === 'pregnant' && (
+              <div className="space-y-4">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setTrackingMode(null)}
+                  className="mb-2"
+                >
+                  ← {t('back')}
+                </Button>
+                <div className="flex gap-2">
+                  <Button
+                    variant={dueDateMode === 'period' ? 'default' : 'outline'}
+                    onClick={() => setDueDateMode('period')}
+                    className="flex-1"
+                  >
+                    {t('lastPeriodOption')}
+                  </Button>
+                  <Button
+                    variant={dueDateMode === 'duedate' ? 'default' : 'outline'}
+                    onClick={() => setDueDateMode('duedate')}
+                    className="flex-1"
+                  >
+                    {t('dueDateOption')}
+                  </Button>
+                </div>
+
+                {dueDateMode === 'period' ? (
+                  <div className="space-y-2">
+                    <Label htmlFor="last-period">{t('firstDayLastPeriod')}</Label>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          className={cn(
+                            "w-full justify-start text-left font-normal",
+                            !selectedDate && "text-muted-foreground"
+                          )}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {selectedDate ? format(selectedDate, "PPP", { locale: ar }) : t('selectDate')}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          mode="single"
+                          selected={selectedDate}
+                          onSelect={setSelectedDate}
+                          disabled={(date) => date > new Date()}
+                          initialFocus
+                          className="pointer-events-auto"
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <Label htmlFor="due-date">{t('expectedDueDate')}</Label>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          className={cn(
+                            "w-full justify-start text-left font-normal",
+                            !selectedDueDate && "text-muted-foreground"
+                          )}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {selectedDueDate ? format(selectedDueDate, "PPP", { locale: ar }) : t('selectDueDate')}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          mode="single"
+                          selected={selectedDueDate}
+                          onSelect={setSelectedDueDate}
+                          disabled={(date) => date < new Date()}
+                          initialFocus
+                          className="pointer-events-auto"
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+                )}
+                <Button 
+                  onClick={handleDateSubmit} 
+                  disabled={dueDateMode === 'period' ? !selectedDate : !selectedDueDate}
+                  className="w-full bg-pink-600 hover:bg-pink-700"
+                >
+                  {t('startTracking')}
+                </Button>
+              </div>
+            )}
+
+            {/* Step 2: Period tracking setup */}
+            {trackingMode === 'period' && (
+              <div className="space-y-4">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setTrackingMode(null)}
+                  className="mb-2"
+                >
+                  ← {t('back')}
+                </Button>
                 <div className="space-y-2">
-                  <Label htmlFor="last-period">{t('firstDayLastPeriod')}</Label>
+                  <Label htmlFor="last-period">{t('lastPeriodStart')}</Label>
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button
@@ -190,43 +353,44 @@ const Index = () => {
                     </PopoverContent>
                   </Popover>
                 </div>
-              ) : (
+
                 <div className="space-y-2">
-                  <Label htmlFor="due-date">{t('expectedDueDate')}</Label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className={cn(
-                          "w-full justify-start text-left font-normal",
-                          !selectedDueDate && "text-muted-foreground"
-                        )}
-                      >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {selectedDueDate ? format(selectedDueDate, "PPP", { locale: ar }) : t('selectDueDate')}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={selectedDueDate}
-                        onSelect={setSelectedDueDate}
-                        disabled={(date) => date < new Date()}
-                        initialFocus
-                        className="pointer-events-auto"
-                      />
-                    </PopoverContent>
-                  </Popover>
+                  <Label htmlFor="cycle-length">{t('cycleLengthLabel')}</Label>
+                  <Input
+                    id="cycle-length"
+                    type="number"
+                    min="21"
+                    max="35"
+                    value={cycleLength}
+                    onChange={(e) => setCycleLength(parseInt(e.target.value) || 28)}
+                    placeholder="28"
+                  />
+                  <p className="text-xs text-muted-foreground">{t('cycleLengthHint')}</p>
                 </div>
-              )}
-            </div>
-            <Button 
-              onClick={handleDateSubmit} 
-              disabled={dueDateMode === 'period' ? !selectedDate : !selectedDueDate}
-              className="w-full bg-pink-600 hover:bg-pink-700"
-            >
-              {t('startTracking')}
-            </Button>
+
+                <div className="space-y-2">
+                  <Label htmlFor="period-duration">{t('periodDurationLabel')}</Label>
+                  <Input
+                    id="period-duration"
+                    type="number"
+                    min="2"
+                    max="10"
+                    value={periodDuration}
+                    onChange={(e) => setPeriodDuration(parseInt(e.target.value) || 5)}
+                    placeholder="5"
+                  />
+                  <p className="text-xs text-muted-foreground">{t('periodDurationHint')}</p>
+                </div>
+
+                <Button 
+                  onClick={handleDateSubmit} 
+                  disabled={!selectedDate}
+                  className="w-full bg-pink-600 hover:bg-pink-700"
+                >
+                  {t('startTracking')}
+                </Button>
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>
@@ -373,7 +537,7 @@ const Index = () => {
       {/* Main Content */}
       <div className="container mx-auto p-4 max-w-4xl pt-20 pb-32">
         {/* Render content based on activeTab */}
-        {activeTab === 'dashboard' && pregnancyInfo && (
+        {activeTab === 'dashboard' && trackingMode === 'pregnant' && pregnancyInfo && (
           <>
             {/* Hero Section with Baby Bump Progress */}
             <div className="relative overflow-hidden bg-gradient-to-br from-pink-100 via-purple-100 to-indigo-100 rounded-3xl p-6 mb-6">
@@ -497,7 +661,129 @@ const Index = () => {
           </>
         )}
 
-        {activeTab === 'weekly' && (
+        {/* Period Tracking Dashboard */}
+        {activeTab === 'dashboard' && trackingMode === 'period' && periodInfo && (
+          <>
+            {/* Hero Section for Period Tracking */}
+            <div className="relative overflow-hidden bg-gradient-to-br from-pink-100 via-purple-100 to-indigo-100 rounded-3xl p-6 mb-6">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-pink-200/30 rounded-full -translate-y-16 translate-x-16"></div>
+              <div className="absolute bottom-0 left-0 w-24 h-24 bg-purple-200/30 rounded-full translate-y-12 -translate-x-12"></div>
+              
+              <div className="relative z-10">
+                <div className="text-center mb-6">
+                  <h2 className="text-3xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent mb-2">
+                    {t('cycleDay')} {periodInfo.cycleDay}
+                  </h2>
+                  <p className="text-gray-600 text-lg">
+                    <span className="font-medium">{periodInfo.daysUntilNextPeriod}</span> {t('daysUntilPeriod')}
+                  </p>
+                </div>
+                
+                {/* Cycle Progress Visualization */}
+                <div className="bg-white/50 backdrop-blur-sm rounded-2xl p-4">
+                  <div className="flex items-center justify-between mb-2 text-sm text-gray-600">
+                    <span>{t('cycleProgress')}</span>
+                    <span className="font-medium">{Math.round((periodInfo.cycleDay / cycleLength) * 100)}%</span>
+                  </div>
+                  <div className="h-3 bg-white rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-gradient-to-r from-pink-500 to-purple-500 rounded-full transition-all duration-500"
+                      style={{ width: `${(periodInfo.cycleDay / cycleLength) * 100}%` }}
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Fertility Window Alert */}
+            {periodInfo.isInFertileWindow && (
+              <Card className="mb-6 bg-gradient-to-br from-green-50 to-emerald-100 border-emerald-200">
+                <CardContent className="p-4">
+                  <div className="flex items-start gap-3">
+                    <div className="w-10 h-10 bg-emerald-500 rounded-full flex items-center justify-center flex-shrink-0">
+                      <Heart className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-emerald-900 mb-1">{t('fertileWindowTitle')}</h3>
+                      <p className="text-sm text-emerald-700">{t('fertileWindowMessage')}</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Next Period Date */}
+            <Card className="mb-6 bg-white shadow-md">
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <CalendarDays className="w-5 h-5 text-pink-600" />
+                  {t('nextPeriod')}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold text-pink-600">
+                  {format(periodInfo.nextPeriodDate, "PPP", { locale: ar })}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Daily Tip */}
+            <DailyTip currentDay={periodInfo.cycleDay} />
+
+            {/* Quick Stats Grid */}
+            <div className="grid grid-cols-2 gap-4 mb-6">
+              <Card className="bg-gradient-to-br from-pink-50 to-rose-100 border-0 shadow-md">
+                <CardContent className="p-4 text-center">
+                  <div className="flex items-center justify-center mb-2">
+                    <CalendarIcon className="w-6 h-6 text-pink-600" />
+                  </div>
+                  <div className="text-2xl font-bold text-pink-700">
+                    {cycleLength} {t('days')}
+                  </div>
+                  <div className="text-sm text-pink-600">{t('cycleLength')}</div>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-gradient-to-br from-purple-50 to-violet-100 border-0 shadow-md">
+                <CardContent className="p-4 text-center">
+                  <div className="flex items-center justify-center mb-2">
+                    <Clock className="w-6 h-6 text-purple-600" />
+                  </div>
+                  <div className="text-2xl font-bold text-purple-700">
+                    {periodDuration} {t('days')}
+                  </div>
+                  <div className="text-sm text-purple-600">{t('periodLength')}</div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Ovulation & Fertile Window Info */}
+            <Card className="mb-6 bg-white shadow-md">
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <Heart className="w-5 h-5 text-rose-600" />
+                  {t('fertilityInfo')}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-600">{t('ovulationDate')}</span>
+                  <span className="font-medium text-gray-900">
+                    {format(periodInfo.ovulationDate, "PP", { locale: ar })}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-600">{t('fertileWindow')}</span>
+                  <span className="font-medium text-gray-900">
+                    {format(periodInfo.fertileWindowStart, "PP", { locale: ar })} - {format(periodInfo.fertileWindowEnd, "PP", { locale: ar })}
+                  </span>
+                </div>
+              </CardContent>
+            </Card>
+          </>
+        )}
+
+        {activeTab === 'weekly' && trackingMode === 'pregnant' && (
           <WeeklyInfo currentWeek={pregnancyInfo?.weeksPregnant || 0} />
         )}
 
@@ -510,6 +796,7 @@ const Index = () => {
       <BottomNavigation 
         activeTab={activeTab}
         onTabChange={setActiveTab}
+        trackingMode={trackingMode}
       />
     </div>
   );

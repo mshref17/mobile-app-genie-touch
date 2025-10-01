@@ -5,14 +5,15 @@ import { Button } from "@/components/ui/button";
 interface BottomNavigationProps {
   activeTab: string;
   onTabChange: (tab: string) => void;
+  trackingMode?: 'pregnant' | 'period' | null;
 }
 
-export function BottomNavigation({ activeTab, onTabChange }: BottomNavigationProps) {
+export function BottomNavigation({ activeTab, onTabChange, trackingMode }: BottomNavigationProps) {
   const { t } = useLanguage();
 
   const tabs = [
     { id: 'dashboard', label: t('dashboard'), icon: Home },
-    { id: 'weekly', label: t('weeklyInfo'), icon: Baby },
+    ...(trackingMode === 'pregnant' ? [{ id: 'weekly', label: t('weeklyInfo'), icon: Baby }] : []),
     { id: 'community', label: t('community'), icon: Users },
   ];
 
