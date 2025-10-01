@@ -12,6 +12,7 @@ import { format, addDays, differenceInDays, differenceInWeeks, subDays } from "d
 import { ar } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useToast } from "@/hooks/use-toast";
 
 import WeeklyInfo from "@/components/WeeklyInfo";
 import Community from "@/components/Community";
@@ -25,6 +26,7 @@ const appLogo = "/lovable-uploads/7a6df10b-0d20-4b9d-acd0-6b0536777e43.png";
 
 const Index = () => {
   const { t, language } = useLanguage();
+  const { toast } = useToast();
   const [trackingMode, setTrackingMode] = useState<'pregnant' | 'period' | null>(null);
   const [lastPeriodDate, setLastPeriodDate] = useState<Date | null>(null);
   const [isFirstTime, setIsFirstTime] = useState(true);
@@ -61,6 +63,9 @@ const Index = () => {
           NotificationService.scheduleWeeklyNotification(pregnancyInfo.weeksPregnant, date);
           NotificationService.scheduleDailyTipNotification();
         }
+      } else if (savedTrackingMode === 'period' && savedCycleLength) {
+        const nextPeriod = addDays(date, parseInt(savedCycleLength));
+        NotificationService.schedulePeriodNotifications(nextPeriod);
       }
     }
   }, []);
@@ -73,6 +78,10 @@ const Index = () => {
       localStorage.setItem('cycleLength', cycleLength.toString());
       localStorage.setItem('periodDuration', periodDuration.toString());
       setIsFirstTime(false);
+      
+      // Schedule period notifications
+      const nextPeriod = addDays(selectedDate, cycleLength);
+      NotificationService.schedulePeriodNotifications(nextPeriod);
     } else if (trackingMode === 'pregnant') {
       if (dueDateMode === 'period' && selectedDate) {
         setLastPeriodDate(selectedDate);
@@ -89,6 +98,21 @@ const Index = () => {
         setIsFirstTime(false);
       }
     }
+  };
+
+  const handlePeriodStarted = () => {
+    const today = new Date();
+    setLastPeriodDate(today);
+    localStorage.setItem('lastPeriodDate', today.toISOString());
+    
+    // Schedule new period notifications
+    const nextPeriod = addDays(today, cycleLength);
+    NotificationService.schedulePeriodNotifications(nextPeriod);
+    
+    toast({
+      title: t('periodStarted'),
+      description: t('periodStartedSuccess'),
+    });
   };
 
   const handleSettingsUpdate = () => {
@@ -506,11 +530,13 @@ const Index = () => {
                     </div>
                     
                     {/* Notification Settings */}
-                    {pregnancyInfo && (
+                    {(pregnancyInfo || periodInfo) && (
                       <div className="border-t pt-4">
                         <NotificationSettings 
-                          currentWeek={pregnancyInfo.weeksPregnant}
+                          currentWeek={pregnancyInfo?.weeksPregnant || 0}
                           pregnancyStartDate={lastPeriodDate}
+                          trackingMode={trackingMode}
+                          nextPeriodDate={periodInfo?.nextPeriodDate}
                         />
                       </div>
                     )}
@@ -721,9 +747,15 @@ const Index = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-pink-600">
+                <div className="text-2xl font-bold text-pink-600 mb-4">
                   {format(periodInfo.nextPeriodDate, "PPP", { locale: ar })}
                 </div>
+                <Button
+                  onClick={handlePeriodStarted}
+                  className="w-full bg-pink-600 hover:bg-pink-700"
+                >
+                  {t('markPeriodStarted')}
+                </Button>
               </CardContent>
             </Card>
 

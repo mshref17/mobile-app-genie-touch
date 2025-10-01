@@ -4,16 +4,19 @@ import { Capacitor } from '@capacitor/core';
 export interface NotificationSettings {
   weeklyNotifications: boolean;
   dailyTipsNotifications: boolean;
+  periodNotifications: boolean;
 }
 
 const DEFAULT_SETTINGS: NotificationSettings = {
   weeklyNotifications: true,
   dailyTipsNotifications: true,
+  periodNotifications: true,
 };
 
 export class NotificationService {
   private static readonly WEEKLY_NOTIFICATION_ID = 1;
   private static readonly DAILY_TIP_NOTIFICATION_ID = 2;
+  private static readonly PERIOD_NOTIFICATION_ID = 3;
   private static readonly SETTINGS_KEY = 'notificationSettings';
 
   static async requestPermissions(): Promise<boolean> {
@@ -135,6 +138,52 @@ export class NotificationService {
     }
   }
 
+  static async schedulePeriodNotifications(nextPeriodDate: Date): Promise<void> {
+    if (!Capacitor.isNativePlatform()) return;
+
+    const settings = this.getSettings();
+    if (!settings.periodNotifications) return;
+
+    try {
+      // Cancel existing period notifications
+      await LocalNotifications.cancel({
+        notifications: [{ id: this.PERIOD_NOTIFICATION_ID }]
+      });
+
+      // Calculate notification start date (2 days before period)
+      const notificationStart = new Date(nextPeriodDate);
+      notificationStart.setDate(notificationStart.getDate() - 2);
+      notificationStart.setHours(9, 0, 0, 0); // 9 AM
+
+      // Only schedule if the notification date is in the future
+      const now = new Date();
+      if (notificationStart <= now) return;
+
+      await LocalNotifications.schedule({
+        notifications: [
+          {
+            id: this.PERIOD_NOTIFICATION_ID,
+            title: '🌸 Period Reminder',
+            body: 'Your period is expected in 2 days. If it has already started, please update it in the app.',
+            schedule: {
+              at: notificationStart,
+              repeats: true,
+              every: 'day'
+            },
+            sound: 'default',
+            attachments: [],
+            actionTypeId: '',
+            extra: {
+              type: 'period_reminder'
+            }
+          }
+        ]
+      });
+    } catch (error) {
+      console.error('Error scheduling period notification:', error);
+    }
+  }
+
   static async cancelAllNotifications(): Promise<void> {
     if (!Capacitor.isNativePlatform()) return;
 
@@ -142,7 +191,8 @@ export class NotificationService {
       await LocalNotifications.cancel({
         notifications: [
           { id: this.WEEKLY_NOTIFICATION_ID },
-          { id: this.DAILY_TIP_NOTIFICATION_ID }
+          { id: this.DAILY_TIP_NOTIFICATION_ID },
+          { id: this.PERIOD_NOTIFICATION_ID }
         ]
       });
     } catch (error) {
@@ -150,7 +200,12 @@ export class NotificationService {
     }
   }
 
-  static async updateNotifications(settings: NotificationSettings, currentWeek: number, pregnancyStartDate: Date): Promise<void> {
+  static async updateNotifications(
+    settings: NotificationSettings, 
+    currentWeek: number, 
+    pregnancyStartDate: Date,
+    nextPeriodDate?: Date
+  ): Promise<void> {
     // Cancel all notifications first
     await this.cancelAllNotifications();
 
@@ -161,6 +216,10 @@ export class NotificationService {
 
     if (settings.dailyTipsNotifications) {
       await this.scheduleDailyTipNotification();
+    }
+
+    if (settings.periodNotifications && nextPeriodDate) {
+      await this.schedulePeriodNotifications(nextPeriodDate);
     }
 
     this.saveSettings(settings);

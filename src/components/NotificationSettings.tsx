@@ -11,9 +11,11 @@ import { useToast } from '@/hooks/use-toast';
 interface NotificationSettingsProps {
   currentWeek: number;
   pregnancyStartDate: Date | null;
+  trackingMode?: 'pregnant' | 'period' | null;
+  nextPeriodDate?: Date;
 }
 
-const NotificationSettingsComponent = ({ currentWeek, pregnancyStartDate }: NotificationSettingsProps) => {
+const NotificationSettingsComponent = ({ currentWeek, pregnancyStartDate, trackingMode, nextPeriodDate }: NotificationSettingsProps) => {
   const { t } = useLanguage();
   const { toast } = useToast();
   const [settings, setSettings] = useState<NotificationSettings>(NotificationService.getSettings());
@@ -46,7 +48,7 @@ const NotificationSettingsComponent = ({ currentWeek, pregnancyStartDate }: Noti
     setSettings(newSettings);
 
     if (pregnancyStartDate) {
-      await NotificationService.updateNotifications(newSettings, currentWeek, pregnancyStartDate);
+      await NotificationService.updateNotifications(newSettings, currentWeek, pregnancyStartDate, nextPeriodDate);
       toast({
         title: "Settings Updated",
         description: "Your notification preferences have been saved.",
@@ -62,31 +64,50 @@ const NotificationSettingsComponent = ({ currentWeek, pregnancyStartDate }: Noti
       </h4>
       
       <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <div className="space-y-0.5">
-            <Label className="text-sm font-medium">{t('weeklyNotifications')}</Label>
-            <p className="text-xs text-muted-foreground">
-              {t('weeklyNotificationsDesc')}
-            </p>
-          </div>
-          <Switch
-            checked={settings.weeklyNotifications}
-            onCheckedChange={(checked) => updateSetting('weeklyNotifications', checked)}
-          />
-        </div>
+        {trackingMode === 'pregnant' && (
+          <>
+            <div className="flex items-center justify-between">
+              <div className="space-y-0.5">
+                <Label className="text-sm font-medium">{t('weeklyNotifications')}</Label>
+                <p className="text-xs text-muted-foreground">
+                  {t('weeklyNotificationsDesc')}
+                </p>
+              </div>
+              <Switch
+                checked={settings.weeklyNotifications}
+                onCheckedChange={(checked) => updateSetting('weeklyNotifications', checked)}
+              />
+            </div>
 
-        <div className="flex items-center justify-between">
-          <div className="space-y-0.5">
-            <Label className="text-sm font-medium">{t('dailyTipsNotifications')}</Label>
-            <p className="text-xs text-muted-foreground">
-              {t('dailyTipsNotificationsDesc')}
-            </p>
+            <div className="flex items-center justify-between">
+              <div className="space-y-0.5">
+                <Label className="text-sm font-medium">{t('dailyTipsNotifications')}</Label>
+                <p className="text-xs text-muted-foreground">
+                  {t('dailyTipsNotificationsDesc')}
+                </p>
+              </div>
+              <Switch
+                checked={settings.dailyTipsNotifications}
+                onCheckedChange={(checked) => updateSetting('dailyTipsNotifications', checked)}
+              />
+            </div>
+          </>
+        )}
+
+        {trackingMode === 'period' && (
+          <div className="flex items-center justify-between">
+            <div className="space-y-0.5">
+              <Label className="text-sm font-medium">{t('periodNotifications')}</Label>
+              <p className="text-xs text-muted-foreground">
+                {t('periodNotificationsDesc')}
+              </p>
+            </div>
+            <Switch
+              checked={settings.periodNotifications}
+              onCheckedChange={(checked) => updateSetting('periodNotifications', checked)}
+            />
           </div>
-          <Switch
-            checked={settings.dailyTipsNotifications}
-            onCheckedChange={(checked) => updateSetting('dailyTipsNotifications', checked)}
-          />
-        </div>
+        )}
 
         {!permissionRequested && (
           <Button 
