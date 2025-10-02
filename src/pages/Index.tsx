@@ -491,83 +491,115 @@ const Index = () => {
                   </DialogHeader>
                   <div className="space-y-6">
 
-                    <div className="space-y-4">
-                      <h4 className="text-sm font-medium">{t('pregnancyDates')}</h4>
-                      <div className="flex gap-2">
-                        <Button
-                          variant={dueDateMode === 'period' ? 'default' : 'outline'}
-                          onClick={() => setDueDateMode('period')}
-                          className="flex-1"
-                        >
-                          {t('lastPeriodDate')}
-                        </Button>
-                        <Button
-                          variant={dueDateMode === 'duedate' ? 'default' : 'outline'}
-                          onClick={() => setDueDateMode('duedate')}
-                          className="flex-1"
-                        >
-                          {t('dueDate')}
-                        </Button>
-                      </div>
+                    {/* Pregnancy Dates Section - Only show for pregnancy tracking */}
+                    {trackingMode === 'pregnant' && (
+                      <div className="space-y-4">
+                        <h4 className="text-sm font-medium">{t('pregnancyDates')}</h4>
+                        <div className="flex gap-2">
+                          <Button
+                            variant={dueDateMode === 'period' ? 'default' : 'outline'}
+                            onClick={() => setDueDateMode('period')}
+                            className="flex-1"
+                          >
+                            {t('lastPeriodDate')}
+                          </Button>
+                          <Button
+                            variant={dueDateMode === 'duedate' ? 'default' : 'outline'}
+                            onClick={() => setDueDateMode('duedate')}
+                            className="flex-1"
+                          >
+                            {t('dueDate')}
+                          </Button>
+                        </div>
 
-                      {dueDateMode === 'period' ? (
-                        <div className="space-y-2">
-                          <Label>{t('firstDayLastPeriod')}</Label>
-                          <Popover>
-                            <PopoverTrigger asChild>
-                              <Button
-                                variant="outline"
-                                className={cn(
-                                  "w-full justify-start text-left font-normal",
-                                  !selectedDate && "text-muted-foreground"
-                                )}
-                              >
-                                <CalendarIcon className="mr-2 h-4 w-4" />
-                                {selectedDate ? format(selectedDate, "PPP", { locale: ar }) : t('selectDate')}
-                              </Button>
-                            </PopoverTrigger>
-                            <PopoverContent className="w-auto p-0" align="start">
-                              <Calendar
-                                mode="single"
-                                selected={selectedDate}
-                                onSelect={setSelectedDate}
-                                disabled={(date) => date > new Date()}
-                                initialFocus
-                                className="pointer-events-auto"
-                              />
-                            </PopoverContent>
-                          </Popover>
-                        </div>
-                      ) : (
-                        <div className="space-y-2">
-                          <Label>{t('expectedDueDate')}</Label>
-                          <Popover>
-                            <PopoverTrigger asChild>
-                              <Button
-                                variant="outline"
-                                className={cn(
-                                  "w-full justify-start text-left font-normal",
-                                  !selectedDueDate && "text-muted-foreground"
-                                )}
-                              >
-                                <CalendarIcon className="mr-2 h-4 w-4" />
-                                {selectedDueDate ? format(selectedDueDate, "PPP", { locale: ar }) : t('selectDueDate')}
-                              </Button>
-                            </PopoverTrigger>
-                            <PopoverContent className="w-auto p-0" align="start">
-                              <Calendar
-                                mode="single"
-                                selected={selectedDueDate}
-                                onSelect={setSelectedDueDate}
-                                disabled={(date) => date < new Date()}
-                                initialFocus
-                                className="pointer-events-auto"
-                              />
-                            </PopoverContent>
-                          </Popover>
-                        </div>
-                      )}
-                    </div>
+                        {dueDateMode === 'period' ? (
+                          <div className="space-y-2">
+                            <Label>{t('firstDayLastPeriod')}</Label>
+                            <Popover>
+                              <PopoverTrigger asChild>
+                                <Button
+                                  variant="outline"
+                                  className={cn(
+                                    "w-full justify-start text-left font-normal",
+                                    !selectedDate && "text-muted-foreground"
+                                  )}
+                                >
+                                  <CalendarIcon className="mr-2 h-4 w-4" />
+                                  {selectedDate ? format(selectedDate, "PPP", { locale: ar }) : t('selectDate')}
+                                </Button>
+                              </PopoverTrigger>
+                              <PopoverContent className="w-auto p-0" align="start">
+                                <Calendar
+                                  mode="single"
+                                  selected={selectedDate}
+                                  onSelect={setSelectedDate}
+                                  disabled={(date) => date > new Date()}
+                                  initialFocus
+                                  className="pointer-events-auto"
+                                />
+                              </PopoverContent>
+                            </Popover>
+                          </div>
+                        ) : (
+                          <div className="space-y-2">
+                            <Label>{t('expectedDueDate')}</Label>
+                            <Popover>
+                              <PopoverTrigger asChild>
+                                <Button
+                                  variant="outline"
+                                  className={cn(
+                                    "w-full justify-start text-left font-normal",
+                                    !selectedDueDate && "text-muted-foreground"
+                                  )}
+                                >
+                                  <CalendarIcon className="mr-2 h-4 w-4" />
+                                  {selectedDueDate ? format(selectedDueDate, "PPP", { locale: ar }) : t('selectDueDate')}
+                                </Button>
+                              </PopoverTrigger>
+                              <PopoverContent className="w-auto p-0" align="start">
+                                <Calendar
+                                  mode="single"
+                                  selected={selectedDueDate}
+                                  onSelect={setSelectedDueDate}
+                                  disabled={(date) => date < new Date()}
+                                  initialFocus
+                                  className="pointer-events-auto"
+                                />
+                              </PopoverContent>
+                            </Popover>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                    
+                    {/* Reset App Section - For period tracking, shown instead of dates */}
+                    {trackingMode === 'period' && (
+                      <div className="space-y-4">
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button variant="destructive" className="w-full">
+                              {t('resetApp')}
+                            </Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>{t('resetAppConfirmTitle')}</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                {t('resetAppConfirmDesc')}
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>
+                                {t('cancel')}
+                              </AlertDialogCancel>
+                              <AlertDialogAction onClick={handleResetApp} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                                {t('resetApp')}
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      </div>
+                    )}
                     
                     {/* Notification Settings */}
                     {(pregnancyInfo || periodInfo) && (
@@ -581,32 +613,34 @@ const Index = () => {
                       </div>
                     )}
                     
-                    {/* Reset App Section */}
-                    <div className="border-t pt-4">
-                      <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                          <Button variant="destructive" className="w-full">
-                            {t('resetApp')}
-                          </Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                          <AlertDialogHeader>
-                            <AlertDialogTitle>{t('resetAppConfirmTitle')}</AlertDialogTitle>
-                            <AlertDialogDescription>
-                              {t('resetAppConfirmDesc')}
-                            </AlertDialogDescription>
-                          </AlertDialogHeader>
-                          <AlertDialogFooter>
-                            <AlertDialogCancel>
-                              {t('cancel')}
-                            </AlertDialogCancel>
-                            <AlertDialogAction onClick={handleResetApp} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                    {/* Reset App Section - Only for pregnant mode, shown at bottom */}
+                    {trackingMode === 'pregnant' && (
+                      <div className="border-t pt-4">
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button variant="destructive" className="w-full">
                               {t('resetApp')}
-                            </AlertDialogAction>
-                          </AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialog>
-                    </div>
+                            </Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>{t('resetAppConfirmTitle')}</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                {t('resetAppConfirmDesc')}
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>
+                                {t('cancel')}
+                              </AlertDialogCancel>
+                              <AlertDialogAction onClick={handleResetApp} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                                {t('resetApp')}
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      </div>
+                    )}
                     
                     <div className="flex gap-2">
                       <Button variant="outline" onClick={() => setIsSettingsOpen(false)} className="flex-1">
