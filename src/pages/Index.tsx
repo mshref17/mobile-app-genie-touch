@@ -38,6 +38,8 @@ const Index = () => {
   const [showSplash, setShowSplash] = useState(true);
   const [cycleLength, setCycleLength] = useState<number>(28);
   const [periodDuration, setPeriodDuration] = useState<number>(5);
+  const [isPeriodDatePickerOpen, setIsPeriodDatePickerOpen] = useState(false);
+  const [selectedPeriodStartDate, setSelectedPeriodStartDate] = useState<Date>();
 
   useEffect(() => {
     const savedDate = localStorage.getItem('lastPeriodDate');
@@ -103,14 +105,18 @@ const Index = () => {
     }
   };
 
-  const handlePeriodStarted = () => {
-    const today = new Date();
-    setLastPeriodDate(today);
-    localStorage.setItem('lastPeriodDate', today.toISOString());
+  const handlePeriodStarted = (date: Date | undefined) => {
+    if (!date) return;
+    
+    setLastPeriodDate(date);
+    localStorage.setItem('lastPeriodDate', date.toISOString());
     
     // Schedule new period notifications
-    const nextPeriod = addDays(today, cycleLength);
+    const nextPeriod = addDays(date, cycleLength);
     NotificationService.schedulePeriodNotifications(nextPeriod);
+    
+    setIsPeriodDatePickerOpen(false);
+    setSelectedPeriodStartDate(undefined);
     
     toast({
       title: t('periodStarted'),
@@ -811,12 +817,27 @@ const Index = () => {
                 <div className="text-2xl font-bold text-pink-600 mb-4">
                   {format(periodInfo.nextPeriodDate, "PPP", { locale: ar })}
                 </div>
-                <Button
-                  onClick={handlePeriodStarted}
-                  className="w-full bg-pink-600 hover:bg-pink-700"
-                >
-                  {t('markPeriodStarted')}
-                </Button>
+                <Popover open={isPeriodDatePickerOpen} onOpenChange={setIsPeriodDatePickerOpen}>
+                  <PopoverTrigger asChild>
+                    <Button className="w-full bg-pink-600 hover:bg-pink-700">
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {t('markPeriodStarted')}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="center">
+                    <Calendar
+                      mode="single"
+                      selected={selectedPeriodStartDate}
+                      onSelect={(date) => {
+                        setSelectedPeriodStartDate(date);
+                        handlePeriodStarted(date);
+                      }}
+                      disabled={(date) => date > new Date()}
+                      initialFocus
+                      className="pointer-events-auto"
+                    />
+                  </PopoverContent>
+                </Popover>
               </CardContent>
             </Card>
 
