@@ -71,6 +71,9 @@ const Index = () => {
   }, []);
 
   const handleDateSubmit = () => {
+    // Cancel all previous notifications when switching modes
+    NotificationService.cancelAllNotifications();
+    
     if (trackingMode === 'period' && selectedDate) {
       setLastPeriodDate(selectedDate);
       localStorage.setItem('lastPeriodDate', selectedDate.toISOString());
