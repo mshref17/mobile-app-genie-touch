@@ -7,7 +7,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { CalendarIcon, Baby, Users, Heart, Settings, CalendarDays, Clock, Star, Gift, Info } from "lucide-react";
-import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { format, addDays, differenceInDays, differenceInWeeks, subDays } from "date-fns";
 import { ar } from "date-fns/locale";
 import { cn } from "@/lib/utils";
@@ -127,6 +127,37 @@ const Index = () => {
       localStorage.setItem('dueDateMode', 'duedate');
     }
     setIsSettingsOpen(false);
+  };
+
+  const handleResetApp = () => {
+    // Clear all localStorage data
+    localStorage.removeItem('trackingMode');
+    localStorage.removeItem('lastPeriodDate');
+    localStorage.removeItem('cycleLength');
+    localStorage.removeItem('periodDuration');
+    localStorage.removeItem('pregnancyStartDate');
+    localStorage.removeItem('dueDateMode');
+    
+    // Reset all state
+    setTrackingMode(null);
+    setLastPeriodDate(null);
+    setCycleLength(28);
+    setPeriodDuration(5);
+    setSelectedDate(undefined);
+    setSelectedDueDate(undefined);
+    setDueDateMode('period');
+    setIsSettingsOpen(false);
+    
+    // Cancel all notifications
+    NotificationService.cancelAllNotifications();
+    
+    // Show intro screen
+    setIsFirstTime(true);
+    
+    toast({
+      title: t('appReset'),
+      description: t('appResetSuccess'),
+    });
   };
 
   const calculatePregnancyInfoForDate = (periodDate: Date) => {
@@ -540,6 +571,33 @@ const Index = () => {
                         />
                       </div>
                     )}
+                    
+                    {/* Reset App Section */}
+                    <div className="border-t pt-4">
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button variant="destructive" className="w-full">
+                            {t('resetApp')}
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>{t('resetAppConfirmTitle')}</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              {t('resetAppConfirmDesc')}
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>
+                              {t('cancel')}
+                            </AlertDialogCancel>
+                            <AlertDialogAction onClick={handleResetApp} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                              {t('resetApp')}
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </div>
                     
                     <div className="flex gap-2">
                       <Button variant="outline" onClick={() => setIsSettingsOpen(false)} className="flex-1">
