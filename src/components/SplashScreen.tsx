@@ -27,7 +27,7 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
               className="w-full h-full object-contain"
             />
           </div>
-          <h1 className="text-2xl font-bold text-gray-800 mb-2">بيبي جيني</h1>
+          <h1 className="text-2xl font-bold text-gray-800 mb-2">دليل المرأة</h1>
           <p className="text-gray-600">Your pregnancy companion</p>
         </div>
       </div>
@@ -44,7 +44,7 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
             className="w-full h-full object-contain"
           />
         </div>
-        <h1 className="text-2xl font-bold text-gray-800 mb-2 animate-fade-in">بيبي جيني</h1>
+        <h1 className="text-2xl font-bold text-gray-800 mb-2 animate-fade-in">دليل المرأة</h1>
         <p className="text-gray-600 animate-fade-in">Your pregnancy companion</p>
         <div className="mt-4 flex justify-center">
           <div className="flex space-x-1">
