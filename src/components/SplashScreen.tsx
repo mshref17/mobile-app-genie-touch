@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import appIcon from "@/assets/app-icon.png";
 
 interface SplashScreenProps {
   onComplete: () => void;
@@ -23,7 +22,7 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
         <div className="text-center animate-scale-out">
           <div className="w-24 h-24 mx-auto mb-6 animate-pulse">
             <img 
-              src={appIcon} 
+              src="/lovable-uploads/7a6df10b-0d20-4b9d-acd0-6b0536777e43.png" 
               alt="App Logo" 
               className="w-full h-full object-contain"
             />
@@ -40,7 +39,7 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
       <div className="text-center animate-scale-in">
         <div className="w-24 h-24 mx-auto mb-6 animate-bounce">
           <img 
-            src={appIcon} 
+            src="/lovable-uploads/7a6df10b-0d20-4b9d-acd0-6b0536777e43.png" 
             alt="App Logo" 
             className="w-full h-full object-contain"
           />
