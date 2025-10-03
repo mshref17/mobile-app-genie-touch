@@ -22,7 +22,9 @@ import { BottomNavigation } from "@/components/BottomNavigation";
 import SplashScreen from "@/components/SplashScreen";
 import { NotificationService } from "@/lib/notifications";
 
-const appLogo = "/lovable-uploads/7a6df10b-0d20-4b9d-acd0-6b0536777e43.png";
+import appIcon from "@/assets/app-icon.png";
+
+const appLogo = appIcon;
 
 const Index = () => {
   const { t, language } = useLanguage();
