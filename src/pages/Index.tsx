@@ -20,6 +20,7 @@ import DailyTip from "@/components/DailyTip";
 import NotificationSettings from "@/components/NotificationSettings";
 import { BottomNavigation } from "@/components/BottomNavigation";
 import SplashScreen from "@/components/SplashScreen";
+import { WelcomeDialog } from "@/components/WelcomeDialog";
 import { NotificationService } from "@/lib/notifications";
 
 const appLogo = "/lovable-uploads/7a6df10b-0d20-4b9d-acd0-6b0536777e43.png";
@@ -468,6 +469,7 @@ const Index = () => {
   
   return (
     <div className="min-h-screen bg-gradient-to-b from-pink-50 to-purple-50 safe-area-full">
+      <WelcomeDialog />
       {/* Fixed App Header Bar */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b safe-area-top">
         <div className="container mx-auto px-4 py-3 max-w-4xl">

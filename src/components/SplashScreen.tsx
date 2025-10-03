@@ -28,7 +28,7 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
             />
           </div>
           <h1 className="text-2xl font-bold text-gray-800 mb-2">دليل المرأة</h1>
-          <p className="text-gray-600">Your pregnancy companion</p>
+          <p className="text-gray-600">Your Wellness Companion</p>
         </div>
       </div>
     );
@@ -45,7 +45,7 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
           />
         </div>
         <h1 className="text-2xl font-bold text-gray-800 mb-2 animate-fade-in">دليل المرأة</h1>
-        <p className="text-gray-600 animate-fade-in">Your pregnancy companion</p>
+        <p className="text-gray-600 animate-fade-in">Your Wellness Companion</p>
         <div className="mt-4 flex justify-center">
           <div className="flex space-x-1">
             <div className="w-2 h-2 bg-pink-400 rounded-full animate-pulse"></div>
