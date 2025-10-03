@@ -212,7 +212,7 @@
     "firstTrimester": "الثلث الأول",
     "fitness": "اللياقة البدنية",
     "periodStarted": "بدأت الدورة",
-    "markPeriodStarted": "تحديد كبداية",
+    "markPeriodStarted": "هل بدأت الدورة في غير الموعد المتوقع؟",
     "periodStartedSuccess": "تم تحديث تاريخ الدورة بنجاح",
     "periodNotifications": "إشعارات تذكير الدورة",
     "periodNotificationsDesc": "احصلي على إشعار قبل يومين من دورتك المتوقعة (9 صباحاً)",
