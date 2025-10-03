@@ -41,6 +41,7 @@ const Index = () => {
   const [periodDuration, setPeriodDuration] = useState<number>(5);
   const [isPeriodDatePickerOpen, setIsPeriodDatePickerOpen] = useState(false);
   const [selectedPeriodStartDate, setSelectedPeriodStartDate] = useState<Date>();
+  const [showWelcomeDialog, setShowWelcomeDialog] = useState(true);
 
   useEffect(() => {
     const savedDate = localStorage.getItem('lastPeriodDate');
@@ -469,7 +470,9 @@ const Index = () => {
   
   return (
     <div className="min-h-screen bg-gradient-to-b from-pink-50 to-purple-50 safe-area-full">
-      <WelcomeDialog />
+      {showWelcomeDialog && isFirstTime && (
+        <WelcomeDialog onComplete={() => setShowWelcomeDialog(false)} />
+      )}
       {/* Fixed App Header Bar */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b safe-area-top">
         <div className="container mx-auto px-4 py-3 max-w-4xl">

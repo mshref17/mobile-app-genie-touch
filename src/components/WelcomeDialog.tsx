@@ -10,7 +10,11 @@ import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Baby, Calendar } from "lucide-react";
 
-export function WelcomeDialog() {
+interface WelcomeDialogProps {
+  onComplete?: () => void;
+}
+
+export function WelcomeDialog({ onComplete }: WelcomeDialogProps) {
   const [open, setOpen] = useState(false);
   const { t, language } = useLanguage();
 
@@ -29,10 +33,16 @@ export function WelcomeDialog() {
   const handleClose = () => {
     localStorage.setItem("hasSeenWelcome", "true");
     setOpen(false);
+    // Trigger the callback to show the selection dialog
+    if (onComplete) {
+      onComplete();
+    }
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={(isOpen) => {
+      if (!isOpen) handleClose();
+    }}>
       <DialogContent className="sm:max-w-md" dir={language === 'ar' ? 'rtl' : 'ltr'}>
         <DialogHeader>
           <DialogTitle className="text-center text-2xl">
