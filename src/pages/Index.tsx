@@ -880,9 +880,6 @@ const Index = () => {
               </CardContent>
             </Card>
 
-            {/* Daily Tip */}
-            <DailyTip currentDay={periodInfo.cycleDay} />
-
             {/* Quick Stats Grid */}
             <div className="grid grid-cols-2 gap-4 mb-6">
               <Card className="bg-gradient-to-br from-pink-50 to-rose-100 border-0 shadow-md">
