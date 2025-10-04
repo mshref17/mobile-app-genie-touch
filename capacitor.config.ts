@@ -11,8 +11,8 @@ const config: CapacitorConfig = {
       presentationOptions: ["badge", "sound", "alert"]
     },
     AdMob: {
-      appId: 'ca-app-pub-XXXXXXXXXXXXXXXX~XXXXXXXXXX', // Replace with your actual App ID
-      testingDevices: [], // Add device IDs for testing
+      appId: 'ca-app-pub-6789336355455489~9928832695',
+      testingDevices: [],
     }
   }
 };

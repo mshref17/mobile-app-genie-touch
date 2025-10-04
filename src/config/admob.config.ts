@@ -4,15 +4,15 @@
 export const ADMOB_CONFIG = {
   // Get your App IDs from: https://apps.admob.com/
   appId: {
-    android: 'ca-app-pub-XXXXXXXXXXXXXXXX~XXXXXXXXXX', // Replace with your Android App ID
-    ios: 'ca-app-pub-XXXXXXXXXXXXXXXX~XXXXXXXXXX',     // Replace with your iOS App ID
+    android: 'ca-app-pub-6789336355455489~9928832695',
+    ios: 'ca-app-pub-6789336355455489~9928832695',
   },
   
   // Get your Ad Unit IDs from: https://apps.admob.com/
   adUnits: {
     appOpen: {
-      android: 'ca-app-pub-XXXXXXXXXXXXXXXX/XXXXXXXXXX', // Replace with your Android App Open Ad Unit ID
-      ios: 'ca-app-pub-XXXXXXXXXXXXXXXX/XXXXXXXXXX',     // Replace with your iOS App Open Ad Unit ID
+      android: 'ca-app-pub-6789336355455489/4513558758',
+      ios: 'ca-app-pub-6789336355455489/4513558758',
     }
   },
   
