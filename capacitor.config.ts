@@ -9,10 +9,6 @@ const config: CapacitorConfig = {
   plugins: {
     PushNotifications: {
       presentationOptions: ["badge", "sound", "alert"]
-    },
-    AdMob: {
-      appId: 'ca-app-pub-6789336355455489~9928832695',
-      testingDevices: [],
     }
   }
 };

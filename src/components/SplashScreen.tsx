@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { AdMobService } from "@/lib/admob";
 
 interface SplashScreenProps {
   onComplete: () => void;
@@ -11,11 +10,7 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsVisible(false);
-      setTimeout(() => {
-        onComplete();
-        // Show ad after splash screen completes
-        AdMobService.showAppOpenAd();
-      }, 300); // Wait for fade out animation
+      setTimeout(onComplete, 300); // Wait for fade out animation
     }, 2000); // Show for 2 seconds
 
     return () => clearTimeout(timer);

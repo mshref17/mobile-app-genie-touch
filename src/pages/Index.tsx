@@ -22,7 +22,6 @@ import { BottomNavigation } from "@/components/BottomNavigation";
 import SplashScreen from "@/components/SplashScreen";
 import { WelcomeDialog } from "@/components/WelcomeDialog";
 import { NotificationService } from "@/lib/notifications";
-import { AdMobService } from "@/lib/admob";
 
 const appLogo = "/lovable-uploads/7a6df10b-0d20-4b9d-acd0-6b0536777e43.png";
 
@@ -50,9 +49,6 @@ const Index = () => {
     const savedTrackingMode = localStorage.getItem('trackingMode') as 'pregnant' | 'period' || null;
     const savedCycleLength = localStorage.getItem('cycleLength');
     const savedPeriodDuration = localStorage.getItem('periodDuration');
-    
-    // Initialize AdMob
-    AdMobService.initialize();
     
     if (savedDate && savedTrackingMode) {
       const date = new Date(savedDate);
