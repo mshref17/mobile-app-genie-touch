@@ -27,13 +27,13 @@ const NotificationSettingsComponent = ({ currentWeek, pregnancyStartDate, tracki
     
     if (granted) {
       toast({
-        title: "Notifications Enabled",
-        description: "You'll receive pregnancy notifications as configured.",
+        title: t('notificationsEnabled'),
+        description: t('notificationsEnabledDesc'),
       });
     } else {
       toast({
-        title: "Notifications Disabled",
-        description: "Please enable notifications in your device settings to receive alerts.",
+        title: t('notificationsDisabled'),
+        description: t('notificationsDisabledDesc'),
         variant: "destructive",
       });
     }
@@ -50,8 +50,8 @@ const NotificationSettingsComponent = ({ currentWeek, pregnancyStartDate, tracki
     if (pregnancyStartDate) {
       await NotificationService.updateNotifications(newSettings, currentWeek, pregnancyStartDate, nextPeriodDate);
       toast({
-        title: "Settings Updated",
-        description: "Your notification preferences have been saved.",
+        title: t('settingsUpdated'),
+        description: t('settingsUpdatedDesc'),
       });
     }
   };

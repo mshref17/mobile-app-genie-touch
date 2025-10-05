@@ -113,7 +113,13 @@
     "monthWeeks8": "Weeks 31-35: Month 8",
     "monthWeeks9": "Weeks 36-40: Month 9",
     "and": "and",
-    "gotIt": "Got it"
+    "gotIt": "Got it",
+    "notificationsEnabled": "Notifications Enabled",
+    "notificationsEnabledDesc": "You'll receive pregnancy notifications as configured.",
+    "notificationsDisabled": "Notifications Disabled",
+    "notificationsDisabledDesc": "Please enable notifications in your device settings to receive alerts.",
+    "settingsUpdated": "Settings Updated",
+    "settingsUpdatedDesc": "Your notification preferences have been saved."
   },
   "ar": {
     "resetApp": "إبدأ من جديد",
@@ -229,6 +235,12 @@
     "monthWeeks8": "الأسابيع 31-35: الشهر الثامن",
     "monthWeeks9": "الأسابيع 36-40: الشهر التاسع",
     "and": "و",
-    "gotIt": "فهمت"
+    "gotIt": "فهمت",
+    "notificationsEnabled": "تم تفعيل الإشعارات",
+    "notificationsEnabledDesc": "ستتلقين إشعارات الحمل كما تم تكوينها.",
+    "notificationsDisabled": "الإشعارات معطلة",
+    "notificationsDisabledDesc": "يرجى تفعيل الإشعارات في إعدادات جهازك لتلقي التنبيهات.",
+    "settingsUpdated": "تم تحديث الإعدادات",
+    "settingsUpdatedDesc": "تم حفظ تفضيلات الإشعارات الخاصة بك."
   }
 }
