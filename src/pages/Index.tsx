@@ -699,7 +699,7 @@ const Index = () => {
                   <div className="flex justify-between text-sm text-gray-600">
                     <span>{t('week')} 1</span>
                     <span className="font-semibold text-pink-600">
-                      {Math.round((pregnancyInfo.weeksPregnant / 40) * 100)}% {t('progressCompleted')}
+                      {t('progressCompleted')} {Math.round((pregnancyInfo.weeksPregnant / 40) * 100)}%
                     </span>
                     <span>{t('week')} 40</span>
                   </div>
