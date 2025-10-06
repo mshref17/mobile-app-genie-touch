@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">mobile-app-genie-touch</string>
-    <string name="title_activity_main">mobile-app-genie-touch</string>
+    <string name="app_name">دليل المرأة</string>
+    <string name="title_activity_main">دليل المرأة</string>
     <string name="package_name">app.lovable.e4d164e326634c4abca4073288a7eff6</string>
     <string name="custom_url_scheme">app.lovable.e4d164e326634c4abca4073288a7eff6</string>
 </resources>
