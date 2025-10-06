@@ -577,10 +577,10 @@ const Community = () => {
           <div className="space-y-4 mt-4">
             <div className="space-y-3">
               <div>
-                <Label htmlFor="nickname">{t("nickname") || "Nickname"}</Label>
+                <Label htmlFor="nickname">{t("nickname")}</Label>
                 <Input
                   id="nickname"
-                  placeholder={t("enterNickname") || "Enter your nickname"}
+                  placeholder={t("enterNickname")}
                   value={nickname}
                   onChange={(e) => setNickname(e.target.value)}
                   className="mt-1"
@@ -700,7 +700,7 @@ const Community = () => {
                  <div className="space-y-3">
                    <div className="flex items-center justify-between">
                      <span className="text-sm font-medium text-purple-700">
-                       {post.nickname || "Anonymous"}
+                       {post.nickname || t("anonymous")}
                      </span>
                      <span className="text-sm text-gray-500">
                        {formatTimeAgo(post.timestamp)}
@@ -764,16 +764,16 @@ const Community = () => {
                    {/* Reply Form */}
                    {replyingTo === post.id && (
                      <div className="mt-4 p-4 bg-gray-50 rounded-lg">
-                       <div className="space-y-3 mb-3">
-                         <div>
-                           <Label htmlFor={`reply-nickname-${post.id}`}>{t("nickname") || "Nickname"}</Label>
-                           <Input
-                             id={`reply-nickname-${post.id}`}
-                             placeholder={t("enterNickname") || "Enter your nickname"}
-                             value={replyNickname}
-                             onChange={(e) => setReplyNickname(e.target.value)}
-                             className="mt-1"
-                           />
+                        <div className="space-y-3 mb-3">
+                          <div>
+                            <Label htmlFor={`reply-nickname-${post.id}`}>{t("nickname")}</Label>
+                            <Input
+                              id={`reply-nickname-${post.id}`}
+                              placeholder={t("enterNickname")}
+                              value={replyNickname}
+                              onChange={(e) => setReplyNickname(e.target.value)}
+                              className="mt-1"
+                            />
                          </div>
                          <Textarea
                            placeholder={t("writeReply") || "Write your reply..."}
@@ -846,10 +846,10 @@ const Community = () => {
                       <h4 className="font-medium text-purple-800">{t("replies") || "Replies"}</h4>
                       {postReplies[post.id].map((reply) => (
                          <div key={reply.id} className="bg-purple-50 p-3 rounded-lg ml-4">
-                           <div className="flex items-center gap-2 mb-2">
-                             <span className="text-xs font-medium text-purple-700">
-                               {reply.nickname || "Anonymous"}
-                             </span>
+                            <div className="flex items-center gap-2 mb-2">
+                              <span className="text-xs font-medium text-purple-700">
+                                {reply.nickname || t("anonymous")}
+                              </span>
                              <span className="text-xs text-gray-500">
                                {formatTimeAgo(reply.timestamp)}
                              </span>

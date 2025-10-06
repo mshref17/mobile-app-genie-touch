@@ -120,7 +120,10 @@
     "notificationsDisabledDesc": "Please enable notifications in your device settings to receive alerts.",
     "settingsUpdated": "Settings Updated",
     "settingsUpdatedDesc": "Your notification preferences have been saved.",
-    "wellnessCompanion": "Your Wellness Companion"
+    "wellnessCompanion": "Your Wellness Companion",
+    "nickname": "Nickname",
+    "enterNickname": "Enter your nickname",
+    "anonymous": "Anonymous"
   },
   "ar": {
     "resetApp": "إبدأ من جديد",
@@ -243,6 +246,9 @@
     "notificationsDisabledDesc": "يرجى تفعيل الإشعارات في إعدادات جهازك لتلقي التنبيهات.",
     "settingsUpdated": "تم تحديث الإعدادات",
     "settingsUpdatedDesc": "تم حفظ تفضيلات الإشعارات الخاصة بك.",
-    "wellnessCompanion": "رفيقتك الصحية"
+    "wellnessCompanion": "رفيقتك الصحية",
+    "nickname": "الاسم المستعار",
+    "enterNickname": "أدخلي اسمك المستعار",
+    "anonymous": "مجهول"
   }
 }
