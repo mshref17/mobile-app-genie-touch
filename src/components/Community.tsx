@@ -87,10 +87,10 @@ const Community = () => {
   const POSTS_PER_PAGE = 10;
 
   const algorithms: Record<SortAlgorithm, AlgorithmInfo> = {
-    smart: { name: 'Smart Feed', icon: Shuffle, description: 'Mixed algorithm' },
-    latest: { name: 'Latest', icon: Clock, description: 'Newest posts first' },
-    'most-liked': { name: 'Popular', icon: TrendingUp, description: 'Most liked posts' },
-    'most-replied': { name: 'Discussed', icon: MessageSquare, description: 'Most replies' }
+    smart: { name: t('smartFeed'), icon: Shuffle, description: t('smartFeedDescription') },
+    latest: { name: t('latest'), icon: Clock, description: t('latestDescription') },
+    'most-liked': { name: t('popular'), icon: TrendingUp, description: t('popularDescription') },
+    'most-replied': { name: t('discussed'), icon: MessageSquare, description: t('discussedDescription') }
   };
 
   // Load initial posts
@@ -432,7 +432,7 @@ const Community = () => {
     
     const algorithmInfo = algorithms[algorithmList[nextIndex]];
     toast({
-      title: `Switched to ${algorithmInfo.name}`,
+      title: `${t('switchedTo')} ${algorithmInfo.name}`,
       description: algorithmInfo.description,
       duration: 2000,
     });
@@ -653,7 +653,7 @@ const Community = () => {
               {algorithms[currentAlgorithm].name}
             </Badge>
             <Badge variant="secondary" className="text-xs">
-              Swipe down to change
+              {t('swipeDownToChange')}
             </Badge>
           </div>
         </div>
@@ -688,8 +688,8 @@ const Community = () => {
         ) : displayedPosts.length === 0 ? (
           <Card className="text-center py-8">
             <CardContent>
-              <p className="text-gray-500 mb-2">No posts available</p>
-              <p className="text-sm text-gray-400">Be the first to share something with the community!</p>
+              <p className="text-gray-500 mb-2">{t('noPostsAvailable')}</p>
+              <p className="text-sm text-gray-400">{t('beFirstToShare')}</p>
             </CardContent>
           </Card>
         ) : (
@@ -893,7 +893,7 @@ const Community = () => {
                 {loadingMore ? (
                   <div className="flex items-center justify-center gap-2">
                     <Loader2 className="w-4 h-4 animate-spin" />
-                    <span className="text-sm text-gray-500">Loading more posts...</span>
+                    <span className="text-sm text-gray-500">{t('loadingMorePosts')}</span>
                   </div>
                 ) : (
                   <Button 
@@ -901,7 +901,7 @@ const Community = () => {
                     onClick={loadMorePosts}
                     className="text-purple-600 border-purple-200 hover:bg-purple-50"
                   >
-                    Load More Posts
+                    {t('loadMorePosts')}
                   </Button>
                 )}
               </div>
@@ -909,7 +909,7 @@ const Community = () => {
             
             {!hasMore && displayedPosts.length > 0 && (
               <div className="text-center py-4">
-                <p className="text-sm text-gray-500">No more posts to load</p>
+                <p className="text-sm text-gray-500">{t('noMorePosts')}</p>
               </div>
             )}
           </>

@@ -125,7 +125,22 @@
     "enterNickname": "Enter your nickname",
     "anonymous": "Anonymous",
     "newStart": "New Start",
-    "newStartDescription": "Clear all data and start fresh with pregnancy or period tracking"
+    "newStartDescription": "Clear all data and start fresh with pregnancy or period tracking",
+    "smartFeed": "Smart Feed",
+    "smartFeedDescription": "Mixed algorithm",
+    "latest": "Latest",
+    "latestDescription": "Newest posts first",
+    "popular": "Popular",
+    "popularDescription": "Most liked posts",
+    "discussed": "Discussed",
+    "discussedDescription": "Most replies",
+    "swipeDownToChange": "Swipe down to change",
+    "switchedTo": "Switched to",
+    "noPostsAvailable": "No posts available",
+    "beFirstToShare": "Be the first to share something with the community!",
+    "loadingMorePosts": "Loading more posts...",
+    "loadMorePosts": "Load More Posts",
+    "noMorePosts": "No more posts to load"
   },
   "ar": {
     "resetApp": "إبدأ من جديد",
@@ -253,6 +268,21 @@
     "enterNickname": "أدخلي اسمك المستعار",
     "anonymous": "مجهول",
     "newStart": "بداية جديدة",
-    "newStartDescription": "امسحي جميع البيانات وابدأي من جديد بتتبع الحمل أو الدورة الشهرية"
+    "newStartDescription": "امسحي جميع البيانات وابدأي من جديد بتتبع الحمل أو الدورة الشهرية",
+    "smartFeed": "تغذية ذكية",
+    "smartFeedDescription": "خوارزمية مختلطة",
+    "latest": "الأحدث",
+    "latestDescription": "أحدث المنشورات أولاً",
+    "popular": "الأكثر شعبية",
+    "popularDescription": "المنشورات الأكثر إعجاباً",
+    "discussed": "الأكثر مناقشة",
+    "discussedDescription": "الأكثر ردوداً",
+    "swipeDownToChange": "اسحب للأسفل للتغيير",
+    "switchedTo": "تم التبديل إلى",
+    "noPostsAvailable": "لا توجد منشورات متاحة",
+    "beFirstToShare": "كن أول من يشارك شيئًا مع المجتمع!",
+    "loadingMorePosts": "جارٍ تحميل المزيد من المنشورات...",
+    "loadMorePosts": "تحميل المزيد من المنشورات",
+    "noMorePosts": "لا توجد منشورات أخرى للتحميل"
   }
 }
