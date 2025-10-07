@@ -626,10 +626,10 @@ const Index = () => {
                   <div className="flex items-center justify-center mb-2">
                     <CalendarDays className="w-6 h-6 text-pink-600" />
                   </div>
-                  <div className="text-2xl font-bold text-pink-700">
-                    {t('weekAbbrev')} {pregnancyInfo.weeksPregnant} {t('and')} {pregnancyInfo.daysInCurrentWeek} {t('dayAbbrev')}
-                  </div>
                   <div className="text-sm text-pink-600">{t('yourProgressText')}</div>
+                  <div className="text-2xl font-bold text-pink-700">
+                    {pregnancyInfo.weeksPregnant} {t('weekAbbrev')}</div> 
+                    <div className="text-lg font-bold text-pink-700">{t('and')} {pregnancyInfo.daysInCurrentWeek} {t('dayAbbrev')}</div>
                 </CardContent>
               </Card>
 
@@ -637,9 +637,6 @@ const Index = () => {
                 <CardContent className="p-4 text-center">
                   <div className="flex items-center justify-center mb-2">
                     <Baby className="w-6 h-6 text-emerald-600" />
-                  </div>
-                  <div className="text-2xl font-bold text-emerald-700">
-                    {calculatePregnancyMonth(pregnancyInfo.weeksPregnant)}
                   </div>
                   <div className="text-sm text-emerald-600 flex items-center justify-center gap-1">
                     {t('month')}
@@ -672,6 +669,9 @@ const Index = () => {
                         </AlertDialogFooter>
                       </AlertDialogContent>
                     </AlertDialog>
+                  </div>
+                  <div className="text-2xl font-bold text-emerald-700">
+                    {calculatePregnancyMonth(pregnancyInfo.weeksPregnant)}
                   </div>
                 </CardContent>
               </Card>

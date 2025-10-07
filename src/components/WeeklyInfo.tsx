@@ -112,8 +112,8 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
         <Button
           variant="ghost"
           size="sm"
-          onClick={handlePreviousWeek}
-          disabled={selectedWeek <= 1}
+          onClick={handleNextWeek}
+          disabled={selectedWeek >= 40}
           className="h-10 w-10 bg-white rounded-full shadow hover:shadow-md disabled:opacity-30 disabled:cursor-not-allowed"
         >
           <ChevronRight className="h-5 w-5 text-pink-600" />
@@ -121,7 +121,7 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
 
         <div className="flex flex-col items-center">
           <Badge variant="secondary" className="bg-pink-100 text-pink-800 px-4 py-1 text-lg font-semibold">
-            {t('week')} {selectedWeek}
+            {t('week')} {selectedWeek} 
             {selectedWeek === currentWeek && (
               <span className="text-xs ml-1">({t('currentWeek')})</span>
             )}
@@ -131,8 +131,8 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
         <Button
           variant="ghost"
           size="sm"
-          onClick={handleNextWeek}
-          disabled={selectedWeek >= 40}
+          onClick={handlePreviousWeek}
+          disabled={selectedWeek <= 1}
           className="h-10 w-10 bg-white rounded-full shadow hover:shadow-md disabled:opacity-30 disabled:cursor-not-allowed"
         >
           <ChevronLeft className="h-5 w-5 text-pink-600" />
