@@ -7,6 +7,7 @@ import { Bell, Settings as SettingsIcon } from "lucide-react";
 import { useLanguage } from '@/contexts/LanguageContext';
 import { NotificationService, NotificationSettings } from '@/lib/notifications';
 import { useToast } from '@/hooks/use-toast';
+import { Capacitor } from '@capacitor/core';
 
 interface NotificationSettingsProps {
   currentWeek: number;
@@ -21,8 +22,8 @@ const NotificationSettingsComponent = ({ currentWeek, pregnancyStartDate, tracki
   const [settings, setSettings] = useState<NotificationSettings>(NotificationService.getSettings());
 
   const updateSetting = async (key: keyof NotificationSettings, value: boolean) => {
-    // Request permissions first if enabling any notification
-    if (value) {
+    // Request permissions first if enabling any notification on native platform
+    if (value && Capacitor.isNativePlatform()) {
       const granted = await NotificationService.requestPermissions();
       
       if (!granted) {
@@ -40,10 +41,14 @@ const NotificationSettingsComponent = ({ currentWeek, pregnancyStartDate, tracki
 
     if (pregnancyStartDate) {
       await NotificationService.updateNotifications(newSettings, currentWeek, pregnancyStartDate, nextPeriodDate);
-      toast({
-        title: t('settingsUpdated'),
-        description: t('settingsUpdatedDesc'),
-      });
+      
+      // Only show success toast on native platform
+      if (Capacitor.isNativePlatform()) {
+        toast({
+          title: t('settingsUpdated'),
+          description: t('settingsUpdatedDesc'),
+        });
+      }
     }
   };
 
