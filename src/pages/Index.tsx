@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Calendar } from "@/components/ui/calendar";
+import { Switch } from "@/components/ui/switch";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { CalendarIcon, Baby, Users, Heart, Settings, CalendarDays, Clock, Star, Gift, Info } from "lucide-react";
@@ -42,6 +43,7 @@ const Index = () => {
   const [isPeriodDatePickerOpen, setIsPeriodDatePickerOpen] = useState(false);
   const [selectedPeriodStartDate, setSelectedPeriodStartDate] = useState<Date>();
   const [showWelcomeDialog, setShowWelcomeDialog] = useState(true);
+  const [showMonthNumbers, setShowMonthNumbers] = useState(false);
 
   useEffect(() => {
     const savedDate = localStorage.getItem('lastPeriodDate');
@@ -49,6 +51,9 @@ const Index = () => {
     const savedTrackingMode = localStorage.getItem('trackingMode') as 'pregnant' | 'period' || null;
     const savedCycleLength = localStorage.getItem('cycleLength');
     const savedPeriodDuration = localStorage.getItem('periodDuration');
+    const savedMonthFormat = localStorage.getItem('showMonthNumbers');
+    
+    if (savedMonthFormat) setShowMonthNumbers(savedMonthFormat === 'true');
     
     if (savedDate && savedTrackingMode) {
       const date = new Date(savedDate);
@@ -540,6 +545,29 @@ const Index = () => {
                       </div>
                     )}
                     
+                    {/* Month Format Settings */}
+                    <div className="border-t pt-4">
+                      <div className="space-y-4">
+                        <div>
+                          <h4 className="text-sm font-medium mb-3">{t('showMonthNumbers')}</h4>
+                          <p className="text-xs text-muted-foreground mb-3">{t('showMonthNumbersDesc')}</p>
+                          <div className="flex items-center justify-between">
+                            <Label htmlFor="month-format" className="text-sm">
+                              {t('showMonthNumbers')}
+                            </Label>
+                            <Switch
+                              id="month-format"
+                              checked={showMonthNumbers}
+                              onCheckedChange={(checked) => {
+                                setShowMonthNumbers(checked);
+                                localStorage.setItem('showMonthNumbers', checked.toString());
+                              }}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
                     <div className="flex gap-2 pt-4">
                       <Button variant="outline" onClick={() => setIsSettingsOpen(false)} className="w-full">
                         {t('cancel')}
@@ -613,7 +641,10 @@ const Index = () => {
                     {format(pregnancyInfo.dueDate, "EEEE", { locale: ar })}
                   </div>
                   <div className="text-xl text-emerald-600">
-                    {format(pregnancyInfo.dueDate, "MMMM d, yyyy", { locale: ar })}
+                    {showMonthNumbers 
+                      ? format(pregnancyInfo.dueDate, "d/M/yyyy")
+                      : format(pregnancyInfo.dueDate, "MMMM d, yyyy", { locale: ar })
+                    }
                   </div>
                 </div>
               </CardContent>
@@ -740,7 +771,10 @@ const Index = () => {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold text-pink-600 mb-4">
-                  {format(periodInfo.nextPeriodDate, "PPP", { locale: ar })}
+                  {showMonthNumbers 
+                    ? format(periodInfo.nextPeriodDate, "d/M/yyyy")
+                    : format(periodInfo.nextPeriodDate, "PPP", { locale: ar })
+                  }
                 </div>
                 <Popover open={isPeriodDatePickerOpen} onOpenChange={setIsPeriodDatePickerOpen}>
                   <PopoverTrigger asChild>
@@ -805,13 +839,19 @@ const Index = () => {
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-gray-600">{t('ovulationDate')}</span>
                   <span className="font-medium text-gray-900">
-                    {format(periodInfo.ovulationDate, "PP", { locale: ar })}
+                    {showMonthNumbers 
+                      ? format(periodInfo.ovulationDate, "d/M/yyyy")
+                      : format(periodInfo.ovulationDate, "PP", { locale: ar })
+                    }
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-gray-600">{t('fertileWindow')}</span>
                   <span className="font-medium text-gray-900">
-                    {format(periodInfo.fertileWindowStart, "PP", { locale: ar })} - {format(periodInfo.fertileWindowEnd, "PP", { locale: ar })}
+                    {showMonthNumbers 
+                      ? `${format(periodInfo.fertileWindowStart, "d/M/yyyy")} - ${format(periodInfo.fertileWindowEnd, "d/M/yyyy")}`
+                      : `${format(periodInfo.fertileWindowStart, "PP", { locale: ar })} - ${format(periodInfo.fertileWindowEnd, "PP", { locale: ar })}`
+                    }
                   </span>
                 </div>
               </CardContent>

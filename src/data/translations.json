@@ -140,7 +140,9 @@
     "beFirstToShare": "Be the first to share something with the community!",
     "loadingMorePosts": "Loading more posts...",
     "loadMorePosts": "Load More Posts",
-    "noMorePosts": "No more posts to load"
+    "noMorePosts": "No more posts to load",
+    "showMonthNumbers": "Show Month Numbers",
+    "showMonthNumbersDesc": "Display months as numbers (e.g. 5) instead of names (e.g. May)"
   },
   "ar": {
     "resetApp": "إبدأ من جديد",
@@ -283,6 +285,8 @@
     "beFirstToShare": "كن أول من يشارك شيئًا مع المجتمع!",
     "loadingMorePosts": "جارٍ تحميل المزيد من المنشورات...",
     "loadMorePosts": "تحميل المزيد من المنشورات",
-    "noMorePosts": "لا توجد منشورات أخرى للتحميل"
+    "noMorePosts": "لا توجد منشورات أخرى للتحميل",
+    "showMonthNumbers": "إظهار أرقام الشهور",
+    "showMonthNumbersDesc": "عرض الشهور كأرقام (مثل 5) بدلاً من الأسماء (مثل مايو)"
   }
 }

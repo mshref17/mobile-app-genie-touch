@@ -27,10 +27,10 @@ const DailyTip = ({ currentDay }: DailyTipProps) => {
         
         if (language === 'ar') {
           const response = await import('@/data/daily-tips-ar.json');
-          tipsData = response.default;
+          tipsData = response.default as unknown as TipsData;
         } else {
           const response = await import('@/data/daily-tips-en.json');
-          tipsData = response.default;
+          tipsData = response.default as unknown as TipsData;
         }
         
         // Use modulo to cycle through tips if current day exceeds available tips
