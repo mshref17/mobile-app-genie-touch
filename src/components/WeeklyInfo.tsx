@@ -149,10 +149,10 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
               <img 
                 src={babySizeImage} 
                 alt={weekData.babySize}
-                className="w-24 h-24 rounded-lg object-cover border-2 border-pink-200 animate-fade-in"
+                className="w-24 h-24 rounded-lg object-cover animate-fade-in"
               />
             ) : (
-              <div className="w-24 h-24 rounded-lg bg-gradient-to-br from-pink-100 to-purple-100 flex items-center justify-center border-2 border-pink-200">
+              <div className="w-24 h-24 rounded-lg bg-gradient-to-br from-pink-100 to-purple-100 flex items-center justify-center">
                 <span className="text-4xl">{getFallbackFruitEmoji(selectedWeek)}</span>
               </div>
             )}
