@@ -108,7 +108,7 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
   return (
     <div className="space-y-6">
       {/* Week Navigation Header - Compact */}
-      <div className="sticky top-16 z-20 bg-gradient-to-b from-pink-50 to-purple-50 py-2 -mx-4 px-4 flex items-center justify-between">
+      <div className="sticky top-0 z-30 bg-gradient-to-b from-pink-50 to-purple-50 py-3 -mx-4 px-4 flex items-center justify-between shadow-sm">
         <Button
           variant="ghost"
           size="sm"
