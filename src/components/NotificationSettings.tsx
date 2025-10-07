@@ -19,29 +19,20 @@ const NotificationSettingsComponent = ({ currentWeek, pregnancyStartDate, tracki
   const { t } = useLanguage();
   const { toast } = useToast();
   const [settings, setSettings] = useState<NotificationSettings>(NotificationService.getSettings());
-  const [permissionRequested, setPermissionRequested] = useState(false);
-
-  const requestNotificationPermissions = async () => {
-    setPermissionRequested(true);
-    const granted = await NotificationService.requestPermissions();
-    
-    if (granted) {
-      toast({
-        title: t('notificationsEnabled'),
-        description: t('notificationsEnabledDesc'),
-      });
-    } else {
-      toast({
-        title: t('notificationsDisabled'),
-        description: t('notificationsDisabledDesc'),
-        variant: "destructive",
-      });
-    }
-  };
 
   const updateSetting = async (key: keyof NotificationSettings, value: boolean) => {
-    if (!permissionRequested) {
-      await requestNotificationPermissions();
+    // Request permissions first if enabling any notification
+    if (value) {
+      const granted = await NotificationService.requestPermissions();
+      
+      if (!granted) {
+        toast({
+          title: t('notificationsDisabled'),
+          description: t('notificationsDisabledDesc'),
+          variant: "destructive",
+        });
+        return;
+      }
     }
 
     const newSettings = { ...settings, [key]: value };
@@ -107,18 +98,6 @@ const NotificationSettingsComponent = ({ currentWeek, pregnancyStartDate, tracki
               onCheckedChange={(checked) => updateSetting('periodNotifications', checked)}
             />
           </div>
-        )}
-
-        {!permissionRequested && (
-          <Button 
-            onClick={requestNotificationPermissions}
-            className="w-full"
-            variant="outline"
-            size="sm"
-          >
-            <Bell className="w-4 h-4 mr-2" />
-            {t('enableNotifications')}
-          </Button>
         )}
       </div>
     </div>
