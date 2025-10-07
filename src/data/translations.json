@@ -123,7 +123,9 @@
     "wellnessCompanion": "Your Wellness Companion",
     "nickname": "Nickname",
     "enterNickname": "Enter your nickname",
-    "anonymous": "Anonymous"
+    "anonymous": "Anonymous",
+    "newStart": "New Start",
+    "newStartDescription": "Clear all data and start fresh with pregnancy or period tracking"
   },
   "ar": {
     "resetApp": "إبدأ من جديد",
@@ -249,6 +251,8 @@
     "wellnessCompanion": "رفيقتك الصحية",
     "nickname": "الاسم المستعار",
     "enterNickname": "أدخلي اسمك المستعار",
-    "anonymous": "مجهول"
+    "anonymous": "مجهول",
+    "newStart": "بداية جديدة",
+    "newStartDescription": "امسحي جميع البيانات وابدأي من جديد بتتبع الحمل أو الدورة الشهرية"
   }
 }
