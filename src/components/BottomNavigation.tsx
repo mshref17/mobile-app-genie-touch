@@ -1,6 +1,7 @@
 import { Home, Baby, Users } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 interface BottomNavigationProps {
   activeTab: string;
@@ -20,20 +21,32 @@ export function BottomNavigation({ activeTab, onTabChange, trackingMode }: Botto
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 pt-2 pb-8 z-50 safe-area-bottom">
       <div className="flex items-center justify-around max-w-md mx-auto">
-        {tabs.map((tab) => (
-          <Button
-            key={tab.id}
-            variant="ghost"
-            size="sm"
-            onClick={() => onTabChange(tab.id)}
-            className={`flex flex-col items-center gap-1 p-3 h-auto ${
-              activeTab === tab.id ? 'text-pink-600' : 'text-gray-500'
-            }`}
-          >
-            <tab.icon className="h-5 w-5" />
-            <span className="text-xs">{tab.label}</span>
-        </Button>
-        ))}
+        {tabs.map((tab) => {
+          const isCommunity = tab.id === 'community';
+          return (
+            <Button
+              key={tab.id}
+              variant="ghost"
+              size="sm"
+              onClick={() => !isCommunity && onTabChange(tab.id)}
+              disabled={isCommunity}
+              className={`relative flex flex-col items-center gap-1 p-3 h-auto ${
+                activeTab === tab.id ? 'text-pink-600' : 'text-gray-500'
+              } ${isCommunity ? 'opacity-50 cursor-not-allowed' : ''}`}
+            >
+              <tab.icon className="h-5 w-5" />
+              <span className="text-xs">{tab.label}</span>
+              {isCommunity && (
+                <Badge 
+                  variant="secondary" 
+                  className="absolute -top-1 -right-1 text-[10px] px-1.5 py-0 h-5 bg-pink-100 text-pink-600 border-pink-200"
+                >
+                  Soon
+                </Badge>
+              )}
+            </Button>
+          );
+        })}
       </div>
     </div>
   );
