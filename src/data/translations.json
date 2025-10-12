@@ -142,7 +142,8 @@
     "loadMorePosts": "Load More Posts",
     "noMorePosts": "No more posts to load",
     "showMonthNumbers": "Show Month Numbers",
-    "showMonthNumbersDesc": "Display months as numbers (e.g. 5) instead of names (e.g. May)"
+    "showMonthNumbersDesc": "Display months as numbers (e.g. 5) instead of names (e.g. May)",
+    "messageFromBaby": "Message from your baby"
   },
   "ar": {
     "resetApp": "إبدأ من جديد",
@@ -287,6 +288,7 @@
     "loadMorePosts": "تحميل المزيد من المنشورات",
     "noMorePosts": "لا توجد منشورات أخرى للتحميل",
     "showMonthNumbers": "إظهار أرقام الشهور",
-    "showMonthNumbersDesc": "عرض الشهور كأرقام (مثل 5) بدلاً من الأسماء (مثل مايو)"
+    "showMonthNumbersDesc": "عرض الشهور كأرقام (مثل 5) بدلاً من الأسماء (مثل مايو)",
+    "messageFromBaby": "رسالة من طفلك"
   }
 }

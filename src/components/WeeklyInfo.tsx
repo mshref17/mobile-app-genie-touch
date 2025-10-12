@@ -2,11 +2,17 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight, Baby } from "lucide-react";
+import { ChevronLeft, ChevronRight, Baby, MessageCircle } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useEffect, useState } from "react";
 import { loadBabySizeImage, getFallbackFruitEmoji } from "@/utils/imageLoader";
 import { loadUltrasoundImage } from "@/utils/ultrasoundLoader";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface WeeklyInfoProps {
   currentWeek: number;
@@ -21,6 +27,7 @@ interface WeekData {
   momTips: string[];
   image: string;
   ultrasoundImage?: string;
+  babyMessage?: string;
 }
 
 const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
@@ -29,6 +36,7 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
   const [selectedWeek, setSelectedWeek] = useState(currentWeek);
   const [babySizeImage, setBabySizeImage] = useState<string | null>(null);
   const [ultrasoundImage, setUltrasoundImage] = useState<string | null>(null);
+  const [showBabyMessage, setShowBabyMessage] = useState(false);
 
   useEffect(() => {
     const loadWeeklyData = async () => {
@@ -107,6 +115,46 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
 
   return (
     <div className="space-y-6">
+      {/* Floating WhatsApp Button */}
+      {weekData?.babyMessage && (
+        <Button
+          onClick={() => setShowBabyMessage(true)}
+          className="fixed bottom-20 left-4 z-50 h-14 w-14 rounded-full bg-[#25D366] hover:bg-[#128C7E] shadow-lg"
+          size="icon"
+        >
+          <MessageCircle className="h-6 w-6 text-white" />
+        </Button>
+      )}
+
+      {/* Baby Message Dialog */}
+      <Dialog open={showBabyMessage} onOpenChange={setShowBabyMessage}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-center text-pink-600">
+              {t('messageFromBaby')}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="bg-gradient-to-b from-[#E5DDD5] to-[#D9CFC7] p-4 rounded-lg min-h-[300px]">
+            {/* WhatsApp-style message bubble */}
+            <div className="flex items-start gap-2 mb-4">
+              <div className="w-10 h-10 rounded-full bg-pink-300 flex items-center justify-center flex-shrink-0">
+                <Baby className="h-6 w-6 text-white" />
+              </div>
+              <div className="flex-1">
+                <div className="bg-white rounded-lg rounded-tl-none p-3 shadow-sm">
+                  <p className="text-sm text-gray-800 leading-relaxed">
+                    {weekData?.babyMessage}
+                  </p>
+                  <span className="text-xs text-gray-500 mt-1 block text-right">
+                    {t('week')} {selectedWeek}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       {/* Week Navigation Header - Compact */}
       <div className="sticky top-[60px] z-30 bg-gradient-to-b from-pink-50 to-purple-50 py-3 -mx-4 px-4 flex items-center justify-between shadow-sm [position:-webkit-sticky]">
         <Button
