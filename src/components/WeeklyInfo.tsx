@@ -141,7 +141,7 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
       {selectedWeek <= currentWeek && (
         <Button
           onClick={() => setShowBabyMessage(true)}
-          className="fixed bottom-28 left-4 z-50 h-14 w-14 rounded-full bg-[#25D366] hover:bg-[#128C7E] shadow-lg opacity-40 hover:opacity-60 transition-opacity"
+          className="fixed bottom-28 left-4 z-50 h-14 w-14 rounded-full bg-[#25D366] hover:bg-[#128C7E] shadow-lg opacity-65 hover:opacity-80 transition-opacity"
           size="icon"
         >
           <MessageCircle className="h-6 w-6 text-white" />
