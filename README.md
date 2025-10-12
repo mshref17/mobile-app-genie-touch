@@ -28,3 +28,4 @@ go to android directory /android
 ./gradlew bundleRelease
 
 keystore password is the one is mms*****85
+key.properties file has the keystore file path
