@@ -23,6 +23,8 @@ import { BottomNavigation } from "@/components/BottomNavigation";
 import SplashScreen from "@/components/SplashScreen";
 import { WelcomeDialog } from "@/components/WelcomeDialog";
 import { NotificationService } from "@/lib/notifications";
+import { LocalNotifications, LocalNotificationSchema } from '@capacitor/local-notifications';
+import { Capacitor } from '@capacitor/core';
 
 const appLogo = "/app-icon.png";
 
@@ -44,6 +46,7 @@ const Index = () => {
   const [selectedPeriodStartDate, setSelectedPeriodStartDate] = useState<Date>();
   const [showWelcomeDialog, setShowWelcomeDialog] = useState(true);
   const [showMonthNumbers, setShowMonthNumbers] = useState(false);
+  const [openBabyMessage, setOpenBabyMessage] = useState(false);
 
   useEffect(() => {
     const savedDate = localStorage.getItem('lastPeriodDate');
@@ -76,6 +79,37 @@ const Index = () => {
         const nextPeriod = addDays(date, parseInt(savedCycleLength));
         NotificationService.schedulePeriodNotifications(nextPeriod);
       }
+    }
+
+    // Listen for notification actions
+    if (Capacitor.isNativePlatform()) {
+      let listenerHandle: any;
+      
+      LocalNotifications.addListener(
+        'localNotificationActionPerformed',
+        (notification: { notification: LocalNotificationSchema }) => {
+          const extra = notification.notification.extra;
+          
+          if (extra?.type === 'weekly') {
+            // Navigate to weekly tab and open baby message
+            setActiveTab('weekly');
+            setTimeout(() => {
+              setOpenBabyMessage(true);
+            }, 100);
+          } else if (extra?.type === 'daily_tip') {
+            // Navigate to dashboard for daily tips
+            setActiveTab('dashboard');
+          }
+        }
+      ).then((handle) => {
+        listenerHandle = handle;
+      });
+
+      return () => {
+        if (listenerHandle) {
+          listenerHandle.remove();
+        }
+      };
     }
   }, []);
 
@@ -860,7 +894,11 @@ const Index = () => {
         )}
 
         {activeTab === 'weekly' && trackingMode === 'pregnant' && (
-          <WeeklyInfo currentWeek={pregnancyInfo?.weeksPregnant || 0} />
+          <WeeklyInfo 
+            currentWeek={pregnancyInfo?.weeksPregnant || 0} 
+            openBabyMessage={openBabyMessage}
+            onBabyMessageClose={() => setOpenBabyMessage(false)}
+          />
         )}
 
         {activeTab === 'community' && (

@@ -17,6 +17,8 @@ import {
 
 interface WeeklyInfoProps {
   currentWeek: number;
+  openBabyMessage?: boolean;
+  onBabyMessageClose?: () => void;
 }
 
 interface WeekData {
@@ -31,7 +33,7 @@ interface WeekData {
   babyMessage?: string;
 }
 
-const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
+const WeeklyInfo = ({ currentWeek, openBabyMessage = false, onBabyMessageClose }: WeeklyInfoProps) => {
   const { language, t } = useLanguage();
   const [weeklyData, setWeeklyData] = useState<Record<string, WeekData>>({});
   const [selectedWeek, setSelectedWeek] = useState(currentWeek);
@@ -63,6 +65,13 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
   useEffect(() => {
     setSelectedWeek(currentWeek);
   }, [currentWeek]);
+
+  // Handle external open baby message request
+  useEffect(() => {
+    if (openBabyMessage) {
+      setShowBabyMessage(true);
+    }
+  }, [openBabyMessage]);
 
   // Load baby size and ultrasound images when selectedWeek changes
   useEffect(() => {
@@ -149,7 +158,12 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
       )}
 
       {/* Baby Message Dialog */}
-      <Dialog open={showBabyMessage} onOpenChange={setShowBabyMessage}>
+      <Dialog open={showBabyMessage} onOpenChange={(open) => {
+        setShowBabyMessage(open);
+        if (!open && onBabyMessageClose) {
+          onBabyMessageClose();
+        }
+      }}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="text-center text-pink-600">
