@@ -7,6 +7,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useEffect, useState, useRef } from "react";
 import { loadBabySizeImage, getFallbackFruitEmoji } from "@/utils/imageLoader";
 import { loadUltrasoundImage } from "@/utils/ultrasoundLoader";
+import PostBirthDialog from "@/components/PostBirthDialog";
 import {
   Dialog,
   DialogContent,
@@ -40,6 +41,7 @@ const WeeklyInfo = ({ currentWeek, openBabyMessage = false, onBabyMessageClose }
   const [babySizeImage, setBabySizeImage] = useState<string | null>(null);
   const [ultrasoundImage, setUltrasoundImage] = useState<string | null>(null);
   const [showBabyMessage, setShowBabyMessage] = useState(false);
+  const [showPostBirthDialog, setShowPostBirthDialog] = useState(false);
   const chatScrollRef = useRef<HTMLDivElement>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
@@ -87,6 +89,17 @@ const WeeklyInfo = ({ currentWeek, openBabyMessage = false, onBabyMessageClose }
     
     loadImages();
   }, [selectedWeek]);
+
+  // Check if we should show post-birth dialog
+  useEffect(() => {
+    if (selectedWeek >= 40 && currentWeek >= 40) {
+      const hasSeenDialog = localStorage.getItem('postBirthDialogShown');
+      if (!hasSeenDialog) {
+        setShowPostBirthDialog(true);
+        localStorage.setItem('postBirthDialogShown', 'true');
+      }
+    }
+  }, [selectedWeek, currentWeek]);
 
   // Auto-scroll to bottom when dialog opens or data changes
   useEffect(() => {
@@ -144,8 +157,20 @@ const WeeklyInfo = ({ currentWeek, openBabyMessage = false, onBabyMessageClose }
     );
   }
 
+  const handleSwitchToPeriodTracking = () => {
+    setShowPostBirthDialog(false);
+    const resetEvent = new CustomEvent('openResetDialog');
+    window.dispatchEvent(resetEvent);
+  };
+
   return (
     <div className="space-y-6">
+      <PostBirthDialog
+        open={showPostBirthDialog}
+        onOpenChange={setShowPostBirthDialog}
+        onSwitchToPeriodTracking={handleSwitchToPeriodTracking}
+      />
+
       {/* Floating WhatsApp Button - only show if selected week is not in the future */}
       {selectedWeek <= currentWeek && (
         <Button

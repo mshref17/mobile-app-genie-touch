@@ -143,7 +143,14 @@
     "noMorePosts": "No more posts to load",
     "showMonthNumbers": "Show Month Numbers",
     "showMonthNumbersDesc": "Display months as numbers (e.g. 5) instead of names (e.g. May)",
-    "messageFromBaby": "Message from your baby"
+    "messageFromBaby": "Message from your baby",
+    "congratulationsTitle": "Congratulations, Mama! 🎉",
+    "congratulationsMessage": "You've reached the end of your pregnancy journey with us. We hope this app helped you through these special 40 weeks!",
+    "postpartumTracking": "Postpartum Period Tracking",
+    "postpartumMessage": "Did you know you can continue using this app to track your menstrual cycle after birth? Many women's periods return 6-8 weeks postpartum (or later if breastfeeding).",
+    "continuePregnancy": "Keep Pregnancy Info",
+    "switchToPeriodTracking": "Switch to Period Tracking",
+    "postpartumInfoNote": "You can always switch to period tracking mode later from Settings → New Start"
   },
   "ar": {
     "resetApp": "إبدأ من جديد",
@@ -289,6 +296,13 @@
     "noMorePosts": "لا توجد منشورات أخرى للتحميل",
     "showMonthNumbers": "إظهار أرقام الشهور",
     "showMonthNumbersDesc": "عرض الشهور كأرقام (مثل 5) بدلاً من الأسماء (مثل مايو)",
-    "messageFromBaby": "رسالة من طفلك"
+    "messageFromBaby": "رسالة من طفلك",
+    "congratulationsTitle": "مبروك يا ماما! 🎉",
+    "congratulationsMessage": "لقد وصلت إلى نهاية رحلة حملك معنا. نأمل أن يكون هذا التطبيق قد ساعدك خلال هذه الأسابيع الأربعين الخاصة!",
+    "postpartumTracking": "تتبع الدورة بعد الولادة",
+    "postpartumMessage": "هل تعلمين أنه يمكنك الاستمرار في استخدام هذا التطبيق لتتبع دورتك الشهرية بعد الولادة؟ تعود الدورة الشهرية لدى العديد من النساء بعد 6-8 أسابيع من الولادة (أو لاحقاً عند الرضاعة الطبيعية).",
+    "continuePregnancy": "احتفظ بمعلومات الحمل",
+    "switchToPeriodTracking": "التبديل إلى تتبع الدورة",
+    "postpartumInfoNote": "يمكنك دائماً التبديل إلى وضع تتبع الدورة لاحقاً من الإعدادات ← بداية جديدة"
   }
 }
