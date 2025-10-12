@@ -39,6 +39,7 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
   const [ultrasoundImage, setUltrasoundImage] = useState<string | null>(null);
   const [showBabyMessage, setShowBabyMessage] = useState(false);
   const chatScrollRef = useRef<HTMLDivElement>(null);
+  const chatEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const loadWeeklyData = async () => {
@@ -78,17 +79,24 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
     loadImages();
   }, [selectedWeek]);
 
-  // Auto-scroll to bottom when dialog opens
+  // Auto-scroll to bottom when dialog opens or data changes
   useEffect(() => {
-    if (showBabyMessage && chatScrollRef.current) {
-      setTimeout(() => {
-        chatScrollRef.current?.scrollTo({
-          top: chatScrollRef.current.scrollHeight,
-          behavior: 'smooth'
-        });
-      }, 100);
-    }
-  }, [showBabyMessage]);
+    if (!showBabyMessage) return;
+
+    const scrollNow = () => {
+      if (chatScrollRef.current) {
+        chatScrollRef.current.scrollTop = chatScrollRef.current.scrollHeight;
+      }
+      chatEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    };
+
+    const raf = requestAnimationFrame(() => {
+      scrollNow();
+      setTimeout(scrollNow, 150);
+    });
+
+    return () => cancelAnimationFrame(raf);
+  }, [showBabyMessage, selectedWeek, weeklyData]);
 
   // Find the closest week data for selected week
   const availableWeeks = Object.keys(weeklyData).map(Number).sort((a, b) => a - b);
@@ -177,7 +185,8 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
                       </div>
                     </div>
                   );
-                })}
+              })}
+              <div ref={chatEndRef} className="h-px" />
             </div>
           </div>
         </DialogContent>
