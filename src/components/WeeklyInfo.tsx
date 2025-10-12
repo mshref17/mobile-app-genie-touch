@@ -198,7 +198,7 @@ const WeeklyInfo = ({ currentWeek, openBabyMessage = false, onBabyMessageClose }
               Messages from your baby through the weeks
             </DialogDescription>
           </DialogHeader>
-          <div ref={chatScrollRef} className="bg-gradient-to-b from-[#E5DDD5] to-[#D9CFC7] p-4 rounded-lg min-h-[300px] max-h-[500px] overflow-y-auto">
+          <div ref={chatScrollRef} className="bg-gradient-to-b from-[#E5DDD5] to-[#D9CFC7] p-4 rounded-lg min-h-[300px] max-h-[500px] overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {/* WhatsApp-style message bubbles - show all messages from week 1 to selectedWeek */}
             <div className="space-y-4">
               {Object.keys(weeklyData)
