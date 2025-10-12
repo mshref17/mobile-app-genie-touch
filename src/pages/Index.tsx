@@ -520,12 +520,32 @@ const Index = () => {
               <img src={appLogo} alt={t('appLogoAlt')} className="w-8 h-8 rounded-lg" />
               <h1 className="text-xl font-semibold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">{t('appName')}</h1>
             </div>
-            <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
-              <DialogTrigger asChild>
-                <Button variant="ghost" size="icon" className="hover:bg-pink-50">
-                  <Settings className="h-6 w-6 text-gray-600 hover:text-pink-600" />
-                </Button>
-              </DialogTrigger>
+            <div className="flex items-center gap-2">
+              {/* Test Notification Button */}
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => {
+                  setActiveTab('weekly');
+                  setTimeout(() => {
+                    setOpenBabyMessage(true);
+                  }, 100);
+                  toast({
+                    title: "🔔 Test Notification",
+                    description: "Simulating weekly notification click",
+                  });
+                }}
+                className="text-xs"
+              >
+                Test 🔔
+              </Button>
+              
+              <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
+                <DialogTrigger asChild>
+                  <Button variant="ghost" size="icon" className="hover:bg-pink-50">
+                    <Settings className="h-6 w-6 text-gray-600 hover:text-pink-600" />
+                  </Button>
+                </DialogTrigger>
                 <DialogContent className="sm:max-w-md">
                   <DialogHeader>
                     <DialogTitle>{t('settings')}</DialogTitle>
@@ -610,6 +630,7 @@ const Index = () => {
                   </div>
                 </DialogContent>
               </Dialog>
+            </div>
           </div>
         </div>
       </div>
