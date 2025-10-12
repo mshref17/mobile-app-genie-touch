@@ -186,7 +186,7 @@ const WeeklyInfo = ({ currentWeek, openBabyMessage = false, onBabyMessageClose }
                   
                   return (
                     <div key={week} className="flex items-start gap-2">
-                      <div className="w-10 h-10 rounded-full bg-pink-300 flex items-center justify-center flex-shrink-0">
+                      <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center flex-shrink-0">
                         <Baby className="h-6 w-6 text-white" />
                       </div>
                       <div className="flex-1">
