@@ -137,14 +137,16 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
 
   return (
     <div className="space-y-6">
-      {/* Floating WhatsApp Button */}
-      <Button
-        onClick={() => setShowBabyMessage(true)}
-        className="fixed bottom-28 left-4 z-50 h-14 w-14 rounded-full bg-[#25D366] hover:bg-[#128C7E] shadow-lg"
-        size="icon"
-      >
-        <MessageCircle className="h-6 w-6 text-white" />
-      </Button>
+      {/* Floating WhatsApp Button - only show if selected week is not in the future */}
+      {selectedWeek <= currentWeek && (
+        <Button
+          onClick={() => setShowBabyMessage(true)}
+          className="fixed bottom-28 left-4 z-50 h-14 w-14 rounded-full bg-[#25D366] hover:bg-[#128C7E] shadow-lg"
+          size="icon"
+        >
+          <MessageCircle className="h-6 w-6 text-white" />
+        </Button>
+      )}
 
       {/* Baby Message Dialog */}
       <Dialog open={showBabyMessage} onOpenChange={setShowBabyMessage}>
@@ -162,7 +164,7 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
             <div className="space-y-4">
               {Object.keys(weeklyData)
                 .map(Number)
-                .filter(week => week >= 1 && week <= selectedWeek)
+                .filter(week => week >= 1 && week <= Math.min(selectedWeek, currentWeek))
                 .sort((a, b) => a - b)
                 .map((week) => {
                   const data = weeklyData[week.toString()];
