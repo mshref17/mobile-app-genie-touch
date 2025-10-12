@@ -175,12 +175,12 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
                       </div>
                       <div className="flex-1">
                         <div className="bg-white rounded-lg rounded-tl-none p-3 shadow-sm">
+                          <span className="text-xs font-semibold text-pink-600 block mb-1">
+                            {t('week')} {week}
+                          </span>
                           <p className="text-sm text-gray-800 leading-relaxed">
                             {data.babyMessage}
                           </p>
-                          <span className="text-xs text-gray-500 mt-1 block text-right">
-                            {t('week')} {week}
-                          </span>
                         </div>
                       </div>
                     </div>
