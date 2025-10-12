@@ -526,11 +526,6 @@ const Index = () => {
                   <Settings className="h-6 w-6 text-gray-600 hover:text-pink-600" />
                 </Button>
               </DialogTrigger>
-                <DialogTrigger asChild>
-                  <Button variant="ghost" size="icon" className="hover:bg-pink-50">
-                    <Settings className="h-6 w-6 text-gray-600 hover:text-pink-600" />
-                  </Button>
-                </DialogTrigger>
                 <DialogContent className="sm:max-w-md">
                   <DialogHeader>
                     <DialogTitle>{t('settings')}</DialogTitle>
