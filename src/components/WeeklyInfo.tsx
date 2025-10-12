@@ -2,11 +2,12 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight, Baby, MessageCircle } from "lucide-react";
+import { ChevronLeft, ChevronRight, Baby } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useEffect, useState, useRef } from "react";
 import { loadBabySizeImage, getFallbackFruitEmoji } from "@/utils/imageLoader";
 import { loadUltrasoundImage } from "@/utils/ultrasoundLoader";
+import whatsappIcon from "@/assets/whatsapp-icon.png";
 import {
   Dialog,
   DialogContent,
@@ -141,10 +142,10 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
       {selectedWeek <= currentWeek && (
         <Button
           onClick={() => setShowBabyMessage(true)}
-          className="fixed bottom-28 left-4 z-50 h-14 w-14 rounded-full bg-[#25D366] hover:bg-[#128C7E] shadow-lg"
+          className="fixed bottom-28 left-4 z-50 h-14 w-14 rounded-full bg-[#25D366] hover:bg-[#128C7E] shadow-lg p-0 overflow-hidden"
           size="icon"
         >
-          <MessageCircle className="h-6 w-6 text-white" />
+          <img src={whatsappIcon} alt="WhatsApp" className="w-full h-full object-contain" />
         </Button>
       )}
 
