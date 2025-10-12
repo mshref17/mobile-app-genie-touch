@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, Baby, MessageCircle } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { loadBabySizeImage, getFallbackFruitEmoji } from "@/utils/imageLoader";
 import { loadUltrasoundImage } from "@/utils/ultrasoundLoader";
 import {
@@ -38,6 +38,7 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
   const [babySizeImage, setBabySizeImage] = useState<string | null>(null);
   const [ultrasoundImage, setUltrasoundImage] = useState<string | null>(null);
   const [showBabyMessage, setShowBabyMessage] = useState(false);
+  const chatScrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const loadWeeklyData = async () => {
@@ -76,6 +77,18 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
     
     loadImages();
   }, [selectedWeek]);
+
+  // Auto-scroll to bottom when dialog opens
+  useEffect(() => {
+    if (showBabyMessage && chatScrollRef.current) {
+      setTimeout(() => {
+        chatScrollRef.current?.scrollTo({
+          top: chatScrollRef.current.scrollHeight,
+          behavior: 'smooth'
+        });
+      }, 100);
+    }
+  }, [showBabyMessage]);
 
   // Find the closest week data for selected week
   const availableWeeks = Object.keys(weeklyData).map(Number).sort((a, b) => a - b);
@@ -119,7 +132,7 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
       {/* Floating WhatsApp Button */}
       <Button
         onClick={() => setShowBabyMessage(true)}
-        className="fixed bottom-20 left-4 z-50 h-14 w-14 rounded-full bg-[#25D366] hover:bg-[#128C7E] shadow-lg"
+        className="fixed bottom-28 left-4 z-50 h-14 w-14 rounded-full bg-[#25D366] hover:bg-[#128C7E] shadow-lg"
         size="icon"
       >
         <MessageCircle className="h-6 w-6 text-white" />
@@ -136,7 +149,7 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
               Messages from your baby through the weeks
             </DialogDescription>
           </DialogHeader>
-          <div className="bg-gradient-to-b from-[#E5DDD5] to-[#D9CFC7] p-4 rounded-lg min-h-[300px] max-h-[500px] overflow-y-auto">
+          <div ref={chatScrollRef} className="bg-gradient-to-b from-[#E5DDD5] to-[#D9CFC7] p-4 rounded-lg min-h-[300px] max-h-[500px] overflow-y-auto">
             {/* WhatsApp-style message bubbles - show all messages from week 1 to selectedWeek */}
             <div className="space-y-4">
               {Object.keys(weeklyData)
