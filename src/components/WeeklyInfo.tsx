@@ -10,6 +10,7 @@ import { loadUltrasoundImage } from "@/utils/ultrasoundLoader";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -116,15 +117,13 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
   return (
     <div className="space-y-6">
       {/* Floating WhatsApp Button */}
-      {weekData?.babyMessage && (
-        <Button
-          onClick={() => setShowBabyMessage(true)}
-          className="fixed bottom-20 left-4 z-50 h-14 w-14 rounded-full bg-[#25D366] hover:bg-[#128C7E] shadow-lg"
-          size="icon"
-        >
-          <MessageCircle className="h-6 w-6 text-white" />
-        </Button>
-      )}
+      <Button
+        onClick={() => setShowBabyMessage(true)}
+        className="fixed bottom-20 left-4 z-50 h-14 w-14 rounded-full bg-[#25D366] hover:bg-[#128C7E] shadow-lg"
+        size="icon"
+      >
+        <MessageCircle className="h-6 w-6 text-white" />
+      </Button>
 
       {/* Baby Message Dialog */}
       <Dialog open={showBabyMessage} onOpenChange={setShowBabyMessage}>
@@ -133,23 +132,39 @@ const WeeklyInfo = ({ currentWeek }: WeeklyInfoProps) => {
             <DialogTitle className="text-center text-pink-600">
               {t('messageFromBaby')}
             </DialogTitle>
+            <DialogDescription className="sr-only">
+              Messages from your baby through the weeks
+            </DialogDescription>
           </DialogHeader>
-          <div className="bg-gradient-to-b from-[#E5DDD5] to-[#D9CFC7] p-4 rounded-lg min-h-[300px]">
-            {/* WhatsApp-style message bubble */}
-            <div className="flex items-start gap-2 mb-4">
-              <div className="w-10 h-10 rounded-full bg-pink-300 flex items-center justify-center flex-shrink-0">
-                <Baby className="h-6 w-6 text-white" />
-              </div>
-              <div className="flex-1">
-                <div className="bg-white rounded-lg rounded-tl-none p-3 shadow-sm">
-                  <p className="text-sm text-gray-800 leading-relaxed">
-                    {weekData?.babyMessage}
-                  </p>
-                  <span className="text-xs text-gray-500 mt-1 block text-right">
-                    {t('week')} {selectedWeek}
-                  </span>
-                </div>
-              </div>
+          <div className="bg-gradient-to-b from-[#E5DDD5] to-[#D9CFC7] p-4 rounded-lg min-h-[300px] max-h-[500px] overflow-y-auto">
+            {/* WhatsApp-style message bubbles - show all messages from week 1 to selectedWeek */}
+            <div className="space-y-4">
+              {Object.keys(weeklyData)
+                .map(Number)
+                .filter(week => week >= 1 && week <= selectedWeek)
+                .sort((a, b) => a - b)
+                .map((week) => {
+                  const data = weeklyData[week.toString()];
+                  if (!data?.babyMessage) return null;
+                  
+                  return (
+                    <div key={week} className="flex items-start gap-2">
+                      <div className="w-10 h-10 rounded-full bg-pink-300 flex items-center justify-center flex-shrink-0">
+                        <Baby className="h-6 w-6 text-white" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="bg-white rounded-lg rounded-tl-none p-3 shadow-sm">
+                          <p className="text-sm text-gray-800 leading-relaxed">
+                            {data.babyMessage}
+                          </p>
+                          <span className="text-xs text-gray-500 mt-1 block text-right">
+                            {t('week')} {week}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
             </div>
           </div>
         </DialogContent>
