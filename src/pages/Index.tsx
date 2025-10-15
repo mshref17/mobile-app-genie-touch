@@ -165,6 +165,21 @@ const Index = () => {
     });
   };
 
+  const handlePeriodEnded = (endDate: Date | undefined) => {
+    if (!lastPeriodDate || !endDate) return;
+    
+    const actualDuration = differenceInDays(endDate, lastPeriodDate) + 1;
+    setPeriodDuration(actualDuration);
+    localStorage.setItem('periodDuration', actualDuration.toString());
+    setIsPeriodDatePickerOpen(false);
+    setSelectedPeriodStartDate(undefined);
+    
+    toast({
+      title: t('periodEnded'),
+      description: `${t('periodEndedSuccess')} ${actualDuration} ${t('days')}`,
+    });
+  };
+
   const handleSettingsUpdate = () => {
     if (dueDateMode === 'period' && selectedDate) {
       setLastPeriodDate(selectedDate);
@@ -263,6 +278,9 @@ const Index = () => {
     const daysUntilNextPeriod = cycleLength - daysSinceLastPeriod;
     const nextPeriodDate = addDays(lastPeriodDate, cycleLength);
     
+    // Check if user is currently in their period
+    const isInPeriod = daysSinceLastPeriod < periodDuration;
+    
     // Ovulation typically occurs 14 days before next period
     const ovulationDate = subDays(nextPeriodDate, 14);
     // Fertile window is typically 5 days before ovulation to 1 day after
@@ -279,7 +297,9 @@ const Index = () => {
       fertileWindowStart,
       fertileWindowEnd,
       isInFertileWindow,
-      cycleDay: (daysSinceLastPeriod % cycleLength) + 1
+      cycleDay: (daysSinceLastPeriod % cycleLength) + 1,
+      isInPeriod,
+      daysSinceLastPeriod
     };
   };
 
@@ -814,7 +834,7 @@ const Index = () => {
                   <PopoverTrigger asChild>
                     <Button className="w-full bg-pink-600 hover:bg-pink-700">
                       <CalendarIcon className="mr-2 h-4 w-4" />
-                      {t('markPeriodStarted')}
+                      {periodInfo.isInPeriod ? t('markPeriodEnded') : t('markPeriodStarted')}
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="center">
@@ -823,9 +843,17 @@ const Index = () => {
                       selected={selectedPeriodStartDate}
                       onSelect={(date) => {
                         setSelectedPeriodStartDate(date);
-                        handlePeriodStarted(date);
+                        if (periodInfo.isInPeriod) {
+                          handlePeriodEnded(date);
+                        } else {
+                          handlePeriodStarted(date);
+                        }
                       }}
-                      disabled={(date) => date > new Date()}
+                      disabled={(date) => 
+                        periodInfo.isInPeriod 
+                          ? (date > new Date() || date < lastPeriodDate!)
+                          : date > new Date()
+                      }
                       initialFocus
                       className="pointer-events-auto"
                     />
