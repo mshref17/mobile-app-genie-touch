@@ -693,7 +693,7 @@ const Index = () => {
                 <div className="w-full bg-white/60 backdrop-blur-sm rounded-2xl px-6 py-3 shadow-lg mb-3 text-right">
                   <h3 className="text-xl text-gray-700">{t('expectedDueDate')}</h3>
                 </div>
-                <div className="text-right flex items-center justify-end gap-2 flex-wrap">
+                <div className="text-right flex items-center justify-end gap-2 flex-nowrap" dir="rtl">
                   <Button 
                     variant="link" 
                     className="text-blue-500 p-0 h-auto text-sm whitespace-nowrap"
@@ -721,7 +721,7 @@ const Index = () => {
                 <div className="w-full bg-white/60 backdrop-blur-sm rounded-2xl px-6 py-3 shadow-lg mb-3 text-right">
                   <h3 className="text-xl text-gray-700">{t('pregnancyAge')}</h3>
                 </div>
-                <div className="text-right flex items-baseline justify-end gap-2 flex-nowrap">
+                <div className="text-right flex items-baseline justify-end gap-2 flex-nowrap" dir="rtl">
                   <div className="text-lg text-gray-600 whitespace-nowrap">
                     ({t('plus')} {pregnancyInfo.daysInCurrentWeek} {t('days')}) {t('weeksDetailed')}
                   </div>
@@ -736,7 +736,7 @@ const Index = () => {
                 <div className="w-full bg-white/60 backdrop-blur-sm rounded-2xl px-6 py-3 shadow-lg mb-3 text-right">
                   <h3 className="text-xl text-gray-700">{t('monthPrefix')}</h3>
                 </div>
-                <div className="text-right flex items-center justify-end gap-2 flex-nowrap">
+                <div className="text-right flex items-center justify-end gap-2 flex-nowrap" dir="rtl">
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <Button variant="ghost" size="sm" className="p-1 h-auto w-auto hover:bg-transparent">
