@@ -534,19 +534,20 @@ const Index = () => {
         <WelcomeDialog onComplete={() => setShowWelcomeDialog(false)} />
       )}
       {/* Fixed App Header Bar */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b safe-area-top">
-        <div className="container mx-auto px-4 py-3 max-w-4xl">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <img src={appLogo} alt={t('appLogoAlt')} className="w-8 h-8 rounded-lg" />
-              <h1 className="text-xl font-semibold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">{t('appName')}</h1>
-            </div>
-            <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
-              <DialogTrigger asChild>
-                <Button variant="ghost" size="icon" className="hover:bg-pink-50">
-                  <Settings className="h-6 w-6 text-gray-600 hover:text-pink-600" />
-                </Button>
-              </DialogTrigger>
+      <div className="fixed top-0 left-0 right-0 z-50 safe-area-top">
+        <div className="bg-white/95 backdrop-blur-sm border-b">
+          <div className="container mx-auto px-4 py-3 max-w-4xl">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <img src={appLogo} alt={t('appLogoAlt')} className="w-8 h-8 rounded-lg" />
+                <h1 className="text-xl font-semibold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">{t('appName')}</h1>
+              </div>
+              <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
+                <DialogTrigger asChild>
+                  <Button variant="ghost" size="icon" className="hover:bg-pink-50">
+                    <Settings className="h-6 w-6 text-gray-600 hover:text-pink-600" />
+                  </Button>
+                </DialogTrigger>
                 <DialogContent className="sm:max-w-md">
                   <DialogHeader>
                     <DialogTitle>{t('settings')}</DialogTitle>
@@ -631,13 +632,26 @@ const Index = () => {
                   </div>
                 </DialogContent>
               </Dialog>
+            </div>
           </div>
         </div>
+        
+        {/* AdMob Banner Placeholder */}
+        <div className="bg-gray-100 border-b border-gray-200 flex items-center justify-center h-[50px]">
+          <span className="text-xs text-gray-400">AdMob Banner</span>
+        </div>
+        
+        {/* Top Navigation */}
+        <BottomNavigation 
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+          trackingMode={trackingMode}
+        />
       </div>
 
       {/* Main Content */}
       <div 
-        className="min-h-screen pt-20 pb-4 relative"
+        className="min-h-screen pt-[158px] pb-4 relative"
         style={{
           backgroundImage: `url(${backgroundImage})`,
           backgroundSize: 'cover',
@@ -953,13 +967,6 @@ const Index = () => {
         )}
         </div>
       </div>
-      
-      {/* Top Navigation */}
-      <BottomNavigation 
-        activeTab={activeTab}
-        onTabChange={setActiveTab}
-        trackingMode={trackingMode}
-      />
     </div>
   );
 };
