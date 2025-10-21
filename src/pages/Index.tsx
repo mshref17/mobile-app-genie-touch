@@ -681,7 +681,7 @@ const Index = () => {
                 <div className="inline-block bg-white/60 backdrop-blur-sm rounded-2xl px-6 py-3 shadow-lg mb-3">
                   <h3 className="text-xl text-gray-700">{t('daysRemaining')}</h3>
                 </div>
-                <div className="text-6xl font-bold text-purple-600">
+                <div className="text-6xl font-bold text-purple-600 text-right">
                   {pregnancyInfo.daysRemaining}
                 </div>
               </div>
@@ -691,7 +691,7 @@ const Index = () => {
                 <div className="inline-block bg-white/60 backdrop-blur-sm rounded-2xl px-6 py-3 shadow-lg mb-3">
                   <h3 className="text-xl text-gray-700">{t('expectedDueDate')}</h3>
                 </div>
-                <div className="flex items-center justify-end gap-2">
+                <div className="flex items-center justify-end gap-2 text-right">
                   <Button 
                     variant="link" 
                     className="text-blue-500 p-0 h-auto text-sm"
@@ -719,7 +719,7 @@ const Index = () => {
                 <div className="inline-block bg-white/60 backdrop-blur-sm rounded-2xl px-6 py-3 shadow-lg mb-3">
                   <h3 className="text-xl text-gray-700">{t('pregnancyAge')}</h3>
                 </div>
-                <div className="flex items-baseline justify-end gap-2">
+                <div className="flex items-baseline justify-end gap-2 text-right">
                   <div className="text-lg text-gray-600">
                     ({t('plus')} {pregnancyInfo.daysInCurrentWeek} {t('days')}) {t('weeksDetailed')}
                   </div>
@@ -734,7 +734,7 @@ const Index = () => {
                 <div className="inline-block bg-white/60 backdrop-blur-sm rounded-2xl px-6 py-3 shadow-lg mb-3">
                   <h3 className="text-xl text-gray-700">{t('currentMonth')}</h3>
                 </div>
-                <div className="text-3xl font-bold text-purple-600 flex items-center justify-end gap-2">
+                <div className="text-3xl font-bold text-purple-600 flex items-center justify-end gap-2 text-right">
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <Button variant="ghost" size="sm" className="p-1 h-auto w-auto hover:bg-transparent">
