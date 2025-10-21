@@ -29,3 +29,13 @@ go to android directory /android
 
 keystore password is the one is mms*****85
 key.properties file has the keystore file path
+
+###########Mohammad ##########
+to build changes and run for android
+npm run build
+
+then sync android
+npx cap sync android
+
+then run the app
+npx cap run android
