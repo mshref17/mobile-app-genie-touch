@@ -677,21 +677,29 @@ const Index = () => {
               </div>
 
               {/* Remaining Days Section */}
-              <div className="mb-6 text-right">
-                <div className="w-full bg-white/60 backdrop-blur-sm rounded-2xl px-6 py-3 shadow-lg mb-3">
+              <div className="mb-6">
+                <div className="w-full bg-white/60 backdrop-blur-sm rounded-2xl px-6 py-3 shadow-lg mb-3 text-right">
                   <h3 className="text-xl text-gray-700">{t('daysRemaining')}</h3>
                 </div>
-                <div className="text-6xl font-bold text-purple-600 text-right">
-                  {pregnancyInfo.daysRemaining}
+                <div className="text-right">
+                  <div className="text-6xl font-bold text-purple-600">
+                    {pregnancyInfo.daysRemaining}
+                  </div>
                 </div>
               </div>
 
               {/* Expected Due Date Section */}
-              <div className="mb-6 text-right">
-                <div className="w-full bg-white/60 backdrop-blur-sm rounded-2xl px-6 py-3 shadow-lg mb-3">
+              <div className="mb-6">
+                <div className="w-full bg-white/60 backdrop-blur-sm rounded-2xl px-6 py-3 shadow-lg mb-3 text-right">
                   <h3 className="text-xl text-gray-700">{t('expectedDueDate')}</h3>
                 </div>
-                <div className="flex items-center justify-end gap-2 text-right">
+                <div className="text-right">
+                  <div className="text-2xl font-bold text-purple-600 mb-2">
+                    {showMonthNumbers 
+                      ? format(pregnancyInfo.dueDate, "yyyy/MM/dd")
+                      : format(pregnancyInfo.dueDate, "MMMM d, yyyy", { locale: ar })
+                    }
+                  </div>
                   <Button 
                     variant="link" 
                     className="text-blue-500 p-0 h-auto text-sm"
@@ -705,66 +713,62 @@ const Index = () => {
                   >
                     {t('hijriCalendar')}
                   </Button>
-                  <div className="text-2xl font-bold text-purple-600">
-                    {showMonthNumbers 
-                      ? format(pregnancyInfo.dueDate, "yyyy/MM/dd")
-                      : format(pregnancyInfo.dueDate, "MMMM d, yyyy", { locale: ar })
-                    }
-                  </div>
                 </div>
               </div>
 
               {/* Pregnancy Age Section */}
-              <div className="mb-6 text-right">
-                <div className="w-full bg-white/60 backdrop-blur-sm rounded-2xl px-6 py-3 shadow-lg mb-3">
+              <div className="mb-6">
+                <div className="w-full bg-white/60 backdrop-blur-sm rounded-2xl px-6 py-3 shadow-lg mb-3 text-right">
                   <h3 className="text-xl text-gray-700">{t('pregnancyAge')}</h3>
                 </div>
-                <div className="flex items-baseline justify-end gap-2 text-right">
-                  <div className="text-lg text-gray-600">
-                    ({t('plus')} {pregnancyInfo.daysInCurrentWeek} {t('days')}) {t('weeksDetailed')}
-                  </div>
+                <div className="text-right">
                   <div className="text-5xl font-bold text-purple-600">
                     {pregnancyInfo.weeksPregnant}
+                  </div>
+                  <div className="text-lg text-gray-600 mt-2">
+                    ({t('plus')} {pregnancyInfo.daysInCurrentWeek} {t('days')}) {t('weeksDetailed')}
                   </div>
                 </div>
               </div>
 
               {/* Current Month Section */}
-              <div className="mb-6 text-right">
-                <div className="w-full bg-white/60 backdrop-blur-sm rounded-2xl px-6 py-3 shadow-lg mb-3">
+              <div className="mb-6">
+                <div className="w-full bg-white/60 backdrop-blur-sm rounded-2xl px-6 py-3 shadow-lg mb-3 text-right">
                   <h3 className="text-xl text-gray-700">{t('currentMonth')}</h3>
                 </div>
-                <div className="text-3xl font-bold text-purple-600 flex items-center justify-end gap-2 text-right">
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <Button variant="ghost" size="sm" className="p-1 h-auto w-auto hover:bg-transparent">
-                        <Info className="w-4 h-4 text-gray-500 hover:text-gray-700" />
-                      </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>{t('monthCalculationTitle')}</AlertDialogTitle>
-                        <AlertDialogDescription className="text-left space-y-2">
-                          <p>{t('monthCalculationDescription')}</p>
-                          <ul className="list-disc list-inside space-y-1 text-sm">
-                            <li>{t('monthWeeks1')}</li>
-                            <li>{t('monthWeeks2')}</li>
-                            <li>{t('monthWeeks3')}</li>
-                            <li>{t('monthWeeks4')}</li>
-                            <li>{t('monthWeeks5')}</li>
-                            <li>{t('monthWeeks6')}</li>
-                            <li>{t('monthWeeks7')}</li>
-                            <li>{t('monthWeeks8')}</li>
-                            <li>{t('monthWeeks9')}</li>
-                          </ul>
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogAction>{t('gotIt')}</AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
-                  {t('monthPrefix')} {calculatePregnancyMonth(pregnancyInfo.weeksPregnant)}
+                <div className="text-right">
+                  <div className="text-3xl font-bold text-purple-600 inline-flex items-center gap-2">
+                    {t('monthPrefix')} {calculatePregnancyMonth(pregnancyInfo.weeksPregnant)}
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button variant="ghost" size="sm" className="p-1 h-auto w-auto hover:bg-transparent">
+                          <Info className="w-4 h-4 text-gray-500 hover:text-gray-700" />
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>{t('monthCalculationTitle')}</AlertDialogTitle>
+                          <AlertDialogDescription className="text-left space-y-2">
+                            <p>{t('monthCalculationDescription')}</p>
+                            <ul className="list-disc list-inside space-y-1 text-sm">
+                              <li>{t('monthWeeks1')}</li>
+                              <li>{t('monthWeeks2')}</li>
+                              <li>{t('monthWeeks3')}</li>
+                              <li>{t('monthWeeks4')}</li>
+                              <li>{t('monthWeeks5')}</li>
+                              <li>{t('monthWeeks6')}</li>
+                              <li>{t('monthWeeks7')}</li>
+                              <li>{t('monthWeeks8')}</li>
+                              <li>{t('monthWeeks9')}</li>
+                            </ul>
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogAction>{t('gotIt')}</AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </div>
                 </div>
               </div>
 
