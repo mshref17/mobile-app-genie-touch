@@ -650,7 +650,7 @@ const Index = () => {
           {activeTab === 'dashboard' && trackingMode === 'pregnant' && pregnancyInfo && (
             <>
               {/* Trimester Progress Bar */}
-              <div className="mb-6 bg-white/80 backdrop-blur-sm rounded-2xl p-4 shadow-lg">
+              <div className="mb-6 bg-white/60 backdrop-blur-sm rounded-2xl p-4 shadow-lg">
                 <div className="flex items-center justify-between mb-3">
                   <div className="text-sm text-gray-600">
                     {format(lastPeriodDate || new Date(), "d/M/yyyy")}
@@ -675,7 +675,7 @@ const Index = () => {
               </div>
 
               {/* Remaining Days Card */}
-              <Card className="mb-4 bg-white/90 backdrop-blur-sm border-0 shadow-lg">
+              <Card className="mb-4 bg-white/60 backdrop-blur-sm border-0 shadow-lg">
                 <CardContent className="p-6 text-right">
                   <h3 className="text-xl text-gray-700 mb-2">{t('daysRemaining')}</h3>
                   <div className="text-7xl font-bold text-purple-600">
@@ -685,7 +685,7 @@ const Index = () => {
               </Card>
 
               {/* Expected Due Date Card */}
-              <Card className="mb-4 bg-white/90 backdrop-blur-sm border-0 shadow-lg">
+              <Card className="mb-4 bg-white/60 backdrop-blur-sm border-0 shadow-lg">
                 <CardContent className="p-6 text-right">
                   <h3 className="text-xl text-gray-700 mb-3">{t('expectedDueDate')}</h3>
                   <div className="text-2xl font-bold text-purple-600 mb-2">
@@ -711,7 +711,7 @@ const Index = () => {
               </Card>
 
               {/* Pregnancy Age Card */}
-              <Card className="mb-4 bg-white/90 backdrop-blur-sm border-0 shadow-lg">
+              <Card className="mb-4 bg-white/60 backdrop-blur-sm border-0 shadow-lg">
                 <CardContent className="p-6 text-right">
                   <h3 className="text-xl text-gray-700 mb-3">{t('pregnancyAge')}</h3>
                   <div className="text-5xl font-bold text-purple-600">
@@ -724,7 +724,7 @@ const Index = () => {
               </Card>
 
               {/* Current Month Card */}
-              <Card className="mb-4 bg-white/90 backdrop-blur-sm border-0 shadow-lg">
+              <Card className="mb-4 bg-white/60 backdrop-blur-sm border-0 shadow-lg">
                 <CardContent className="p-6 text-right">
                   <h3 className="text-xl text-gray-700 mb-2">{t('currentMonth')}</h3>
                   <div className="text-3xl font-bold text-purple-600 flex items-center justify-end gap-2">
