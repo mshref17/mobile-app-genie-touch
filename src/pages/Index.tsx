@@ -678,7 +678,7 @@ const Index = () => {
 
               {/* Remaining Days Section */}
               <div className="mb-6 -ml-4">
-                <div className="w-full bg-white/60 backdrop-blur-sm rounded-r-2xl pl-6 pr-6 py-3 shadow-lg mb-3 text-right">
+                <div className="w-full bg-white/60 backdrop-blur-sm rounded-r-lg pl-6 pr-6 py-3 shadow-lg mb-3 text-right">
                   <h3 className="text-xl text-gray-700">{t('daysRemaining')}</h3>
                 </div>
                 <div className="text-right">
@@ -690,7 +690,7 @@ const Index = () => {
 
               {/* Expected Due Date Section */}
               <div className="mb-6 -ml-4">
-                <div className="w-full bg-white/60 backdrop-blur-sm rounded-r-2xl pl-6 pr-6 py-3 shadow-lg mb-3 text-right">
+                <div className="w-full bg-white/60 backdrop-blur-sm rounded-r-lg pl-6 pr-6 py-3 shadow-lg mb-3 text-right">
                   <h3 className="text-xl text-gray-700">{t('expectedDueDate')}</h3>
                 </div>
                 <div className="text-right flex items-center justify-end gap-2 flex-nowrap flex-row-reverse" dir="rtl">
@@ -718,7 +718,7 @@ const Index = () => {
 
               {/* Pregnancy Age Section */}
               <div className="mb-6 -ml-4">
-                <div className="w-full bg-white/60 backdrop-blur-sm rounded-r-2xl pl-6 pr-6 py-3 shadow-lg mb-3 text-right">
+                <div className="w-full bg-white/60 backdrop-blur-sm rounded-r-lg pl-6 pr-6 py-3 shadow-lg mb-3 text-right">
                   <h3 className="text-xl text-gray-700">{t('pregnancyAge')}</h3>
                 </div>
                 <div className="text-right flex items-baseline justify-end gap-2 flex-nowrap flex-row-reverse" dir="rtl">
@@ -733,7 +733,7 @@ const Index = () => {
 
               {/* Current Month Section */}
               <div className="mb-6 -ml-4">
-                <div className="w-full bg-white/60 backdrop-blur-sm rounded-r-2xl pl-6 pr-6 py-3 shadow-lg mb-3 text-right">
+                <div className="w-full bg-white/60 backdrop-blur-sm rounded-r-lg pl-6 pr-6 py-3 shadow-lg mb-3 text-right">
                   <h3 className="text-xl text-gray-700">{t('monthPrefix')}</h3>
                 </div>
                 <div className="text-right flex items-center justify-end gap-2 flex-nowrap flex-row-reverse" dir="rtl">
