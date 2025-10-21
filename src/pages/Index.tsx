@@ -645,8 +645,13 @@ const Index = () => {
           backgroundAttachment: 'fixed'
         }}
       >
-        {/* Light pink overlay */}
-        <div className="absolute inset-0 bg-pink-100/20 pointer-events-none"></div>
+        {/* Gradient overlay matching old Android version */}
+        <div 
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: 'linear-gradient(to right, rgba(255, 255, 255, 0.55), rgba(215, 146, 248, 0.40))'
+          }}
+        ></div>
         <div className="container mx-auto p-4 max-w-4xl relative z-10">
           {/* Render content based on activeTab */}
           {activeTab === 'dashboard' && trackingMode === 'pregnant' && pregnancyInfo && (
