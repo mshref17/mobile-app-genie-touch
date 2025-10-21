@@ -734,11 +734,11 @@ const Index = () => {
               {/* Current Month Section */}
               <div className="mb-6">
                 <div className="w-full bg-white/60 backdrop-blur-sm rounded-2xl px-6 py-3 shadow-lg mb-3 text-right">
-                  <h3 className="text-xl text-gray-700">{t('currentMonth')}</h3>
+                  <h3 className="text-xl text-gray-700">{t('monthPrefix')}</h3>
                 </div>
                 <div className="text-right">
                   <div className="text-3xl font-bold text-purple-600 inline-flex items-center gap-2">
-                    {t('monthPrefix')} {calculatePregnancyMonth(pregnancyInfo.weeksPregnant)}
+                    {calculatePregnancyMonth(pregnancyInfo.weeksPregnant)}
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
                         <Button variant="ghost" size="sm" className="p-1 h-auto w-auto hover:bg-transparent">
