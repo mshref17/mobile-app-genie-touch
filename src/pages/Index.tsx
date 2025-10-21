@@ -678,7 +678,7 @@ const Index = () => {
               <Card className="mb-4 bg-white/60 backdrop-blur-sm border-0 shadow-lg">
                 <CardContent className="p-6 text-right">
                   <h3 className="text-xl text-gray-700 mb-2">{t('daysRemaining')}</h3>
-                  <div className="text-7xl font-bold text-purple-600">
+                  <div className="text-6xl font-bold text-purple-600">
                     {pregnancyInfo.daysRemaining}
                   </div>
                 </CardContent>
@@ -688,25 +688,27 @@ const Index = () => {
               <Card className="mb-4 bg-white/60 backdrop-blur-sm border-0 shadow-lg">
                 <CardContent className="p-6 text-right">
                   <h3 className="text-xl text-gray-700 mb-3">{t('expectedDueDate')}</h3>
-                  <div className="text-2xl font-bold text-purple-600 mb-2">
-                    {showMonthNumbers 
-                      ? format(pregnancyInfo.dueDate, "yyyy/MM/dd")
-                      : format(pregnancyInfo.dueDate, "MMMM d, yyyy", { locale: ar })
-                    }
+                  <div className="flex items-center justify-end gap-2">
+                    <div className="text-2xl font-bold text-purple-600">
+                      {showMonthNumbers 
+                        ? format(pregnancyInfo.dueDate, "yyyy/MM/dd")
+                        : format(pregnancyInfo.dueDate, "MMMM d, yyyy", { locale: ar })
+                      }
+                    </div>
+                    <Button 
+                      variant="link" 
+                      className="text-blue-500 p-0 h-auto text-sm"
+                      onClick={() => {
+                        // Future: Add Hijri calendar conversion
+                        toast({
+                          title: t('comingSoon'),
+                          description: t('hijriCalendarFeature')
+                        });
+                      }}
+                    >
+                      {t('hijriCalendar')}
+                    </Button>
                   </div>
-                  <Button 
-                    variant="link" 
-                    className="text-blue-500 p-0 h-auto"
-                    onClick={() => {
-                      // Future: Add Hijri calendar conversion
-                      toast({
-                        title: t('comingSoon'),
-                        description: t('hijriCalendarFeature')
-                      });
-                    }}
-                  >
-                    {t('hijriCalendar')}
-                  </Button>
                 </CardContent>
               </Card>
 
@@ -714,11 +716,13 @@ const Index = () => {
               <Card className="mb-4 bg-white/60 backdrop-blur-sm border-0 shadow-lg">
                 <CardContent className="p-6 text-right">
                   <h3 className="text-xl text-gray-700 mb-3">{t('pregnancyAge')}</h3>
-                  <div className="text-5xl font-bold text-purple-600">
-                    {pregnancyInfo.weeksPregnant}
-                  </div>
-                  <div className="text-lg text-gray-600 mt-1">
-                    ({t('plus')} {pregnancyInfo.daysInCurrentWeek} {t('days')}) {t('weeksDetailed')}
+                  <div className="flex items-baseline justify-end gap-2">
+                    <div className="text-5xl font-bold text-purple-600">
+                      {pregnancyInfo.weeksPregnant}
+                    </div>
+                    <div className="text-lg text-gray-600">
+                      ({t('plus')} {pregnancyInfo.daysInCurrentWeek} {t('days')}) {t('weeksDetailed')}
+                    </div>
                   </div>
                 </CardContent>
               </Card>
