@@ -678,7 +678,7 @@ const Index = () => {
 
               {/* Remaining Days Section */}
               <div className="mb-6 text-right">
-                <div className="inline-block bg-white/60 backdrop-blur-sm rounded-2xl px-6 py-3 shadow-lg mb-3">
+                <div className="w-full bg-white/60 backdrop-blur-sm rounded-2xl px-6 py-3 shadow-lg mb-3">
                   <h3 className="text-xl text-gray-700">{t('daysRemaining')}</h3>
                 </div>
                 <div className="text-6xl font-bold text-purple-600 text-right">
@@ -688,7 +688,7 @@ const Index = () => {
 
               {/* Expected Due Date Section */}
               <div className="mb-6 text-right">
-                <div className="inline-block bg-white/60 backdrop-blur-sm rounded-2xl px-6 py-3 shadow-lg mb-3">
+                <div className="w-full bg-white/60 backdrop-blur-sm rounded-2xl px-6 py-3 shadow-lg mb-3">
                   <h3 className="text-xl text-gray-700">{t('expectedDueDate')}</h3>
                 </div>
                 <div className="flex items-center justify-end gap-2 text-right">
@@ -716,7 +716,7 @@ const Index = () => {
 
               {/* Pregnancy Age Section */}
               <div className="mb-6 text-right">
-                <div className="inline-block bg-white/60 backdrop-blur-sm rounded-2xl px-6 py-3 shadow-lg mb-3">
+                <div className="w-full bg-white/60 backdrop-blur-sm rounded-2xl px-6 py-3 shadow-lg mb-3">
                   <h3 className="text-xl text-gray-700">{t('pregnancyAge')}</h3>
                 </div>
                 <div className="flex items-baseline justify-end gap-2 text-right">
@@ -731,7 +731,7 @@ const Index = () => {
 
               {/* Current Month Section */}
               <div className="mb-6 text-right">
-                <div className="inline-block bg-white/60 backdrop-blur-sm rounded-2xl px-6 py-3 shadow-lg mb-3">
+                <div className="w-full bg-white/60 backdrop-blur-sm rounded-2xl px-6 py-3 shadow-lg mb-3">
                   <h3 className="text-xl text-gray-700">{t('currentMonth')}</h3>
                 </div>
                 <div className="text-3xl font-bold text-purple-600 flex items-center justify-end gap-2 text-right">
