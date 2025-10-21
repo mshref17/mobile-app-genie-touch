@@ -682,7 +682,7 @@ const Index = () => {
                   <h3 className="text-xl text-gray-700">{t('daysRemaining')}</h3>
                 </div>
                 <div className="text-right">
-                  <div className="text-6xl font-bold text-purple-600">
+                  <div className="text-6xl font-bold text-white">
                     {pregnancyInfo.daysRemaining}
                   </div>
                 </div>
@@ -707,7 +707,7 @@ const Index = () => {
                   >
                     {t('hijriCalendar')}
                   </Button>
-                  <div className="text-2xl font-bold text-purple-600 whitespace-nowrap">
+                  <div className="text-2xl font-bold text-white whitespace-nowrap">
                     {showMonthNumbers 
                       ? format(pregnancyInfo.dueDate, "yyyy/MM/dd")
                       : format(pregnancyInfo.dueDate, "MMMM d, yyyy", { locale: ar })
@@ -722,10 +722,10 @@ const Index = () => {
                   <h3 className="text-xl text-gray-700">{t('pregnancyAge')}</h3>
                 </div>
                 <div className="text-right flex items-baseline justify-end gap-2 flex-nowrap flex-row-reverse" dir="rtl">
-                  <div className="text-lg text-gray-600 whitespace-nowrap">
+                  <div className="text-lg text-white whitespace-nowrap">
                     ({t('plus')} {pregnancyInfo.daysInCurrentWeek} {t('days')}) {t('weeksDetailed')}
                   </div>
-                  <div className="text-5xl font-bold text-purple-600 whitespace-nowrap">
+                  <div className="text-5xl font-bold text-white whitespace-nowrap">
                     {pregnancyInfo.weeksPregnant}
                   </div>
                 </div>
@@ -766,7 +766,7 @@ const Index = () => {
                       </AlertDialogFooter>
                     </AlertDialogContent>
                   </AlertDialog>
-                  <div className="text-3xl font-bold text-purple-600 whitespace-nowrap">
+                  <div className="text-3xl font-bold text-white whitespace-nowrap">
                     {calculatePregnancyMonth(pregnancyInfo.weeksPregnant)}
                   </div>
                 </div>
