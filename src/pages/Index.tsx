@@ -646,7 +646,7 @@ const Index = () => {
         }}
       >
         {/* Light pink overlay */}
-        <div className="absolute inset-0 bg-pink-200/30 pointer-events-none"></div>
+        <div className="absolute inset-0 bg-pink-100/20 pointer-events-none"></div>
         <div className="container mx-auto p-4 max-w-4xl relative z-10">
           {/* Render content based on activeTab */}
           {activeTab === 'dashboard' && trackingMode === 'pregnant' && pregnancyInfo && (
