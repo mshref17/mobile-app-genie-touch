@@ -640,9 +640,9 @@ const Index = () => {
         className="min-h-screen pt-20 pb-32 relative"
         style={{
           backgroundImage: `url(${backgroundImage})`,
-          backgroundSize: '100% 100%',
+          backgroundSize: 'cover',
           backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat'
+          backgroundAttachment: 'fixed'
         }}
       >
         {/* Gradient overlay matching old Android version */}
