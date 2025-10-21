@@ -637,7 +637,7 @@ const Index = () => {
 
       {/* Main Content */}
       <div 
-        className="min-h-screen pt-20 pb-32 relative"
+        className="min-h-screen pt-20 pb-4 relative"
         style={{
           backgroundImage: `url(${backgroundImage})`,
           backgroundSize: 'cover',
@@ -954,7 +954,7 @@ const Index = () => {
         </div>
       </div>
       
-      {/* Bottom Navigation */}
+      {/* Top Navigation */}
       <BottomNavigation 
         activeTab={activeTab}
         onTabChange={setActiveTab}
