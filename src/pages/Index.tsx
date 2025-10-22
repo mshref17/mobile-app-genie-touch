@@ -534,13 +534,14 @@ const Index = () => {
         <WelcomeDialog onComplete={() => setShowWelcomeDialog(false)} />
       )}
       {/* Fixed App Header Bar */}
-      <div className="fixed top-0 left-0 right-0 z-50 safe-area-top">
+      <div className="fixed top-0 left-0 right-0 z-50 safe-area-top bg-white">
+        {/* Header with logo and settings */}
         <div className="bg-white/95 backdrop-blur-sm border-b">
-          <div className="container mx-auto px-4 py-3 max-w-4xl">
+          <div className="container mx-auto px-4 py-1.5 max-w-4xl">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <img src={appLogo} alt={t('appLogoAlt')} className="w-8 h-8 rounded-lg" />
-                <h1 className="text-xl font-semibold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">{t('appName')}</h1>
+              <div className="flex items-center gap-2">
+                <img src={appLogo} alt={t('appLogoAlt')} className="w-7 h-7 rounded-lg" />
+                <h1 className="text-lg font-semibold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">{t('appName')}</h1>
               </div>
               <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
                 <DialogTrigger asChild>
@@ -651,7 +652,7 @@ const Index = () => {
 
       {/* Main Content */}
       <div 
-        className="min-h-screen pt-[162px] pb-4 relative overflow-y-auto"
+        className="min-h-screen pt-[138px] pb-4 relative"
         style={{
           backgroundImage: `url(${backgroundImage})`,
           backgroundSize: 'cover',
