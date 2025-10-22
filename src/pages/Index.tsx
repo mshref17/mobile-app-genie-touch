@@ -670,7 +670,7 @@ const Index = () => {
       <div 
         className="relative overflow-y-auto overscroll-contain pb-4"
         style={{
-          height: `calc(100dvh - ${topOffset}px)`,
+          height: `calc(100vh - ${topOffset}px)`,
           backgroundImage: `url(${backgroundImage})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
@@ -679,7 +679,7 @@ const Index = () => {
       >
         {/* Gradient overlay matching old Android version */}
         <div 
-          className="absolute inset-0 pointer-events-none z-0"
+          className="absolute inset-0 pointer-events-none"
           style={{
             background: 'linear-gradient(to right, rgba(255, 255, 255, 0.55), rgba(215, 146, 248, 0.40))'
           }}
@@ -714,7 +714,7 @@ const Index = () => {
               </div>
 
               {/* Remaining Days Section */}
-              <div className="mb-6 -mx-4">
+              <div className="mb-6 -ml-4">
                 <div className="w-full bg-white/60 backdrop-blur-sm rounded-r-lg pl-6 pr-6 py-3 shadow-lg mb-3 text-right">
                   <h3 className="text-xl text-gray-700">{t('daysRemaining')}</h3>
                 </div>
@@ -726,7 +726,7 @@ const Index = () => {
               </div>
 
               {/* Expected Due Date Section */}
-              <div className="mb-6 -mx-4">
+              <div className="mb-6 -ml-4">
                 <div className="w-full bg-white/60 backdrop-blur-sm rounded-r-lg pl-6 pr-6 py-3 shadow-lg mb-3 text-right">
                   <h3 className="text-xl text-gray-700">{t('expectedDueDate')}</h3>
                 </div>
@@ -754,7 +754,7 @@ const Index = () => {
               </div>
 
               {/* Pregnancy Age Section */}
-              <div className="mb-6 -mx-4">
+              <div className="mb-6 -ml-4">
                 <div className="w-full bg-white/60 backdrop-blur-sm rounded-r-lg pl-6 pr-6 py-3 shadow-lg mb-3 text-right">
                   <h3 className="text-xl text-gray-700">{t('pregnancyAge')}</h3>
                 </div>
@@ -769,7 +769,7 @@ const Index = () => {
               </div>
 
               {/* Current Month Section */}
-              <div className="mb-6 -mx-4">
+              <div className="mb-6 -ml-4">
                 <div className="w-full bg-white/60 backdrop-blur-sm rounded-r-lg pl-6 pr-6 py-3 shadow-lg mb-3 text-right">
                   <h3 className="text-xl text-gray-700">{t('monthPrefix')}</h3>
                 </div>

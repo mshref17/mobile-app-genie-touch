@@ -234,7 +234,7 @@ const WeeklyInfo = ({ currentWeek, openBabyMessage = false, onBabyMessageClose }
       </Dialog>
 
       {/* Week Navigation Header - Compact */}
-      <div className="sticky top-0 z-30 bg-gradient-to-b from-pink-50 to-purple-50 py-3 -mx-4 px-4 flex items-center justify-between shadow-sm [position:-webkit-sticky]">
+      <div className="sticky top-[60px] z-30 bg-gradient-to-b from-pink-50 to-purple-50 py-3 -mx-4 px-4 flex items-center justify-between shadow-sm [position:-webkit-sticky]">
         <Button
           variant="ghost"
           size="sm"
