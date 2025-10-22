@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -48,7 +48,10 @@ const Index = () => {
   const [showWelcomeDialog, setShowWelcomeDialog] = useState(true);
   const [showMonthNumbers, setShowMonthNumbers] = useState(false);
   const [openBabyMessage, setOpenBabyMessage] = useState(false);
-
+  
+  const topRef = useRef<HTMLDivElement>(null);
+  const [topOffset, setTopOffset] = useState(0);
+  
   useEffect(() => {
     const savedDate = localStorage.getItem('lastPeriodDate');
     const savedMode = localStorage.getItem('dueDateMode') as 'period' | 'duedate' || 'period';
@@ -113,6 +116,19 @@ const Index = () => {
       };
     }
   }, []);
+
+  useEffect(() => {
+    const update = () => setTopOffset(topRef.current?.offsetHeight || 0);
+    update();
+    const id = setTimeout(update, 50);
+    window.addEventListener('resize', update);
+    window.addEventListener('orientationchange', update);
+    return () => {
+      clearTimeout(id);
+      window.removeEventListener('resize', update);
+      window.removeEventListener('orientationchange', update);
+    };
+  }, [language, trackingMode, activeTab]);
 
   const handleDateSubmit = () => {
     // Cancel all previous notifications when switching modes
@@ -534,7 +550,7 @@ const Index = () => {
         <WelcomeDialog onComplete={() => setShowWelcomeDialog(false)} />
       )}
       {/* Fixed App Header Bar */}
-      <div className="fixed top-0 left-0 right-0 z-50 safe-area-top bg-white">
+      <div ref={topRef} className="fixed top-0 left-0 right-0 z-50 safe-area-top bg-white">
         {/* Header with logo and settings */}
         <div className="bg-white/95 backdrop-blur-sm border-b">
           <div className="container mx-auto px-4 py-1.5 max-w-4xl">
@@ -652,8 +668,9 @@ const Index = () => {
 
       {/* Main Content */}
       <div 
-        className="min-h-screen pt-[138px] pb-4"
+        className="min-h-screen pb-4 relative"
         style={{
+          paddingTop: topOffset,
           backgroundImage: `url(${backgroundImage})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
