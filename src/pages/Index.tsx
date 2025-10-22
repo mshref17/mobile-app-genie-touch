@@ -651,7 +651,7 @@ const Index = () => {
 
       {/* Main Content */}
       <div 
-        className="min-h-screen pt-[158px] pb-4 relative"
+        className="min-h-screen pt-[162px] pb-4 relative overflow-y-auto"
         style={{
           backgroundImage: `url(${backgroundImage})`,
           backgroundSize: 'cover',
