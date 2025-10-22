@@ -545,7 +545,7 @@ const Index = () => {
   }
   
   return (
-    <div className="min-h-screen bg-gradient-to-b from-pink-50 to-purple-50 safe-area-full">
+    <div className="h-screen overflow-hidden bg-gradient-to-b from-pink-50 to-purple-50 safe-area-full">
       {showWelcomeDialog && isFirstTime && (
         <WelcomeDialog onComplete={() => setShowWelcomeDialog(false)} />
       )}
@@ -668,9 +668,9 @@ const Index = () => {
 
       {/* Main Content */}
       <div 
-        className="min-h-screen pb-4 relative"
+        className="relative overflow-y-auto overscroll-contain pb-4"
         style={{
-          paddingTop: topOffset,
+          height: `calc(100vh - ${topOffset}px)`,
           backgroundImage: `url(${backgroundImage})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
