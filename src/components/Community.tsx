@@ -1,14 +1,16 @@
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Heart, MessageCircle, Camera, Video, Send, Loader2, TrendingUp, Clock, MessageSquare, Shuffle, Plus } from "lucide-react";
+import { Heart, MessageCircle, Camera, Video, Send, Loader2, TrendingUp, Clock, MessageSquare, Shuffle, Plus, LogOut } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { db, storage } from "@/lib/firebase";
@@ -40,6 +42,7 @@ interface Post {
   attachments?: string[];
   nickname: string;
   authorId: string;
+  profilePic?: string;
 }
 
 interface Reply {
@@ -50,6 +53,7 @@ interface Reply {
   attachments?: string[];
   nickname: string;
   authorId: string;
+  profilePic?: string;
 }
 
 type SortAlgorithm = 'smart' | 'latest' | 'most-liked' | 'most-replied';
@@ -62,18 +66,18 @@ interface AlgorithmInfo {
 
 const Community = () => {
   const { t } = useLanguage();
+  const { user, userProfile, logout } = useAuth();
+  const navigate = useNavigate();
   const [displayedPosts, setDisplayedPosts] = useState<Post[]>([]);
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [lastDoc, setLastDoc] = useState<QueryDocumentSnapshot<DocumentData> | null>(null);
   const [newPost, setNewPost] = useState('');
-  const [nickname, setNickname] = useState('');
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
   const [replyContent, setReplyContent] = useState('');
-  const [replyNickname, setReplyNickname] = useState('');
   const [replyFiles, setReplyFiles] = useState<File[]>([]);
   const [replyUploading, setReplyUploading] = useState(false);
   const [repliesVisible, setRepliesVisible] = useState<Record<string, boolean>>({});
@@ -309,16 +313,18 @@ const Community = () => {
   };
 
   const handleSubmitPost = async () => {
+    if (!user || !userProfile) {
+      navigate('/login');
+      return;
+    }
+
     if (!newPost.trim()) return;
     
-    console.log('Attempting to submit post:', newPost);
     setUploading(true);
     try {
       let attachments: string[] = [];
       
-      // Upload files if any
       if (selectedFiles.length > 0) {
-        console.log('Uploading files:', selectedFiles);
         attachments = await uploadFiles(selectedFiles);
       }
       
@@ -328,18 +334,14 @@ const Community = () => {
         likes: 0,
         replies: 0,
         attachments: attachments,
-        nickname: nickname,
-        authorId: `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+        nickname: userProfile.username,
+        authorId: user.uid,
+        profilePic: userProfile.profilePic || ''
       };
       
-      console.log('Adding post to Firestore:', postData);
-      
-      // Add post to Firestore
-      const docRef = await addDoc(collection(db, 'posts'), postData);
-      console.log('Post added successfully with ID:', docRef.id);
+      await addDoc(collection(db, 'posts'), postData);
       
       setNewPost('');
-      setNickname('');
       setSelectedFiles([]);
       setIsCreatePostOpen(false);
       
@@ -450,15 +452,18 @@ const Community = () => {
   };
 
   const handleReplySubmit = async (postId: string) => {
+    if (!user || !userProfile) {
+      navigate('/login');
+      return;
+    }
+
     if (!replyContent.trim()) return;
     
     setReplyUploading(true);
     try {
       let attachments: string[] = [];
       
-      // Upload files if any
       if (replyFiles.length > 0) {
-        console.log('Uploading reply files:', replyFiles);
         attachments = await uploadFiles(replyFiles);
       }
       
@@ -467,24 +472,21 @@ const Community = () => {
         timestamp: serverTimestamp(),
         postId: postId,
         attachments: attachments,
-        nickname: replyNickname,
-        authorId: `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+        nickname: userProfile.username,
+        authorId: user.uid,
+        profilePic: userProfile.profilePic || ''
       };
       
-      // Add reply to Firestore
       await addDoc(collection(db, 'replies'), replyData);
       
-      // Update post reply count
       const postRef = doc(db, 'posts', postId);
       await updateDoc(postRef, {
         replies: increment(1)
       });
       
       setReplyContent('');
-      setReplyNickname('');
       setReplyFiles([]);
       setReplyingTo(null);
-      
       
       toast({
         title: t("replyAdded") || "Reply Added",
@@ -557,8 +559,48 @@ const Community = () => {
 
   return (
     <div className="space-y-6 relative">
+      {/* User Profile & Logout */}
+      {user && userProfile && (
+        <div className="flex items-center justify-between p-4 bg-gradient-to-r from-pink-50 to-purple-50 rounded-lg">
+          <div className="flex items-center gap-3">
+            {userProfile.profilePic ? (
+              <img 
+                src={userProfile.profilePic} 
+                alt={userProfile.username}
+                className="w-10 h-10 rounded-full object-cover"
+              />
+            ) : (
+              <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+                <span className="text-sm font-semibold">
+                  {userProfile.username.charAt(0).toUpperCase()}
+                </span>
+              </div>
+            )}
+            <div>
+              <p className="font-medium text-sm">{userProfile.username}</p>
+              <p className="text-xs text-muted-foreground">{user.email}</p>
+            </div>
+          </div>
+          <Button 
+            variant="outline" 
+            size="sm"
+            onClick={logout}
+            className="gap-2"
+          >
+            <LogOut className="h-4 w-4" />
+            Logout
+          </Button>
+        </div>
+      )}
+
       {/* Floating Action Button */}
-      <Dialog open={isCreatePostOpen} onOpenChange={setIsCreatePostOpen}>
+      <Dialog open={isCreatePostOpen} onOpenChange={(open) => {
+        if (open && !user) {
+          navigate('/login');
+        } else {
+          setIsCreatePostOpen(open);
+        }
+      }}>
         <DialogTrigger asChild>
           <Button 
             className="fixed bottom-28 right-6 h-14 w-14 rounded-full shadow-lg bg-pink-600 hover:bg-pink-700 opacity-40 hover:opacity-60 transition-opacity z-[100]"
@@ -576,16 +618,6 @@ const Community = () => {
           </DialogHeader>
           <div className="space-y-4 mt-4">
             <div className="space-y-3">
-              <div>
-                <Label htmlFor="nickname">{t("nickname")}</Label>
-                <Input
-                  id="nickname"
-                  placeholder={t("enterNickname")}
-                  value={nickname}
-                  onChange={(e) => setNickname(e.target.value)}
-                  className="mt-1"
-                />
-              </div>
               <Textarea
                 placeholder={t("communityPlaceholder")}
                 value={newPost}
@@ -614,7 +646,7 @@ const Community = () => {
               
               <Button 
                 onClick={handleSubmitPost}
-                disabled={!newPost.trim() || !nickname.trim() || uploading}
+                disabled={!newPost.trim() || uploading}
                 className="bg-pink-600 hover:bg-pink-700 ml-auto"
               >
                 {uploading ? (
@@ -698,11 +730,26 @@ const Community = () => {
             <Card key={post.id}>
               <CardContent className="pt-6">
                  <div className="space-y-3">
-                   <div className="flex items-center justify-between">
-                     <span className="text-sm font-medium text-purple-700">
-                       {post.nickname || t("anonymous")}
-                     </span>
-                     <span className="text-sm text-gray-500">
+                   <div className="flex items-center gap-2 mb-2">
+                     {post.profilePic ? (
+                       <img 
+                         src={post.profilePic} 
+                         alt={post.nickname}
+                         className="w-8 h-8 rounded-full object-cover"
+                       />
+                     ) : (
+                       <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center">
+                         <span className="text-xs font-semibold text-purple-700">
+                           {post.nickname?.charAt(0).toUpperCase()}
+                         </span>
+                       </div>
+                     )}
+                     <div className="flex-1">
+                       <span className="text-sm font-medium text-purple-700">
+                         {post.nickname || t("anonymous")}
+                       </span>
+                     </div>
+                     <span className="text-xs text-gray-500">
                        {formatTimeAgo(post.timestamp)}
                      </span>
                    </div>
@@ -755,7 +802,13 @@ const Community = () => {
                       variant="ghost" 
                       size="sm" 
                       className="text-blue-600 hover:text-blue-700"
-                      onClick={() => setReplyingTo(post.id)}
+                      onClick={() => {
+                        if (!user) {
+                          navigate('/login');
+                        } else {
+                          setReplyingTo(post.id);
+                        }
+                      }}
                     >
                       {t("reply") || "Reply"}
                     </Button>
@@ -765,16 +818,6 @@ const Community = () => {
                    {replyingTo === post.id && (
                      <div className="mt-4 p-4 bg-gray-50 rounded-lg">
                         <div className="space-y-3 mb-3">
-                          <div>
-                            <Label htmlFor={`reply-nickname-${post.id}`}>{t("nickname")}</Label>
-                            <Input
-                              id={`reply-nickname-${post.id}`}
-                              placeholder={t("enterNickname")}
-                              value={replyNickname}
-                              onChange={(e) => setReplyNickname(e.target.value)}
-                              className="mt-1"
-                            />
-                         </div>
                          <Textarea
                            placeholder={t("writeReply") || "Write your reply..."}
                            value={replyContent}
@@ -815,7 +858,7 @@ const Community = () => {
                          <Button 
                            size="sm" 
                            onClick={() => handleReplySubmit(post.id)}
-                           disabled={!replyContent.trim() || !replyNickname.trim() || replyUploading}
+                           disabled={!replyContent.trim() || replyUploading}
                            className="bg-purple-600 hover:bg-purple-700"
                          >
                           {replyUploading ? (
@@ -829,7 +872,6 @@ const Community = () => {
                            onClick={() => {
                              setReplyingTo(null);
                              setReplyContent('');
-                             setReplyNickname('');
                              setReplyFiles([]);
                            }}
                           disabled={replyUploading}
