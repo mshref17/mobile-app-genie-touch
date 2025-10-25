@@ -7,7 +7,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Switch } from "@/components/ui/switch";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { CalendarIcon, Baby, Users, Heart, Settings, CalendarDays, Clock, Star, Gift, Info } from "lucide-react";
+import { CalendarIcon, Baby, Users, Heart, Settings, CalendarDays, Clock, Star, Gift, Info, Lightbulb } from "lucide-react";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { format, addDays, differenceInDays, differenceInWeeks, subDays } from "date-fns";
 import { ar } from "date-fns/locale";
@@ -48,6 +48,8 @@ const Index = () => {
   const [showWelcomeDialog, setShowWelcomeDialog] = useState(true);
   const [showMonthNumbers, setShowMonthNumbers] = useState(false);
   const [openBabyMessage, setOpenBabyMessage] = useState(false);
+  const [isDailyTipOpen, setIsDailyTipOpen] = useState(false);
+  const [dailyTip, setDailyTip] = useState<string>('');
 
   useEffect(() => {
     const savedDate = localStorage.getItem('lastPeriodDate');
@@ -306,6 +308,37 @@ const Index = () => {
 
   const pregnancyInfo = trackingMode === 'pregnant' ? calculatePregnancyInfo() : null;
   const periodInfo = trackingMode === 'period' ? calculatePeriodInfo() : null;
+
+  // Load daily tip based on current day
+  useEffect(() => {
+    const loadDailyTip = async () => {
+      if (!pregnancyInfo) return;
+      
+      try {
+        let tipsData: any;
+        
+        if (language === 'ar') {
+          const response = await import('@/data/daily-tips-ar.json');
+          tipsData = response.default;
+        } else {
+          const response = await import('@/data/daily-tips-en.json');
+          tipsData = response.default;
+        }
+        
+        const tipIndex = pregnancyInfo.totalDays > 0 ? ((pregnancyInfo.totalDays - 1) % tipsData.tips.length) : 0;
+        const tip = tipsData.tips[tipIndex];
+        
+        setDailyTip(tip?.tip || 'Take care of yourself and your baby today!');
+      } catch (error) {
+        console.error('Error loading daily tips:', error);
+        setDailyTip('Take care of yourself and your baby today!');
+      }
+    };
+
+    if (pregnancyInfo && pregnancyInfo.totalDays > 0) {
+      loadDailyTip();
+    }
+  }, [pregnancyInfo?.totalDays, language]);
 
   if (isFirstTime) {
     return (
@@ -698,7 +731,17 @@ const Index = () => {
 
               {/* Remaining Days Section */}
               <div className="mb-6 -ml-4">
-                <div className="w-full bg-white/60 backdrop-blur-sm rounded-r-lg pl-6 pr-6 py-3 shadow-lg mb-3 text-right">
+                <div className="w-full bg-white/60 backdrop-blur-sm rounded-r-lg pl-6 pr-6 py-3 shadow-lg mb-3 text-right flex items-center justify-between">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="p-2 h-auto hover:bg-white/30 transition-all"
+                    onClick={() => setIsDailyTipOpen(true)}
+                  >
+                    <div className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg">
+                      <Lightbulb className="w-4 h-4 text-white" />
+                    </div>
+                  </Button>
                   <h3 className="text-xl text-gray-700">{t('daysRemaining')}</h3>
                 </div>
                 <div className="text-right">
@@ -792,9 +835,41 @@ const Index = () => {
                 </div>
               </div>
 
-              <div className="mt-6">
-                <DailyTip currentDay={pregnancyInfo.totalDays} />
-              </div>
+              {/* Daily Tip Dialog */}
+              <Dialog open={isDailyTipOpen} onOpenChange={setIsDailyTipOpen}>
+                <DialogContent className="max-w-md mx-4">
+                  <div className="relative">
+                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 rounded-t-lg"></div>
+                    
+                    <div className="pt-6 pb-2">
+                      <div className="flex items-start gap-4">
+                        <div className="flex-shrink-0">
+                          <div className="relative">
+                            <div className="w-14 h-14 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg">
+                              <Lightbulb className="w-7 h-7 text-white" />
+                            </div>
+                            <div className="absolute -top-1 w-6 h-6 bg-pink-500 rounded-full flex items-center justify-center -right-1">
+                              <span className="text-white text-xs font-bold">{pregnancyInfo.totalDays}</span>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-4">
+                            <h3 className="text-lg font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
+                              {t('dailyTip')}
+                            </h3>
+                            <div className="flex-1 h-px bg-gradient-to-r from-pink-200 to-transparent"></div>
+                          </div>
+                          <p className="text-gray-700 leading-relaxed text-base font-medium italic">
+                            "{dailyTip}"
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
             </>
           )}
 
