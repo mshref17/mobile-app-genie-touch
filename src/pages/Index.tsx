@@ -732,6 +732,7 @@ const Index = () => {
               {/* Remaining Days Section */}
               <div className="mb-6 -ml-4">
                 <div className="w-full bg-white/60 backdrop-blur-sm rounded-r-lg pl-6 pr-6 py-3 shadow-lg mb-3 text-right flex items-center justify-between">
+                  <h3 className="text-xl text-gray-700 flex-1">{t('daysRemaining')}</h3>
                   <Button
                     variant="ghost"
                     size="sm"
@@ -742,7 +743,6 @@ const Index = () => {
                       <Lightbulb className="w-4 h-4 text-white" />
                     </div>
                   </Button>
-                  <h3 className="text-xl text-gray-700">{t('daysRemaining')}</h3>
                 </div>
                 <div className="text-right">
                   <div className="text-6xl font-bold text-white">
