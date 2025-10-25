@@ -705,19 +705,19 @@ const Index = () => {
           {activeTab === 'dashboard' && trackingMode === 'pregnant' && pregnancyInfo && (
             <>
               {/* Trimester Progress Bar */}
-              <div className="mb-6 text-right">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="text-sm text-gray-600">
-                    {format(pregnancyInfo.dueDate, "d/M/yyyy")}
+              <div className="mb-4 text-right">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="text-base font-medium text-gray-700">
+                    {format(pregnancyInfo.dueDate, "d/M")}
                   </div>
-                  <div className="text-sm text-gray-600">
-                    {format(lastPeriodDate || new Date(), "d/M/yyyy")}
+                  <div className="text-base font-medium text-gray-700">
+                    {format(lastPeriodDate || new Date(), "d/M")}
                   </div>
                 </div>
                 
-                <div className="relative h-2 bg-gray-200 rounded-full mb-3">
+                <div className="relative h-2 bg-gray-400 rounded-full mb-2">
                   <div 
-                    className="absolute h-full bg-gradient-to-r from-pink-400 via-purple-400 to-indigo-400 rounded-full transition-all duration-1000"
+                    className="absolute h-full bg-gradient-to-r from-yellow-300 via-gray-400 to-gray-500 rounded-full transition-all duration-1000"
                     style={{ width: `${Math.min((pregnancyInfo.weeksPregnant / 40) * 100, 100)}%` }}
                   ></div>
                 </div>
@@ -730,38 +730,44 @@ const Index = () => {
               </div>
 
               {/* Remaining Days Section */}
-              <div className="mb-6 -ml-4">
-                <div className="w-full bg-white/60 backdrop-blur-sm rounded-r-lg pl-6 pr-6 py-3 shadow-lg mb-3 text-right flex items-center justify-between">
-                  <h3 className="text-xl text-gray-700 flex-1">{t('daysRemaining')}</h3>
+              <div className="mb-4">
+                <div className="bg-white/90 backdrop-blur-sm rounded-2xl px-6 py-3 shadow-md text-right">
+                  <h3 className="text-lg font-medium text-gray-700">{t('daysRemaining')}</h3>
+                </div>
+                <div className="text-right px-6 py-4 relative">
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="p-2 h-auto hover:bg-white/30 transition-all"
+                    className="absolute left-4 top-1/2 -translate-y-1/2 p-0 h-auto hover:bg-transparent"
                     onClick={() => setIsDailyTipOpen(true)}
                   >
-                    <div className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg">
-                      <Lightbulb className="w-4 h-4 text-white" />
+                    <div className="w-12 h-12 bg-yellow-300 rounded-lg flex items-center justify-center shadow-md relative">
+                      <Lightbulb className="w-6 h-6 text-gray-700" />
+                      <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></div>
                     </div>
                   </Button>
-                </div>
-                <div className="text-right">
-                  <div className="text-6xl font-bold text-white">
+                  <div className="text-[120px] leading-none font-bold text-white" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.2)' }}>
                     {pregnancyInfo.daysRemaining}
                   </div>
                 </div>
               </div>
 
               {/* Expected Due Date Section */}
-              <div className="mb-6 -ml-4">
-                <div className="w-full bg-white/60 backdrop-blur-sm rounded-r-lg pl-6 pr-6 py-3 shadow-lg mb-3 text-right">
-                  <h3 className="text-xl text-gray-700">{t('expectedDueDate')}</h3>
+              <div className="mb-4">
+                <div className="bg-white/90 backdrop-blur-sm rounded-2xl px-6 py-3 shadow-md text-right">
+                  <h3 className="text-lg font-medium text-gray-700">{t('expectedDueDate')}</h3>
                 </div>
-                <div className="text-right flex items-center justify-end gap-2 flex-nowrap flex-row-reverse" dir="rtl">
+                <div className="text-right px-6 py-3">
+                  <div className="text-4xl font-bold text-white mb-2" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.2)' }}>
+                    {showMonthNumbers 
+                      ? format(pregnancyInfo.dueDate, "yyyy/MM/dd")
+                      : format(pregnancyInfo.dueDate, "yyyy/MM/dd")
+                    }
+                  </div>
                   <Button 
                     variant="link" 
-                    className="text-blue-500 p-0 h-auto text-sm whitespace-nowrap"
+                    className="text-blue-400 p-0 h-auto text-base font-medium hover:text-blue-300"
                     onClick={() => {
-                      // Future: Add Hijri calendar conversion
                       toast({
                         title: t('comingSoon'),
                         description: t('hijriCalendarFeature')
@@ -770,40 +776,44 @@ const Index = () => {
                   >
                     {t('hijriCalendar')}
                   </Button>
-                  <div className="text-2xl font-bold text-white whitespace-nowrap">
-                    {showMonthNumbers 
-                      ? format(pregnancyInfo.dueDate, "yyyy/MM/dd")
-                      : format(pregnancyInfo.dueDate, "MMMM d, yyyy", { locale: ar })
-                    }
-                  </div>
                 </div>
               </div>
 
               {/* Pregnancy Age Section */}
-              <div className="mb-6 -ml-4">
-                <div className="w-full bg-white/60 backdrop-blur-sm rounded-r-lg pl-6 pr-6 py-3 shadow-lg mb-3 text-right">
-                  <h3 className="text-xl text-gray-700">{t('pregnancyAge')}</h3>
+              <div className="mb-4">
+                <div className="bg-white/90 backdrop-blur-sm rounded-2xl px-6 py-3 shadow-md text-right">
+                  <h3 className="text-lg font-medium text-gray-700">{t('pregnancyAge')}</h3>
                 </div>
-                <div className="text-right flex items-baseline justify-end gap-2 flex-nowrap flex-row-reverse" dir="rtl">
-                  <div className="text-lg text-white whitespace-nowrap">
-                    ({t('plus')} {pregnancyInfo.daysInCurrentWeek} {t('days')}) {t('weeksDetailed')}
+                <div className="text-right px-6 py-3">
+                  <div className="text-5xl font-bold text-white mb-2" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.2)' }}>
+                    {pregnancyInfo.weeksPregnant} <span className="text-2xl">({t('plus')} {pregnancyInfo.daysInCurrentWeek} {t('days')})</span>
                   </div>
-                  <div className="text-5xl font-bold text-white whitespace-nowrap">
-                    {pregnancyInfo.weeksPregnant}
-                  </div>
+                  <Button 
+                    variant="link" 
+                    className="text-blue-400 p-0 h-auto text-base font-medium hover:text-blue-300"
+                    onClick={() => setActiveTab('weekly')}
+                  >
+                    {t('weekDetails')}
+                  </Button>
                 </div>
               </div>
 
               {/* Current Month Section */}
-              <div className="mb-6 -ml-4">
-                <div className="w-full bg-white/60 backdrop-blur-sm rounded-r-lg pl-6 pr-6 py-3 shadow-lg mb-3 text-right">
-                  <h3 className="text-xl text-gray-700">{t('monthPrefix')}</h3>
+              <div className="mb-4">
+                <div className="bg-white/90 backdrop-blur-sm rounded-2xl px-6 py-3 shadow-md text-right">
+                  <h3 className="text-lg font-medium text-gray-700">{t('monthPrefix')}</h3>
                 </div>
-                <div className="text-right flex items-center justify-end gap-2 flex-nowrap flex-row-reverse" dir="rtl">
+                <div className="text-right px-6 py-3">
+                  <div className="text-5xl font-bold text-white mb-2" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.2)' }}>
+                    {t(`month${calculatePregnancyMonth(pregnancyInfo.weeksPregnant)}`)}
+                  </div>
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
-                      <Button variant="ghost" size="sm" className="p-1 h-auto w-auto hover:bg-transparent">
-                        <Info className="w-4 h-4 text-gray-500 hover:text-gray-700" />
+                      <Button 
+                        variant="link" 
+                        className="text-blue-400 p-0 h-auto text-base font-medium hover:text-blue-300"
+                      >
+                        {t('monthCalculation')}
                       </Button>
                     </AlertDialogTrigger>
                     <AlertDialogContent>
@@ -829,9 +839,6 @@ const Index = () => {
                       </AlertDialogFooter>
                     </AlertDialogContent>
                   </AlertDialog>
-                  <div className="text-3xl font-bold text-white whitespace-nowrap">
-                    {calculatePregnancyMonth(pregnancyInfo.weeksPregnant)}
-                  </div>
                 </div>
               </div>
 
