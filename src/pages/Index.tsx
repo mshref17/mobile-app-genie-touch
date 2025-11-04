@@ -746,7 +746,7 @@ const Index = () => {
                       <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></div>
                     </div>
                   </Button>
-                  <div className="text-[120px] leading-none font-bold text-white" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.2)' }}>
+                  <div className="text-5xl sm:text-6xl leading-none font-bold text-white" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.2)' }}>
                     {pregnancyInfo.daysRemaining}
                   </div>
                 </div>
@@ -757,16 +757,10 @@ const Index = () => {
                 <div className="bg-white/90 backdrop-blur-sm rounded-2xl px-6 py-3 shadow-md text-right">
                   <h3 className="text-lg font-medium text-gray-700">{t('expectedDueDate')}</h3>
                 </div>
-                <div className="text-right px-6 py-3">
-                  <div className="text-4xl font-bold text-white mb-2" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.2)' }}>
-                    {showMonthNumbers 
-                      ? format(pregnancyInfo.dueDate, "yyyy/MM/dd")
-                      : format(pregnancyInfo.dueDate, "yyyy/MM/dd")
-                    }
-                  </div>
+                <div className="text-right px-6 py-3 flex items-center justify-end gap-3">
                   <Button 
                     variant="link" 
-                    className="text-blue-400 p-0 h-auto text-base font-medium hover:text-blue-300"
+                    className="text-blue-400 p-0 h-auto text-sm font-medium hover:text-blue-300"
                     onClick={() => {
                       toast({
                         title: t('comingSoon'),
@@ -776,6 +770,12 @@ const Index = () => {
                   >
                     {t('hijriCalendar')}
                   </Button>
+                  <div className="text-2xl sm:text-3xl font-bold text-white" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.2)' }}>
+                    {showMonthNumbers 
+                      ? format(pregnancyInfo.dueDate, "yyyy/MM/dd")
+                      : format(pregnancyInfo.dueDate, "yyyy/MM/dd")
+                    }
+                  </div>
                 </div>
               </div>
 
@@ -784,17 +784,17 @@ const Index = () => {
                 <div className="bg-white/90 backdrop-blur-sm rounded-2xl px-6 py-3 shadow-md text-right">
                   <h3 className="text-lg font-medium text-gray-700">{t('pregnancyAge')}</h3>
                 </div>
-                <div className="text-right px-6 py-3">
-                  <div className="text-5xl font-bold text-white mb-2" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.2)' }}>
-                    {pregnancyInfo.weeksPregnant} <span className="text-2xl">({t('plus')} {pregnancyInfo.daysInCurrentWeek} {t('days')})</span>
-                  </div>
+                <div className="text-right px-6 py-3 flex items-center justify-end gap-3">
                   <Button 
                     variant="link" 
-                    className="text-blue-400 p-0 h-auto text-base font-medium hover:text-blue-300"
+                    className="text-blue-400 p-0 h-auto text-sm font-medium hover:text-blue-300"
                     onClick={() => setActiveTab('weekly')}
                   >
                     {t('weekDetails')}
                   </Button>
+                  <div className="text-2xl sm:text-3xl font-bold text-white" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.2)' }}>
+                    {pregnancyInfo.weeksPregnant} <span className="text-lg">({t('plus')} {pregnancyInfo.daysInCurrentWeek} {t('days')})</span>
+                  </div>
                 </div>
               </div>
 
@@ -803,15 +803,12 @@ const Index = () => {
                 <div className="bg-white/90 backdrop-blur-sm rounded-2xl px-6 py-3 shadow-md text-right">
                   <h3 className="text-lg font-medium text-gray-700">{t('monthPrefix')}</h3>
                 </div>
-                <div className="text-right px-6 py-3">
-                  <div className="text-5xl font-bold text-white mb-2" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.2)' }}>
-                    {t(`month${calculatePregnancyMonth(pregnancyInfo.weeksPregnant)}`)}
-                  </div>
+                <div className="text-right px-6 py-3 flex items-center justify-end gap-3">
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <Button 
                         variant="link" 
-                        className="text-blue-400 p-0 h-auto text-base font-medium hover:text-blue-300"
+                        className="text-blue-400 p-0 h-auto text-sm font-medium hover:text-blue-300"
                       >
                         {t('monthCalculation')}
                       </Button>
@@ -839,6 +836,9 @@ const Index = () => {
                       </AlertDialogFooter>
                     </AlertDialogContent>
                   </AlertDialog>
+                  <div className="text-2xl sm:text-3xl font-bold text-white" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.2)' }}>
+                    {t(`month${calculatePregnancyMonth(pregnancyInfo.weeksPregnant)}`)}
+                  </div>
                 </div>
               </div>
 
