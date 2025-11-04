@@ -758,12 +758,6 @@ const Index = () => {
                   <h3 className="text-lg font-medium text-gray-700">{t('expectedDueDate')}</h3>
                 </div>
                 <div className="text-right px-6 py-3 flex flex-row-reverse items-center justify-end gap-3">
-                  <div className="text-2xl sm:text-3xl font-bold text-white" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.2)' }}>
-                    {showMonthNumbers 
-                      ? format(pregnancyInfo.dueDate, "yyyy/MM/dd")
-                      : format(pregnancyInfo.dueDate, "yyyy/MM/dd")
-                    }
-                  </div>
                   <Button 
                     variant="link" 
                     className="text-blue-400 p-0 h-auto text-sm font-medium hover:text-blue-300"
@@ -776,6 +770,12 @@ const Index = () => {
                   >
                     {t('hijriCalendar')}
                   </Button>
+                  <div className="text-2xl sm:text-3xl font-bold text-white" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.2)' }}>
+                    {showMonthNumbers 
+                      ? format(pregnancyInfo.dueDate, "yyyy/MM/dd")
+                      : format(pregnancyInfo.dueDate, "yyyy/MM/dd")
+                    }
+                  </div>
                 </div>
               </div>
 
