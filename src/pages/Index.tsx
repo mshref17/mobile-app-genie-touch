@@ -785,9 +785,6 @@ const Index = () => {
                   <h3 className="text-lg font-medium text-gray-700">{t('pregnancyAge')}</h3>
                 </div>
                 <div className="text-right px-6 py-3 flex flex-row-reverse items-center justify-end gap-3">
-                  <div className="text-2xl sm:text-3xl font-bold text-white" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.2)' }}>
-                    {pregnancyInfo.weeksPregnant} <span className="text-lg">({t('plus')} {pregnancyInfo.daysInCurrentWeek} {t('days')})</span>
-                  </div>
                   <Button 
                     variant="link" 
                     className="text-blue-400 p-0 h-auto text-sm font-medium hover:text-blue-300"
@@ -795,6 +792,9 @@ const Index = () => {
                   >
                     {t('weekDetails')}
                   </Button>
+                  <div className="text-2xl sm:text-3xl font-bold text-white" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.2)' }}>
+                    {pregnancyInfo.weeksPregnant} <span className="text-lg">({t('plus')} {pregnancyInfo.daysInCurrentWeek} {t('days')})</span>
+                  </div>
                 </div>
               </div>
 
@@ -804,9 +804,6 @@ const Index = () => {
                   <h3 className="text-lg font-medium text-gray-700">{t('monthPrefix')}</h3>
                 </div>
                 <div className="text-right px-6 py-3 flex flex-row-reverse items-center justify-end gap-3">
-                  <div className="text-2xl sm:text-3xl font-bold text-white" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.2)' }}>
-                    {t(`month${calculatePregnancyMonth(pregnancyInfo.weeksPregnant)}`)}
-                  </div>
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <Button 
@@ -839,6 +836,9 @@ const Index = () => {
                       </AlertDialogFooter>
                     </AlertDialogContent>
                   </AlertDialog>
+                  <div className="text-2xl sm:text-3xl font-bold text-white" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.2)' }}>
+                    {t(`month${calculatePregnancyMonth(pregnancyInfo.weeksPregnant)}`)}
+                  </div>
                 </div>
               </div>
 
