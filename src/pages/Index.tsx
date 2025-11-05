@@ -705,7 +705,7 @@ const Index = () => {
           {activeTab === 'dashboard' && trackingMode === 'pregnant' && pregnancyInfo && (
             <>
               {/* Trimester Progress Bar */}
-              <div className="mb-4 text-right">
+              <div className="mb-4 mt-8 text-right">
                 <div className="flex items-center justify-between mb-2">
                   <div className="text-base font-medium text-gray-700">
                     {format(pregnancyInfo.dueDate, "d/M")}
