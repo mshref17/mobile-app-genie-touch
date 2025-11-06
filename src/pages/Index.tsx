@@ -851,16 +851,16 @@ const Index = () => {
                     <div className="pt-6 pb-2">
                       <div className="mb-6">
                         <div className="flex items-center gap-3 mb-4">
-                          <div className="flex-1 h-px bg-gradient-to-l from-pink-200 to-transparent"></div>
-                          <h3 className="text-lg font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
-                            {t('dailyTip')}
-                          </h3>
                           <div className="w-10 h-10 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg relative">
                             <Lightbulb className="w-5 h-5 text-white" />
                             <div className="absolute -top-1 w-5 h-5 bg-pink-500 rounded-full flex items-center justify-center -right-1">
                               <span className="text-white text-[10px] font-bold">{pregnancyInfo.totalDays}</span>
                             </div>
                           </div>
+                          <h3 className="text-lg font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
+                            {t('dailyTip')}
+                          </h3>
+                          <div className="flex-1 h-px bg-gradient-to-r from-pink-200 to-transparent"></div>
                         </div>
                         <p className="text-gray-700 leading-relaxed text-base font-medium italic mb-6">
                           "{dailyTip}"
