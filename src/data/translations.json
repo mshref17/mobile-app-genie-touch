@@ -175,7 +175,8 @@
     "postpartumMessage": "Did you know you can continue using this app to track your menstrual cycle after birth? Many women's periods return 6-8 weeks postpartum (or later if breastfeeding).",
     "continuePregnancy": "Keep Pregnancy Info",
     "switchToPeriodTracking": "Switch to Period Tracking",
-    "postpartumInfoNote": "You can always switch to period tracking mode later from Settings → New Start"
+    "postpartumInfoNote": "You can always switch to period tracking mode later from Settings → New Start",
+    "close": "Close"
   },
   "ar": {
     "resetApp": "إبدأ من جديد",
@@ -353,6 +354,7 @@
     "postpartumMessage": "هل تعلمين أنه يمكنك الاستمرار في استخدام هذا التطبيق لتتبع دورتك الشهرية بعد الولادة؟ تعود الدورة الشهرية لدى العديد من النساء بعد 6-8 أسابيع من الولادة (أو لاحقاً عند الرضاعة الطبيعية).",
     "continuePregnancy": "احتفظ بمعلومات الحمل",
     "switchToPeriodTracking": "التبديل إلى تتبع الدورة",
-    "postpartumInfoNote": "يمكنك دائماً التبديل إلى وضع تتبع الدورة لاحقاً من الإعدادات ← بداية جديدة"
+    "postpartumInfoNote": "يمكنك دائماً التبديل إلى وضع تتبع الدورة لاحقاً من الإعدادات ← بداية جديدة",
+    "close": "إغلاق"
   }
 }
