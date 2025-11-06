@@ -844,7 +844,7 @@ const Index = () => {
 
               {/* Daily Tip Dialog */}
               <Dialog open={isDailyTipOpen} onOpenChange={setIsDailyTipOpen}>
-                <DialogContent className="max-w-md left-[50%] -translate-x-1/2 mx-4 [&>button]:hidden">
+                <DialogContent className="max-w-md w-[calc(100%-2rem)] [&>button]:hidden">
                   <div className="relative">
                     <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 rounded-t-lg"></div>
                     
