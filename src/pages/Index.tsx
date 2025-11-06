@@ -844,40 +844,33 @@ const Index = () => {
 
               {/* Daily Tip Dialog */}
               <Dialog open={isDailyTipOpen} onOpenChange={setIsDailyTipOpen}>
-                <DialogContent className="max-w-md mx-6 [&>button]:hidden">
+                <DialogContent className="max-w-md left-[50%] -translate-x-1/2 mx-4 [&>button]:hidden">
                   <div className="relative">
                     <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 rounded-t-lg"></div>
                     
                     <div className="pt-6 pb-2">
-                      <div className="flex items-start gap-4">
-                        <div className="flex-shrink-0">
-                          <div className="relative">
-                            <div className="w-14 h-14 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg">
-                              <Lightbulb className="w-7 h-7 text-white" />
-                            </div>
-                            <div className="absolute -top-1 w-6 h-6 bg-pink-500 rounded-full flex items-center justify-center -right-1">
-                              <span className="text-white text-xs font-bold">{pregnancyInfo.totalDays}</span>
+                      <div className="mb-6">
+                        <div className="flex items-center gap-3 mb-4">
+                          <div className="w-10 h-10 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg relative">
+                            <Lightbulb className="w-5 h-5 text-white" />
+                            <div className="absolute -top-1 w-5 h-5 bg-pink-500 rounded-full flex items-center justify-center -right-1">
+                              <span className="text-white text-[10px] font-bold">{pregnancyInfo.totalDays}</span>
                             </div>
                           </div>
+                          <h3 className="text-lg font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
+                            {t('dailyTip')}
+                          </h3>
+                          <div className="flex-1 h-px bg-gradient-to-r from-pink-200 to-transparent"></div>
                         </div>
-                        
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 mb-4">
-                            <h3 className="text-lg font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
-                              {t('dailyTip')}
-                            </h3>
-                            <div className="flex-1 h-px bg-gradient-to-r from-pink-200 to-transparent"></div>
-                          </div>
-                          <p className="text-gray-700 leading-relaxed text-base font-medium italic mb-6">
-                            "{dailyTip}"
-                          </p>
-                          <Button 
-                            onClick={() => setIsDailyTipOpen(false)}
-                            className="w-full bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600"
-                          >
-                            {t('close') || 'Close'}
-                          </Button>
-                        </div>
+                        <p className="text-gray-700 leading-relaxed text-base font-medium italic mb-6">
+                          "{dailyTip}"
+                        </p>
+                        <Button 
+                          onClick={() => setIsDailyTipOpen(false)}
+                          className="w-full bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600"
+                        >
+                          {t('close') || 'Close'}
+                        </Button>
                       </div>
                     </div>
                   </div>
