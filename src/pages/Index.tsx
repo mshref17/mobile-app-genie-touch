@@ -7,7 +7,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Switch } from "@/components/ui/switch";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { CalendarIcon, Baby, Users, Heart, Settings, CalendarDays, Clock, Star, Gift, Info, Lightbulb } from "lucide-react";
+import { CalendarIcon, Baby, Users, Heart, Settings, CalendarDays, Clock, Star, Gift, Info, Lightbulb, Sun } from "lucide-react";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { format, addDays, differenceInDays, differenceInWeeks, subDays } from "date-fns";
 import { ar } from "date-fns/locale";
@@ -705,7 +705,10 @@ const Index = () => {
           {activeTab === 'dashboard' && trackingMode === 'pregnant' && pregnancyInfo && (
             <>
               {/* Hero Section with Daily Tip */}
-              <Card className="mb-6 bg-gradient-to-br from-pink-100 via-purple-100 to-indigo-100 shadow-lg border-0">
+              <Card className="mb-6 bg-gradient-to-br from-pink-100 via-purple-100 to-indigo-100 shadow-lg border-0 relative overflow-hidden">
+                <div className="absolute top-4 left-4 w-16 h-16 bg-gradient-to-br from-yellow-300 to-orange-400 rounded-full flex items-center justify-center shadow-lg">
+                  <Sun className="w-8 h-8 text-white" />
+                </div>
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between mb-6">
                     <div className="text-center flex-1">
