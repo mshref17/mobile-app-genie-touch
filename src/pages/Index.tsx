@@ -778,7 +778,7 @@ const Index = () => {
               </Card>
 
               {/* Days Remaining - Hero Card */}
-              <Card className="overflow-hidden border-none shadow-xl bg-gradient-to-br from-pink-500 via-purple-500 to-indigo-500 dark:from-pink-600 dark:via-purple-700 dark:to-indigo-800">
+              <Card className="overflow-hidden border-none shadow-xl bg-gradient-to-br from-pink-400 via-purple-400 to-indigo-400 dark:from-pink-500 dark:via-purple-500 dark:to-indigo-600">
                 <CardContent className="p-8 relative">
                   <Button
                     variant="ghost"
