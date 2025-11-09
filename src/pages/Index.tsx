@@ -778,7 +778,7 @@ const Index = () => {
               </Card>
 
               {/* Days Remaining - Hero Card */}
-              <Card className="overflow-hidden border-none shadow-xl bg-gradient-to-br from-rose-500 via-pink-500 to-fuchsia-500 dark:from-rose-600 dark:via-pink-700 dark:to-fuchsia-700">
+              <Card className="overflow-hidden border-none shadow-xl bg-white/80 dark:bg-card/90 backdrop-blur-sm border border-white/40">
                 <CardContent className="p-8 relative">
                   <Button
                     variant="ghost"
@@ -792,8 +792,8 @@ const Index = () => {
                     </div>
                   </Button>
                   <div className="text-right">
-                    <h3 className="text-lg font-semibold text-white/90 mb-2">{t('daysRemaining')}</h3>
-                    <div className="text-7xl sm:text-8xl leading-none font-bold text-white drop-shadow-lg">
+                    <h3 className="text-lg font-semibold text-foreground mb-2">{t('daysRemaining')}</h3>
+                    <div className="text-7xl sm:text-8xl leading-none font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent drop-shadow-lg">
                       {pregnancyInfo.daysRemaining}
                     </div>
                   </div>
