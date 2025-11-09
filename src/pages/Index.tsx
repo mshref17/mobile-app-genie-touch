@@ -693,11 +693,21 @@ const Index = () => {
           backgroundAttachment: 'scroll'
         }}
       >
-        {/* Gradient overlay matching old Android version */}
+        {/* Enhanced multi-layer gradient overlay for depth and color harmony */}
         <div 
           className="absolute inset-0 pointer-events-none"
           style={{
-            background: 'linear-gradient(to right, rgba(255, 255, 255, 0.55), rgba(215, 146, 248, 0.40))'
+            background: `
+              radial-gradient(circle at 20% 20%, rgba(255, 182, 193, 0.3) 0%, transparent 50%),
+              radial-gradient(circle at 80% 80%, rgba(221, 160, 221, 0.3) 0%, transparent 50%),
+              linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.65) 0%, 
+                rgba(255, 218, 224, 0.5) 25%,
+                rgba(230, 190, 255, 0.45) 50%,
+                rgba(215, 146, 248, 0.4) 75%,
+                rgba(200, 150, 255, 0.35) 100%
+              )
+            `
           }}
         ></div>
         <div className="container mx-auto p-4 max-w-4xl relative z-10">
