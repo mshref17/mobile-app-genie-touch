@@ -765,19 +765,20 @@ const Index = () => {
                       ? format(pregnancyInfo.dueDate, "yyyy/MM/dd")
                       : format(pregnancyInfo.dueDate, "yyyy/MM/dd")
                     }
+                    {' '}
+                    <Button 
+                      variant="link" 
+                      className="text-blue-500 p-0 h-auto text-sm hover:text-blue-600 inline"
+                      onClick={() => {
+                        toast({
+                          title: t('comingSoon'),
+                          description: t('hijriCalendarFeature')
+                        });
+                      }}
+                    >
+                      {t('hijriCalendar')} ←
+                    </Button>
                   </div>
-                  <Button 
-                    variant="link" 
-                    className="text-blue-500 p-0 h-auto text-sm hover:text-blue-600"
-                    onClick={() => {
-                      toast({
-                        title: t('comingSoon'),
-                        description: t('hijriCalendarFeature')
-                      });
-                    }}
-                  >
-                    {t('hijriCalendar')} ←
-                  </Button>
                 </CardContent>
               </Card>
 
@@ -792,14 +793,15 @@ const Index = () => {
                 <CardContent>
                   <div className="text-2xl font-bold text-purple-600 mb-2">
                     {pregnancyInfo.weeksPregnant} {t('weeks')} {t('plus')} {pregnancyInfo.daysInCurrentWeek} {t('days')}
+                    {' '}
+                    <Button 
+                      variant="link" 
+                      className="text-blue-500 p-0 h-auto text-sm hover:text-blue-600 inline"
+                      onClick={() => setActiveTab('weekly')}
+                    >
+                      {t('weekDetails')} ←
+                    </Button>
                   </div>
-                  <Button 
-                    variant="link" 
-                    className="text-blue-500 p-0 h-auto text-sm hover:text-blue-600"
-                    onClick={() => setActiveTab('weekly')}
-                  >
-                    {t('weekDetails')} ←
-                  </Button>
                 </CardContent>
               </Card>
 
@@ -814,39 +816,40 @@ const Index = () => {
                 <CardContent>
                   <div className="text-2xl font-bold text-indigo-600 mb-2">
                     {t(`month${calculatePregnancyMonth(pregnancyInfo.weeksPregnant)}`)}
+                    {' '}
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button 
+                          variant="link" 
+                          className="text-blue-500 p-0 h-auto text-sm hover:text-blue-600 inline"
+                        >
+                          {t('monthCalculation')} ←
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>{t('monthCalculationTitle')}</AlertDialogTitle>
+                          <AlertDialogDescription className="text-left space-y-2">
+                            <p>{t('monthCalculationDescription')}</p>
+                            <ul className="list-disc list-inside space-y-1 text-sm">
+                              <li>{t('monthWeeks1')}</li>
+                              <li>{t('monthWeeks2')}</li>
+                              <li>{t('monthWeeks3')}</li>
+                              <li>{t('monthWeeks4')}</li>
+                              <li>{t('monthWeeks5')}</li>
+                              <li>{t('monthWeeks6')}</li>
+                              <li>{t('monthWeeks7')}</li>
+                              <li>{t('monthWeeks8')}</li>
+                              <li>{t('monthWeeks9')}</li>
+                            </ul>
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogAction>{t('gotIt')}</AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   </div>
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <Button 
-                        variant="link" 
-                        className="text-blue-500 p-0 h-auto text-sm hover:text-blue-600"
-                      >
-                        {t('monthCalculation')} ←
-                      </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>{t('monthCalculationTitle')}</AlertDialogTitle>
-                        <AlertDialogDescription className="text-left space-y-2">
-                          <p>{t('monthCalculationDescription')}</p>
-                          <ul className="list-disc list-inside space-y-1 text-sm">
-                            <li>{t('monthWeeks1')}</li>
-                            <li>{t('monthWeeks2')}</li>
-                            <li>{t('monthWeeks3')}</li>
-                            <li>{t('monthWeeks4')}</li>
-                            <li>{t('monthWeeks5')}</li>
-                            <li>{t('monthWeeks6')}</li>
-                            <li>{t('monthWeeks7')}</li>
-                            <li>{t('monthWeeks8')}</li>
-                            <li>{t('monthWeeks9')}</li>
-                          </ul>
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogAction>{t('gotIt')}</AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
                 </CardContent>
               </Card>
 
