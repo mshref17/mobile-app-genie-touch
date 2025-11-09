@@ -314,7 +314,6 @@ const WeeklyInfo = ({ currentWeek, openBabyMessage = false, onBabyMessageClose }
             <ul className="space-y-2">
               {weekData.developments.map((item, index) => (
                 <li key={index} className="flex items-start">
-                  <div className="w-2 h-2 bg-pink-400 rounded-full mt-2 flex-shrink-0 mr-3"></div>
                   <span className="text-gray-600" dangerouslySetInnerHTML={{ __html: item }}></span>
                 </li>
               ))}
@@ -330,7 +329,6 @@ const WeeklyInfo = ({ currentWeek, openBabyMessage = false, onBabyMessageClose }
             <ul className="space-y-2">
               {weekData.momTips.map((tip, index) => (
                 <li key={index} className="flex items-start">
-                  <div className="w-2 h-2 bg-purple-400 rounded-full mt-2 flex-shrink-0 mr-3"></div>
                   <span className="text-gray-600" dangerouslySetInnerHTML={{ __html: tip }}></span>
                 </li>
               ))}
