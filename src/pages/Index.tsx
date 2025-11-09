@@ -731,7 +731,7 @@ const Index = () => {
 
               {/* Remaining Days Section */}
               <div className="mb-4">
-                <div className="bg-white/90 backdrop-blur-sm rounded-2xl px-6 py-3 shadow-md text-right">
+                <div className="bg-white/80 backdrop-blur-sm rounded-2xl px-6 py-3 shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-white/40 text-right">
                   <h3 className="text-lg font-medium text-gray-700">{t('daysRemaining')}</h3>
                 </div>
                 <div className="text-right px-6 py-4 relative">
@@ -754,7 +754,7 @@ const Index = () => {
 
               {/* Expected Due Date Section */}
               <div className="mb-4">
-                <div className="bg-white/90 backdrop-blur-sm rounded-2xl px-6 py-3 shadow-md text-right">
+                <div className="bg-white/80 backdrop-blur-sm rounded-2xl px-6 py-3 shadow-[0_4px_20px_rgb(0,0,0,0.08)] border border-white/60 text-right">
                   <h3 className="text-lg font-medium text-gray-700">{t('expectedDueDate')}</h3>
                 </div>
                 <div className="text-right px-6 py-3 flex flex-row-reverse items-center justify-end gap-3">
@@ -781,7 +781,7 @@ const Index = () => {
 
               {/* Pregnancy Age Section */}
               <div className="mb-4">
-                <div className="bg-white/90 backdrop-blur-sm rounded-2xl px-6 py-3 shadow-md text-right">
+                <div className="bg-white/80 backdrop-blur-sm rounded-2xl px-6 py-3 shadow-[0_4px_20px_rgb(0,0,0,0.08)] border border-white/60 text-right">
                   <h3 className="text-lg font-medium text-gray-700">{t('pregnancyAge')}</h3>
                 </div>
                 <div className="text-right px-6 py-3 flex flex-row-reverse items-center justify-end gap-3">
@@ -800,7 +800,7 @@ const Index = () => {
 
               {/* Current Month Section */}
               <div className="mb-4">
-                <div className="bg-white/90 backdrop-blur-sm rounded-2xl px-6 py-3 shadow-md text-right">
+                <div className="bg-white/80 backdrop-blur-sm rounded-2xl px-6 py-3 shadow-[0_4px_20px_rgb(0,0,0,0.08)] border border-white/60 text-right">
                   <h3 className="text-lg font-medium text-gray-700">{t('monthPrefix')}</h3>
                 </div>
                 <div className="text-right px-6 py-3 flex flex-row-reverse items-center justify-end gap-3">
@@ -883,7 +883,7 @@ const Index = () => {
         {activeTab === 'dashboard' && trackingMode === 'period' && periodInfo && (
           <>
             {/* Hero Section for Period Tracking */}
-            <div className="relative overflow-hidden bg-gradient-to-br from-pink-100 via-purple-100 to-indigo-100 rounded-3xl p-6 mb-6">
+            <div className="relative overflow-hidden bg-gradient-to-br from-pink-100/80 via-purple-100/80 to-indigo-100/80 backdrop-blur-sm rounded-3xl p-6 mb-6 shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-white/40">
               <div className="absolute top-0 right-0 w-32 h-32 bg-pink-200/30 rounded-full -translate-y-16 translate-x-16"></div>
               <div className="absolute bottom-0 left-0 w-24 h-24 bg-purple-200/30 rounded-full translate-y-12 -translate-x-12"></div>
               
@@ -915,7 +915,7 @@ const Index = () => {
 
             {/* Fertility Window Alert */}
             {periodInfo.isInFertileWindow && (
-              <Card className="mb-6 bg-gradient-to-br from-green-50 to-emerald-100 border-emerald-200">
+              <Card className="mb-6 bg-gradient-to-br from-green-50/80 to-emerald-100/80 backdrop-blur-sm border-emerald-300 shadow-[0_4px_20px_rgb(0,0,0,0.08)]">
                 <CardContent className="p-4">
                   <div className="flex items-start gap-3">
                     <div className="w-10 h-10 bg-emerald-500 rounded-full flex items-center justify-center flex-shrink-0">
@@ -931,7 +931,7 @@ const Index = () => {
             )}
 
             {/* Next Period Date */}
-            <Card className="mb-6 bg-white shadow-md">
+            <Card className="mb-6 bg-white/80 backdrop-blur-sm shadow-[0_4px_20px_rgb(0,0,0,0.08)] border border-white/60">
               <CardHeader className="pb-3">
                 <CardTitle className="flex items-center gap-2 text-lg">
                   <CalendarDays className="w-5 h-5 text-pink-600" />
@@ -979,7 +979,7 @@ const Index = () => {
 
             {/* Quick Stats Grid */}
             <div className="grid grid-cols-2 gap-4 mb-6">
-              <Card className="bg-gradient-to-br from-pink-50 to-rose-100 border-0 shadow-md">
+              <Card className="bg-gradient-to-br from-pink-50/80 to-rose-100/80 backdrop-blur-sm border border-pink-200/50 shadow-[0_4px_20px_rgb(0,0,0,0.08)]">
                 <CardContent className="p-4 text-center">
                   <div className="flex items-center justify-center mb-2">
                     <CalendarIcon className="w-6 h-6 text-pink-600" />
@@ -991,7 +991,7 @@ const Index = () => {
                 </CardContent>
               </Card>
 
-              <Card className="bg-gradient-to-br from-purple-50 to-violet-100 border-0 shadow-md">
+              <Card className="bg-gradient-to-br from-purple-50/80 to-violet-100/80 backdrop-blur-sm border border-purple-200/50 shadow-[0_4px_20px_rgb(0,0,0,0.08)]">
                 <CardContent className="p-4 text-center">
                   <div className="flex items-center justify-center mb-2">
                     <Clock className="w-6 h-6 text-purple-600" />
@@ -1005,7 +1005,7 @@ const Index = () => {
             </div>
 
             {/* Ovulation & Fertile Window Info */}
-            <Card className="mb-6 bg-white shadow-md">
+            <Card className="mb-6 bg-white/80 backdrop-blur-sm shadow-[0_4px_20px_rgb(0,0,0,0.08)] border border-white/60">
               <CardHeader className="pb-3">
                 <CardTitle className="flex items-center gap-2 text-lg">
                   <Heart className="w-5 h-5 text-rose-600" />
