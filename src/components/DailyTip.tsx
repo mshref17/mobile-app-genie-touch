@@ -63,7 +63,7 @@ const DailyTip = ({ currentDay }: DailyTipProps) => {
           <div className="flex items-start gap-4">
             <div className="flex-shrink-0">
               <div className="relative">
-                <div className="w-14 h-14 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg transform rotate-12 group-hover:rotate-0 transition-transform duration-300">
+                <div className="w-14 h-14 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg transform rotate-12 group-hover:rotate-0 transition-transform duration-300 animate-pulse">
                   <Lightbulb className="w-7 h-7 text-white" />
                 </div>
                 <div className="absolute -top-1 w-6 h-6 bg-pink-500 rounded-full flex items-center justify-center -right-1">
