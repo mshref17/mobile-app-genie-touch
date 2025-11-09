@@ -749,7 +749,7 @@ const Index = () => {
           {activeTab === 'dashboard' && trackingMode === 'pregnant' && pregnancyInfo && (
             <div className="space-y-4">
               {/* Trimester Progress Card */}
-              <Card className="overflow-hidden border-none shadow-lg bg-white/30 dark:bg-white/10 backdrop-blur-md border border-white/40">
+              <Card className="overflow-hidden border-none shadow-lg bg-pink-100/40 dark:bg-pink-900/20 backdrop-blur-md border border-pink-200/50 dark:border-pink-500/30">
                 <CardContent className="p-6">
                   <div className="text-right mb-4">
                     <div className="flex items-center justify-between mb-3">
@@ -803,7 +803,7 @@ const Index = () => {
               {/* Info Cards Grid */}
               <div className="grid gap-4">
                 {/* Expected Due Date Card */}
-                <Card className="overflow-hidden border-none shadow-lg bg-white/30 dark:bg-white/10 backdrop-blur-md border border-white/40 hover:shadow-xl transition-shadow">
+                <Card className="overflow-hidden border-none shadow-lg bg-pink-50/50 dark:bg-pink-900/15 backdrop-blur-md border border-pink-200/50 dark:border-pink-500/30 hover:shadow-xl transition-shadow">
                   <CardContent className="p-6">
                     <div className="flex items-start justify-between">
                       <div className="flex-1 text-right">
@@ -835,7 +835,7 @@ const Index = () => {
                 </Card>
 
                 {/* Pregnancy Age Card */}
-                <Card className="overflow-hidden border-none shadow-lg bg-white/30 dark:bg-white/10 backdrop-blur-md border border-white/40 hover:shadow-xl transition-shadow">
+                <Card className="overflow-hidden border-none shadow-lg bg-purple-50/50 dark:bg-purple-900/15 backdrop-blur-md border border-purple-200/50 dark:border-purple-500/30 hover:shadow-xl transition-shadow">
                   <CardContent className="p-6">
                     <div className="flex items-start justify-between">
                       <div className="flex-1 text-right">
@@ -859,7 +859,7 @@ const Index = () => {
                 </Card>
 
                 {/* Current Month Card */}
-                <Card className="overflow-hidden border-none shadow-lg bg-white/30 dark:bg-white/10 backdrop-blur-md border border-white/40 hover:shadow-xl transition-shadow">
+                <Card className="overflow-hidden border-none shadow-lg bg-indigo-50/50 dark:bg-indigo-900/15 backdrop-blur-md border border-indigo-200/50 dark:border-indigo-500/30 hover:shadow-xl transition-shadow">
                   <CardContent className="p-6">
                     <div className="flex items-start justify-between">
                       <div className="flex-1 text-right">
@@ -945,7 +945,7 @@ const Index = () => {
         {activeTab === 'dashboard' && trackingMode === 'period' && periodInfo && (
           <div className="space-y-4">
             {/* Hero Section for Period Tracking */}
-            <Card className="overflow-hidden border-none shadow-xl bg-gradient-to-br from-pink-400/80 via-purple-400/80 to-indigo-400/80 dark:from-pink-500/70 dark:via-purple-500/70 dark:to-indigo-600/70 backdrop-blur-lg">
+            <Card className="overflow-hidden border-none shadow-xl bg-gradient-to-br from-purple-400/80 via-violet-400/80 to-indigo-400/80 dark:from-purple-500/70 dark:via-violet-500/70 dark:to-indigo-600/70 backdrop-blur-lg">
               <CardContent className="p-8 relative">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16"></div>
                 <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full translate-y-12 -translate-x-12"></div>
@@ -995,7 +995,7 @@ const Index = () => {
             )}
 
             {/* Next Period Date Card */}
-            <Card className="overflow-hidden border-none shadow-lg bg-white/30 dark:bg-white/10 backdrop-blur-md border border-white/40 hover:shadow-xl transition-shadow">
+            <Card className="overflow-hidden border-none shadow-lg bg-purple-50/50 dark:bg-purple-900/15 backdrop-blur-md border border-purple-200/50 dark:border-purple-500/30 hover:shadow-xl transition-shadow">
               <CardContent className="p-6">
                 <div className="text-right mb-4">
                   <h3 className="text-base font-semibold text-foreground mb-3 flex items-center justify-end gap-2">
@@ -1043,7 +1043,7 @@ const Index = () => {
 
             {/* Quick Stats Grid */}
             <div className="grid grid-cols-2 gap-4">
-              <Card className="overflow-hidden border-none shadow-lg bg-white/30 dark:bg-white/10 backdrop-blur-md border border-white/40">
+              <Card className="overflow-hidden border-none shadow-lg bg-purple-50/50 dark:bg-purple-900/15 backdrop-blur-md border border-purple-200/50 dark:border-purple-500/30">
                 <CardContent className="p-6 text-center">
                   <div className="flex items-center justify-center mb-3">
                     <div className="w-12 h-12 bg-gradient-to-br from-pink-500 to-rose-500 rounded-full flex items-center justify-center shadow-md">
@@ -1057,7 +1057,7 @@ const Index = () => {
                 </CardContent>
               </Card>
 
-              <Card className="overflow-hidden border-none shadow-lg bg-white/30 dark:bg-white/10 backdrop-blur-md border border-white/40">
+              <Card className="overflow-hidden border-none shadow-lg bg-violet-50/50 dark:bg-violet-900/15 backdrop-blur-md border border-violet-200/50 dark:border-violet-500/30">
                 <CardContent className="p-6 text-center">
                   <div className="flex items-center justify-center mb-3">
                     <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-indigo-500 rounded-full flex items-center justify-center shadow-md">
@@ -1073,7 +1073,7 @@ const Index = () => {
             </div>
 
             {/* Ovulation & Fertile Window Info */}
-            <Card className="overflow-hidden border-none shadow-lg bg-white/30 dark:bg-white/10 backdrop-blur-md border border-white/40 hover:shadow-xl transition-shadow">
+            <Card className="overflow-hidden border-none shadow-lg bg-purple-50/50 dark:bg-purple-900/15 backdrop-blur-md border border-purple-200/50 dark:border-purple-500/30 hover:shadow-xl transition-shadow">
               <CardContent className="p-6">
                 <h3 className="text-base font-semibold text-foreground mb-4 flex items-center gap-2">
                   <Heart className="w-5 h-5 text-rose-500" />
