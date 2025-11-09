@@ -813,12 +813,12 @@ const Index = () => {
                         {t('monthCalculation')}
                       </Button>
                     </AlertDialogTrigger>
-                    <AlertDialogContent>
+                    <AlertDialogContent className={language === 'ar' ? 'text-right' : ''}>
                       <AlertDialogHeader>
-                        <AlertDialogTitle>{t('monthCalculationTitle')}</AlertDialogTitle>
-                        <AlertDialogDescription className="text-left space-y-2">
-                          <p>{t('monthCalculationDescription')}</p>
-                          <ul className="list-disc list-inside space-y-1 text-sm">
+                        <AlertDialogTitle className={language === 'ar' ? 'text-right' : ''}>{t('monthCalculationTitle')}</AlertDialogTitle>
+                        <AlertDialogDescription className={language === 'ar' ? 'text-right' : 'text-left'} dir="auto">
+                          <p className="space-y-2">{t('monthCalculationDescription')}</p>
+                          <ul className={`list-disc space-y-1 text-sm ${language === 'ar' ? 'list-inside text-right' : 'list-inside'}`}>
                             <li>{t('monthWeeks1')}</li>
                             <li>{t('monthWeeks2')}</li>
                             <li>{t('monthWeeks3')}</li>
