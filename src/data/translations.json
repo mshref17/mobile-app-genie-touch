@@ -176,7 +176,11 @@
     "continuePregnancy": "Keep Pregnancy Info",
     "switchToPeriodTracking": "Switch to Period Tracking",
     "postpartumInfoNote": "You can always switch to period tracking mode later from Settings → New Start",
-    "close": "Close"
+    "close": "Close",
+    "displaySettings": "Display Settings",
+    "darkMode": "Dark Mode",
+    "darkModeEnabled": "Dark Mode Enabled",
+    "darkModeDisabled": "Light Mode Enabled"
   },
   "ar": {
     "resetApp": "إبدأ من جديد",
@@ -355,6 +359,10 @@
     "continuePregnancy": "احتفظ بمعلومات الحمل",
     "switchToPeriodTracking": "التبديل إلى تتبع الدورة",
     "postpartumInfoNote": "يمكنك دائماً التبديل إلى وضع تتبع الدورة لاحقاً من الإعدادات ← بداية جديدة",
-    "close": "إغلاق"
+    "close": "إغلاق",
+    "displaySettings": "إعدادات العرض",
+    "darkMode": "الوضع الداكن",
+    "darkModeEnabled": "تم تفعيل الوضع الداكن",
+    "darkModeDisabled": "تم تفعيل الوضع الفاتح"
   }
 }
