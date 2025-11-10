@@ -25,6 +25,7 @@ import { WelcomeDialog } from "@/components/WelcomeDialog";
 import { NotificationService } from "@/lib/notifications";
 import { LocalNotifications, LocalNotificationSchema } from '@capacitor/local-notifications';
 import { Capacitor } from '@capacitor/core';
+import backgroundImage from "@/assets/newbgnine.jpg";
 
 
 const appLogo = "/app-icon.png";
@@ -721,7 +722,36 @@ const Index = () => {
       </div>
 
       {/* Main Content */}
-      <div className="min-h-screen pt-[160px] pb-4 bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50 dark:from-purple-950 dark:via-indigo-950 dark:to-pink-950">
+      <div 
+        className="min-h-screen pt-[160px] pb-4"
+        style={trackingMode === 'pregnant' ? {
+          backgroundImage: `url(${backgroundImage})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundAttachment: 'scroll'
+        } : {}}
+      >
+        {/* Gradient overlay for pregnancy mode */}
+        {trackingMode === 'pregnant' && (
+          <>
+            <div 
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background: 'linear-gradient(to right, rgba(255, 255, 255, 0.55), rgba(215, 146, 248, 0.40))'
+              }}
+            ></div>
+            <div 
+              className="absolute inset-0 pointer-events-none dark:block hidden"
+              style={{
+                background: 'linear-gradient(to right, rgba(30, 20, 40, 0.85), rgba(60, 30, 80, 0.85))'
+              }}
+            ></div>
+          </>
+        )}
+        {/* Solid gradient background for period mode */}
+        {trackingMode === 'period' && (
+          <div className="absolute inset-0 bg-gradient-to-br from-rose-50 via-pink-50 to-purple-50 dark:from-rose-950 dark:via-pink-950 dark:to-purple-950"></div>
+        )}
         <div className="container mx-auto p-4 max-w-4xl relative z-10">
           {/* Render content based on activeTab */}
           {activeTab === 'dashboard' && trackingMode === 'pregnant' && pregnancyInfo && (
