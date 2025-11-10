@@ -995,14 +995,14 @@ const Index = () => {
             )}
 
             {/* Next Period Date Card */}
-            <Card className="overflow-hidden border-none shadow-lg bg-white/80 dark:bg-card/90 backdrop-blur-sm border border-white/40 hover:shadow-xl transition-shadow">
+            <Card className="overflow-hidden border-none shadow-lg bg-gradient-to-br from-rose-400 to-pink-500 dark:from-rose-500 dark:to-pink-600 hover:shadow-xl transition-shadow">
               <CardContent className="p-6">
                 <div className="text-right mb-4">
-                  <h3 className="text-base font-semibold text-foreground mb-3 flex items-center justify-end gap-2">
-                    <CalendarDays className="w-5 h-5 text-primary" />
+                  <h3 className="text-base font-semibold text-white mb-3 flex items-center justify-end gap-2">
+                    <CalendarDays className="w-5 h-5 text-white/90" />
                     {t('nextPeriod')}
                   </h3>
-                  <div className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent mb-4">
+                  <div className="text-3xl sm:text-4xl font-bold text-white mb-4">
                     {showMonthNumbers 
                       ? format(periodInfo.nextPeriodDate, "d/M/yyyy")
                       : format(periodInfo.nextPeriodDate, "PPP", { locale: ar })
@@ -1011,7 +1011,7 @@ const Index = () => {
                 </div>
                 <Popover open={isPeriodDatePickerOpen} onOpenChange={setIsPeriodDatePickerOpen}>
                   <PopoverTrigger asChild>
-                    <Button className="w-full bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 shadow-md">
+                    <Button className="w-full bg-white text-rose-600 hover:bg-white/90 shadow-md font-semibold">
                       <CalendarIcon className="mr-2 h-4 w-4" />
                       {periodInfo.isInPeriod ? t('markPeriodEnded') : t('markPeriodStarted')}
                     </Button>
