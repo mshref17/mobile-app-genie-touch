@@ -575,7 +575,7 @@ const Index = () => {
         <WelcomeDialog onComplete={() => setShowWelcomeDialog(false)} />
       )}
       {/* Fixed App Header Bar */}
-      <div className="fixed top-0 left-0 right-0 z-50 safe-area-top bg-gradient-to-r from-pink-500/95 via-purple-500/95 to-indigo-500/95 dark:from-pink-600/95 dark:via-purple-700/95 dark:to-indigo-800/95 backdrop-blur-md shadow-lg">
+      <div className="fixed top-0 left-0 right-0 z-50 safe-area-top bg-gradient-to-r from-pink-400/90 via-purple-400/90 to-indigo-400/90 dark:from-pink-500/85 dark:via-purple-600/85 dark:to-indigo-700/85 backdrop-blur-md shadow-lg">
         {/* Header with logo and settings */}
         <div className="border-b border-white/20">
           <div className="container mx-auto px-4 py-2 max-w-4xl">
@@ -709,8 +709,8 @@ const Index = () => {
         </div>
         
         {/* AdMob Banner Placeholder */}
-        <div className="bg-white/10 border-b border-white/20 flex items-center justify-center h-[50px]">
-          <span className="text-xs text-white/70">AdMob Banner</span>
+        <div className="bg-white/30 dark:bg-white/10 border-b border-white/30 flex items-center justify-center h-[50px]">
+          <span className="text-xs text-white/90 dark:text-white/70">AdMob Banner</span>
         </div>
         
         {/* Top Navigation */}
