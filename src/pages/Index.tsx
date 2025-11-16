@@ -124,6 +124,16 @@ const Index = () => {
     }
   }, []);
 
+  // Initialize AdSense ads
+  useEffect(() => {
+    try {
+      // @ts-ignore
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+    } catch (err) {
+      console.error('AdSense error:', err);
+    }
+  }, []);
+
   const handleDateSubmit = () => {
     // Cancel all previous notifications when switching modes
     NotificationService.cancelAllNotifications();
@@ -708,9 +718,14 @@ const Index = () => {
           </div>
         </div>
         
-        {/* AdMob Banner Placeholder */}
-        <div className="bg-white/30 dark:bg-white/10 border-b border-white/30 flex items-center justify-center h-[50px]">
-          <span className="text-xs text-white/90 dark:text-white/70">AdMob Banner</span>
+        {/* AdMob Banner */}
+        <div className="bg-white/30 dark:bg-white/10 border-b border-white/30 flex items-center justify-center min-h-[50px] overflow-hidden">
+          <ins className="adsbygoogle"
+               style={{ display: 'block' }}
+               data-ad-client="ca-app-pub-3940256099942544"
+               data-ad-slot="6300978111"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
         </div>
         
         {/* Top Navigation */}
