@@ -680,7 +680,7 @@ const Community = () => {
         <div className="flex items-center justify-between">
           <h3 className="text-xl font-semibold text-pink-800">{t("communityQuestions")}</h3>
           <div className="flex items-center gap-2">
-            <Badge variant="outline" className="text-purple-600 border-purple-200">
+            <Badge variant="outline" className="hidden text-purple-600 border-purple-200">
               {React.createElement(algorithms[currentAlgorithm].icon, { className: "w-3 h-3 mr-1" })}
               {algorithms[currentAlgorithm].name}
             </Badge>
