@@ -728,26 +728,31 @@ const Index = () => {
           {activeTab === 'dashboard' && trackingMode === 'pregnant' && pregnancyInfo && (
             <div className="space-y-4">
               {/* Top Progress Card - Similar to reference */}
-              <Card className="overflow-hidden border-none shadow-xl bg-gradient-to-br from-violet-100 via-purple-100 to-fuchsia-100 dark:from-violet-900/30 dark:via-purple-900/30 dark:to-fuchsia-900/30">
-                <CardContent className="p-6">
-                  <div className="text-center mb-4">
-                    <p className="text-lg text-muted-foreground">
-                      {pregnancyInfo.daysRemaining} {t('daysRemaining')}
-                    </p>
-                  </div>
+              <Card className="overflow-hidden border-none shadow-xl bg-gradient-to-br from-violet-500 via-purple-500 to-fuchsia-500 dark:from-violet-600 dark:via-purple-700 dark:to-fuchsia-700">
+                <CardContent className="p-8 relative">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16"></div>
+                  <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full translate-y-12 -translate-x-12"></div>
                   
-                  {/* Progress Bar */}
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-center">
-                      <span className="text-2xl font-bold text-foreground">
-                        {Math.round((pregnancyInfo.weeksPregnant / 40) * 100)}%
-                      </span>
+                  <div className="relative z-10">
+                    <div className="text-center mb-4">
+                      <p className="text-white/90 text-xl font-medium">
+                        {pregnancyInfo.daysRemaining} {t('daysRemaining')}
+                      </p>
                     </div>
-                    <div className="h-3 bg-muted/30 rounded-full overflow-hidden">
-                      <div 
-                        className="h-full bg-gradient-to-r from-violet-500 via-purple-500 to-fuchsia-500 rounded-full transition-all duration-1000"
-                        style={{ width: `${Math.min((pregnancyInfo.weeksPregnant / 40) * 100, 100)}%` }}
-                      ></div>
+                    
+                    {/* Progress Bar */}
+                    <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-4 border border-white/30">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-2xl font-bold text-white">
+                          {Math.round((pregnancyInfo.weeksPregnant / 40) * 100)}%
+                        </span>
+                      </div>
+                      <div className="h-3 bg-white/30 rounded-full overflow-hidden">
+                        <div 
+                          className="h-full bg-gradient-to-r from-amber-400 to-rose-400 rounded-full transition-all duration-1000 shadow-lg"
+                          style={{ width: `${Math.min((pregnancyInfo.weeksPregnant / 40) * 100, 100)}%` }}
+                        ></div>
+                      </div>
                     </div>
                   </div>
                 </CardContent>
