@@ -812,79 +812,27 @@ const Index = () => {
                 </CardContent>
               </Card>
 
-              {/* Bottom Summary Cards - Similar to period/cycle length cards */}
-              <div className="grid grid-cols-2 gap-4">
-                {/* Trimester Card */}
-                <Card className="overflow-hidden border-none shadow-lg bg-violet-50 dark:bg-violet-900/20">
-                  <CardContent className="p-6 text-center">
-                    <div className="w-12 h-12 rounded-full bg-violet-100 dark:bg-violet-900/40 flex items-center justify-center mx-auto mb-3">
-                      <Star className="w-6 h-6 text-violet-600 dark:text-violet-400" />
+              {/* Daily Tip Card - Always visible */}
+              <Card className="overflow-hidden border-none shadow-xl bg-card">
+                <CardContent className="p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="w-14 h-14 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg flex-shrink-0 relative">
+                      <Lightbulb className="w-7 h-7 text-white" />
+                      <div className="absolute -top-1 -right-1 w-6 h-6 bg-pink-500 rounded-full flex items-center justify-center shadow-md">
+                        <span className="text-white text-xs font-bold">{pregnancyInfo.totalDays}</span>
+                      </div>
                     </div>
-                    <p className="text-2xl font-bold text-foreground mb-1">
-                      {pregnancyInfo.weeksPregnant <= 12 ? '1' : pregnancyInfo.weeksPregnant <= 26 ? '2' : '3'}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      {pregnancyInfo.weeksPregnant <= 12 ? t('firstTrimester') : pregnancyInfo.weeksPregnant <= 26 ? t('secondTrimester') : t('thirdTrimester')}
-                    </p>
-                  </CardContent>
-                </Card>
-
-                {/* Daily Tip Card */}
-                <Card className="overflow-hidden border-none shadow-lg bg-pink-50 dark:bg-pink-900/20">
-                  <CardContent className="p-6 text-center">
-                    <Button
-                      variant="ghost"
-                      className="w-full h-full p-0 hover:bg-transparent"
-                      onClick={() => setIsDailyTipOpen(true)}
-                    >
-                      <div>
-                        <div className="w-12 h-12 rounded-full bg-amber-100 dark:bg-amber-900/40 flex items-center justify-center mx-auto mb-3 relative">
-                          <Lightbulb className="w-6 h-6 text-amber-600 dark:text-amber-400" />
-                          <div className="absolute -top-1 -right-1 w-3 h-3 bg-rose-500 rounded-full animate-pulse"></div>
-                        </div>
-                        <p className="text-sm text-muted-foreground">
-                          {t('dailyTip')}
-                        </p>
-                      </div>
-                    </Button>
-                  </CardContent>
-                </Card>
-              </div>
-
-              {/* Daily Tip Dialog */}
-              <Dialog open={isDailyTipOpen} onOpenChange={setIsDailyTipOpen}>
-                <DialogContent className="max-w-md w-[calc(100%-2rem)] [&>button]:hidden">
-                  <div className="relative">
-                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 rounded-t-lg"></div>
-                    
-                    <div className="pt-6 pb-2">
-                      <div className="mb-6">
-                        <div className="flex items-center gap-3 mb-4">
-                          <div className="w-10 h-10 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg relative">
-                            <Lightbulb className="w-5 h-5 text-white" />
-                            <div className="absolute -top-1 w-5 h-5 bg-pink-500 rounded-full flex items-center justify-center -right-1">
-                              <span className="text-white text-[10px] font-bold">{pregnancyInfo.totalDays}</span>
-                            </div>
-                          </div>
-                          <h3 className="text-lg font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
-                            {t('dailyTip')}
-                          </h3>
-                          <div className="flex-1 h-px bg-gradient-to-r from-pink-200 to-transparent"></div>
-                        </div>
-                        <p className="text-gray-700 leading-relaxed text-base font-medium italic mb-6">
-                          "{dailyTip}"
-                        </p>
-                        <Button 
-                          onClick={() => setIsDailyTipOpen(false)}
-                          className="w-full bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600"
-                        >
-                          {t('close') || 'Close'}
-                        </Button>
-                      </div>
+                    <div className="flex-1">
+                      <h3 className="text-lg font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent mb-3">
+                        {t('dailyTip')}
+                      </h3>
+                      <p className="text-foreground leading-relaxed text-base italic">
+                        "{dailyTip}"
+                      </p>
                     </div>
                   </div>
-                </DialogContent>
-              </Dialog>
+                </CardContent>
+              </Card>
             </div>
           )}
 
