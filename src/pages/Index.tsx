@@ -727,162 +727,118 @@ const Index = () => {
           {/* Render content based on activeTab */}
           {activeTab === 'dashboard' && trackingMode === 'pregnant' && pregnancyInfo && (
             <div className="space-y-4">
-              {/* Trimester Progress Card */}
-              <Card className="overflow-hidden border-none shadow-xl bg-gradient-to-br from-violet-500 via-purple-500 to-fuchsia-500 dark:from-violet-600 dark:via-purple-700 dark:to-fuchsia-700">
-                <CardContent className="p-8 relative">
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16"></div>
-                  <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full translate-y-12 -translate-x-12"></div>
+              {/* Top Progress Card - Similar to reference */}
+              <Card className="overflow-hidden border-none shadow-xl bg-gradient-to-br from-violet-100 via-purple-100 to-fuchsia-100 dark:from-violet-900/30 dark:via-purple-900/30 dark:to-fuchsia-900/30">
+                <CardContent className="p-6">
+                  <div className="text-center mb-4">
+                    <p className="text-lg text-muted-foreground">
+                      {pregnancyInfo.daysRemaining} {t('daysRemaining')}
+                    </p>
+                  </div>
                   
-                  <div className="relative z-10">
-                    
-                    {/* Progress Visualization */}
-                    <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-4 border border-white/30">
-                      <div className="flex items-center justify-between mb-3 text-sm text-white/90">
-                        <span>{format(pregnancyInfo.dueDate, "d/M")}</span>
-                        <span className="font-bold">{Math.round((pregnancyInfo.weeksPregnant / 40) * 100)}%</span>
-                        <span>{format(lastPeriodDate || new Date(), "d/M")}</span>
-                      </div>
-                      
-                      <div className="h-3 bg-white/30 rounded-full overflow-hidden mb-3">
-                        <div 
-                          className="h-full bg-gradient-to-r from-amber-400 via-rose-400 to-pink-300 rounded-full transition-all duration-1000 shadow-lg"
-                          style={{ width: `${Math.min((pregnancyInfo.weeksPregnant / 40) * 100, 100)}%` }}
-                        ></div>
-                      </div>
-                      
-                      <div className="flex justify-between text-xs font-medium text-white/80">
-                        <span>{t('thirdTrimester')}</span>
-                        <span>{t('secondTrimester')}</span>
-                        <span>{t('firstTrimester')}</span>
-                      </div>
+                  {/* Progress Bar */}
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span className="text-2xl font-bold text-foreground">
+                        {Math.round((pregnancyInfo.weeksPregnant / 40) * 100)}%
+                      </span>
+                    </div>
+                    <div className="h-3 bg-muted/30 rounded-full overflow-hidden">
+                      <div 
+                        className="h-full bg-gradient-to-r from-violet-500 via-purple-500 to-fuchsia-500 rounded-full transition-all duration-1000"
+                        style={{ width: `${Math.min((pregnancyInfo.weeksPregnant / 40) * 100, 100)}%` }}
+                      ></div>
                     </div>
                   </div>
                 </CardContent>
               </Card>
 
-              {/* Days Remaining - Hero Card */}
-              <Card className="overflow-hidden border-none shadow-xl bg-white/80 dark:bg-card/90 backdrop-blur-sm border border-white/40">
-                <CardContent className="p-8 relative">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="absolute left-4 top-4 p-0 h-auto hover:bg-white/20 rounded-xl"
-                    onClick={() => setIsDailyTipOpen(true)}
-                  >
-                    <div className="w-14 h-14 bg-amber-400 rounded-xl flex items-center justify-center shadow-lg relative hover:scale-105 transition-transform">
-                      <Lightbulb className="w-7 h-7 text-amber-900" />
-                      <div className="absolute -top-1 -right-1 w-4 h-4 bg-rose-500 rounded-full animate-pulse"></div>
+              {/* Main Info Card - Similar to period mode info card */}
+              <Card className="overflow-hidden border-none shadow-lg bg-card">
+                <CardContent className="p-6 space-y-6">
+                  {/* Expected Due Date */}
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-full bg-pink-100 dark:bg-pink-900/30 flex items-center justify-center flex-shrink-0">
+                      <CalendarDays className="w-6 h-6 text-pink-600 dark:text-pink-400" />
                     </div>
-                  </Button>
-                  <div className="text-right">
-                    <h3 className="text-lg font-semibold text-foreground mb-2">{t('daysRemaining')}</h3>
-                    <div className="text-7xl sm:text-8xl leading-none font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent drop-shadow-lg">
-                      {pregnancyInfo.daysRemaining}
+                    <div className="flex-1 text-right">
+                      <p className="text-sm text-muted-foreground mb-1">{t('expectedDueDate')}</p>
+                      <p className="text-xl font-semibold text-foreground">
+                        {showMonthNumbers 
+                          ? format(pregnancyInfo.dueDate, "dd MMM yyyy", { locale: language === 'ar' ? ar : undefined })
+                          : format(pregnancyInfo.dueDate, "dd MMM yyyy", { locale: language === 'ar' ? ar : undefined })
+                        }
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="border-t border-border"></div>
+
+                  {/* Pregnancy Age */}
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center flex-shrink-0">
+                      <Clock className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+                    </div>
+                    <div className="flex-1 text-right">
+                      <p className="text-sm text-muted-foreground mb-1">{t('pregnancyAge')}</p>
+                      <p className="text-xl font-semibold text-foreground">
+                        {pregnancyInfo.weeksPregnant} {t('weeks')} + {pregnancyInfo.daysInCurrentWeek} {t('days')}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="border-t border-border"></div>
+
+                  {/* Current Month */}
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center flex-shrink-0">
+                      <Baby className="w-6 h-6 text-green-600 dark:text-green-400" />
+                    </div>
+                    <div className="flex-1 text-right">
+                      <p className="text-sm text-muted-foreground mb-1">{t('currentMonth')}</p>
+                      <p className="text-xl font-semibold text-foreground">
+                        {t(`month${calculatePregnancyMonth(pregnancyInfo.weeksPregnant)}`)}
+                      </p>
                     </div>
                   </div>
                 </CardContent>
               </Card>
 
-              {/* Info Cards Grid */}
-              <div className="grid gap-4">
-                {/* Expected Due Date Card */}
-                <Card className="overflow-hidden border-none shadow-lg bg-white/80 dark:bg-card/90 backdrop-blur-sm border border-white/40 hover:shadow-xl transition-shadow">
-                  <CardContent className="p-6">
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1 text-right">
-                        <h3 className="text-base font-semibold text-foreground mb-3 flex items-center justify-end gap-2">
-                          <CalendarDays className="w-5 h-5 text-primary" />
-                          {t('expectedDueDate')}
-                        </h3>
-                        <div className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
-                          {showMonthNumbers 
-                            ? format(pregnancyInfo.dueDate, "yyyy/MM/dd")
-                            : format(pregnancyInfo.dueDate, "yyyy/MM/dd")
-                          }
-                        </div>
-                        <Button 
-                          variant="link" 
-                          className="text-primary p-0 h-auto text-sm font-medium mt-2 hover:text-accent"
-                          onClick={() => {
-                            toast({
-                              title: t('comingSoon'),
-                              description: t('hijriCalendarFeature')
-                            });
-                          }}
-                        >
-                          {t('hijriCalendar')}
-                        </Button>
-                      </div>
+              {/* Bottom Summary Cards - Similar to period/cycle length cards */}
+              <div className="grid grid-cols-2 gap-4">
+                {/* Trimester Card */}
+                <Card className="overflow-hidden border-none shadow-lg bg-violet-50 dark:bg-violet-900/20">
+                  <CardContent className="p-6 text-center">
+                    <div className="w-12 h-12 rounded-full bg-violet-100 dark:bg-violet-900/40 flex items-center justify-center mx-auto mb-3">
+                      <Star className="w-6 h-6 text-violet-600 dark:text-violet-400" />
                     </div>
+                    <p className="text-2xl font-bold text-foreground mb-1">
+                      {pregnancyInfo.weeksPregnant <= 12 ? '1' : pregnancyInfo.weeksPregnant <= 26 ? '2' : '3'}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      {pregnancyInfo.weeksPregnant <= 12 ? t('firstTrimester') : pregnancyInfo.weeksPregnant <= 26 ? t('secondTrimester') : t('thirdTrimester')}
+                    </p>
                   </CardContent>
                 </Card>
 
-                {/* Pregnancy Age Card */}
-                <Card className="overflow-hidden border-none shadow-lg bg-white/80 dark:bg-card/90 backdrop-blur-sm border border-white/40 hover:shadow-xl transition-shadow">
-                  <CardContent className="p-6">
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1 text-right">
-                        <h3 className="text-base font-semibold text-foreground mb-3 flex items-center justify-end gap-2">
-                          <Clock className="w-5 h-5 text-secondary" />
-                          {t('pregnancyAge')}
-                        </h3>
-                        <div className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
-                          {pregnancyInfo.weeksPregnant} <span className="text-xl">({t('plus')} {pregnancyInfo.daysInCurrentWeek} {t('days')})</span>
+                {/* Daily Tip Card */}
+                <Card className="overflow-hidden border-none shadow-lg bg-pink-50 dark:bg-pink-900/20">
+                  <CardContent className="p-6 text-center">
+                    <Button
+                      variant="ghost"
+                      className="w-full h-full p-0 hover:bg-transparent"
+                      onClick={() => setIsDailyTipOpen(true)}
+                    >
+                      <div>
+                        <div className="w-12 h-12 rounded-full bg-amber-100 dark:bg-amber-900/40 flex items-center justify-center mx-auto mb-3 relative">
+                          <Lightbulb className="w-6 h-6 text-amber-600 dark:text-amber-400" />
+                          <div className="absolute -top-1 -right-1 w-3 h-3 bg-rose-500 rounded-full animate-pulse"></div>
                         </div>
-                        <Button 
-                          variant="link" 
-                          className="text-secondary p-0 h-auto text-sm font-medium mt-2 hover:text-accent"
-                          onClick={() => setActiveTab('weekly')}
-                        >
-                          {t('weekDetails')}
-                        </Button>
+                        <p className="text-sm text-muted-foreground">
+                          {t('dailyTip')}
+                        </p>
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* Current Month Card */}
-                <Card className="overflow-hidden border-none shadow-lg bg-white/80 dark:bg-card/90 backdrop-blur-sm border border-white/40 hover:shadow-xl transition-shadow">
-                  <CardContent className="p-6">
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1 text-right">
-                        <div className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                          {t(`month${calculatePregnancyMonth(pregnancyInfo.weeksPregnant)}`)}
-                        </div>
-                        <AlertDialog>
-                          <AlertDialogTrigger asChild>
-                            <Button 
-                              variant="link" 
-                              className="text-accent p-0 h-auto text-sm font-medium mt-2 hover:text-primary"
-                            >
-                              {t('monthCalculation')}
-                            </Button>
-                          </AlertDialogTrigger>
-                          <AlertDialogContent className={language === 'ar' ? 'text-right' : ''}>
-                            <AlertDialogHeader>
-                              <AlertDialogTitle className={language === 'ar' ? 'text-right' : ''}>{t('monthCalculationTitle')}</AlertDialogTitle>
-                              <AlertDialogDescription className={language === 'ar' ? 'text-right' : 'text-left'} dir="auto">
-                                <p className="space-y-2">{t('monthCalculationDescription')}</p>
-                                <ul className={`list-disc space-y-1 text-sm ${language === 'ar' ? 'list-inside text-right' : 'list-inside'}`}>
-                                  <li>{t('monthWeeks1')}</li>
-                                  <li>{t('monthWeeks2')}</li>
-                                  <li>{t('monthWeeks3')}</li>
-                                  <li>{t('monthWeeks4')}</li>
-                                  <li>{t('monthWeeks5')}</li>
-                                  <li>{t('monthWeeks6')}</li>
-                                  <li>{t('monthWeeks7')}</li>
-                                  <li>{t('monthWeeks8')}</li>
-                                  <li>{t('monthWeeks9')}</li>
-                                </ul>
-                              </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                              <AlertDialogAction>{t('gotIt')}</AlertDialogAction>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
-                      </div>
-                    </div>
+                    </Button>
                   </CardContent>
                 </Card>
               </div>
