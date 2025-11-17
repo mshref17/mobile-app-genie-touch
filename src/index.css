@@ -29,13 +29,13 @@ All colors MUST be HSL.
     --primary: 340 82% 52%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 270 95% 75%;
+    --secondary: 220 10% 70%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 320 20% 97%;
-    --muted-foreground: 330 15% 50%;
+    --muted: 220 10% 97%;
+    --muted-foreground: 220 10% 50%;
 
-    --accent: 280 100% 70%;
+    --accent: 220 15% 65%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
@@ -48,10 +48,10 @@ All colors MUST be HSL.
     --radius: 1rem;
     
     /* Custom gradient colors */
-    --gradient-primary: linear-gradient(135deg, hsl(340, 82%, 52%), hsl(270, 95%, 75%));
-    --gradient-card: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 240, 250, 0.95));
+    --gradient-primary: linear-gradient(135deg, hsl(340, 82%, 52%), hsl(220, 15%, 70%));
+    --gradient-card: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(245, 247, 250, 0.95));
     --shadow-elegant: 0 10px 30px -10px hsl(340 82% 52% / 0.3);
-    --shadow-soft: 0 4px 20px rgba(236, 72, 153, 0.15);
+    --shadow-soft: 0 4px 20px rgba(180, 190, 200, 0.15);
 
     --sidebar-background: 0 0% 98%;
 
@@ -83,13 +83,13 @@ All colors MUST be HSL.
     --primary: 340 82% 62%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 270 95% 75%;
+    --secondary: 220 10% 40%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 280 20% 20%;
-    --muted-foreground: 320 15% 65%;
+    --muted: 220 10% 20%;
+    --muted-foreground: 220 10% 65%;
 
-    --accent: 280 100% 70%;
+    --accent: 220 15% 45%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
@@ -100,10 +100,10 @@ All colors MUST be HSL.
     --ring: 340 82% 62%;
 
     /* Dark mode gradient colors */
-    --gradient-primary: linear-gradient(135deg, hsl(340, 82%, 62%), hsl(270, 95%, 75%));
-    --gradient-card: linear-gradient(135deg, rgba(30, 20, 40, 0.95), rgba(40, 20, 50, 0.95));
+    --gradient-primary: linear-gradient(135deg, hsl(340, 82%, 62%), hsl(220, 15%, 50%));
+    --gradient-card: linear-gradient(135deg, rgba(30, 30, 40, 0.95), rgba(40, 40, 50, 0.95));
     --shadow-elegant: 0 10px 40px -10px hsl(340 82% 52% / 0.5);
-    --shadow-soft: 0 4px 30px rgba(236, 72, 153, 0.25);
+    --shadow-soft: 0 4px 30px rgba(150, 160, 180, 0.25);
   }
 }
 
