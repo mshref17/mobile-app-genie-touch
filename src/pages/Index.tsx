@@ -734,11 +734,6 @@ const Index = () => {
                   <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full translate-y-12 -translate-x-12"></div>
                   
                   <div className="relative z-10">
-                    <div className="text-center mb-6">
-                      <p className="text-white/90 text-xl font-medium">
-                        {t('pregnancyProgress')}
-                      </p>
-                    </div>
                     
                     {/* Progress Visualization */}
                     <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-4 border border-white/30">
