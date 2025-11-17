@@ -760,7 +760,7 @@ const Index = () => {
                           {language === 'ar' ? 'أسبوع' : 'Week'} 1
                         </span>
                         <span className="text-pink-600 dark:text-pink-400 font-bold">
-                          {language === 'ar' ? 'احملت' : 'Pregnant'} {Math.round((pregnancyInfo.weeksPregnant / 40) * 100)}%
+                          {Math.round((pregnancyInfo.weeksPregnant / 40) * 100)}%
                         </span>
                         <span className="text-gray-600 dark:text-gray-400">
                           {language === 'ar' ? 'أسبوع' : 'Week'} 40
