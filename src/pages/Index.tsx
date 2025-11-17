@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,7 +8,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Switch } from "@/components/ui/switch";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { CalendarIcon, Baby, Users, Heart, Settings, CalendarDays, Clock, Star, Gift, Info, Lightbulb } from "lucide-react";
+import { CalendarIcon, Baby, Users, Heart, Settings, CalendarDays, Clock, Star, Gift, Info, Lightbulb, ChevronDown } from "lucide-react";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { format, addDays, differenceInDays, differenceInWeeks, subDays } from "date-fns";
 import { ar } from "date-fns/locale";
@@ -52,6 +53,7 @@ const Index = () => {
   const [isDailyTipOpen, setIsDailyTipOpen] = useState(false);
   const [dailyTip, setDailyTip] = useState<string>('');
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isDailyTipCollapsed, setIsDailyTipCollapsed] = useState(false);
 
   useEffect(() => {
     const savedDate = localStorage.getItem('lastPeriodDate');
@@ -761,27 +763,40 @@ const Index = () => {
                 </CardContent>
               </Card>
 
-              {/* Daily Tip Card - Always visible */}
-              <Card className="overflow-hidden border-none shadow-xl bg-card">
-                <CardContent className="p-6">
-                  <div className="flex items-start gap-4">
-                    <div className="w-14 h-14 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg flex-shrink-0 relative">
-                      <Lightbulb className="w-7 h-7 text-white" />
-                      <div className="absolute -top-1 -right-1 w-6 h-6 bg-pink-500 rounded-full flex items-center justify-center shadow-md">
-                        <span className="text-white text-xs font-bold">{pregnancyInfo.totalDays}</span>
+              {/* Daily Tip Card - Collapsible */}
+              <Collapsible open={!isDailyTipCollapsed} onOpenChange={(open) => setIsDailyTipCollapsed(!open)}>
+                <Card className="overflow-hidden border-none shadow-xl bg-card">
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg flex-shrink-0 relative">
+                          <Lightbulb className="w-5 h-5 text-white" />
+                          <div className="absolute -top-1 -right-1 w-5 h-5 bg-pink-500 rounded-full flex items-center justify-center shadow-md">
+                            <span className="text-white text-[10px] font-bold">{pregnancyInfo.totalDays}</span>
+                          </div>
+                        </div>
+                        <h3 className="text-lg font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
+                          {t('dailyTip')}
+                        </h3>
                       </div>
+                      <CollapsibleTrigger asChild>
+                        <Button variant="ghost" size="icon" className="h-8 w-8">
+                          <ChevronDown className={cn(
+                            "h-5 w-5 transition-transform duration-200",
+                            isDailyTipCollapsed && "rotate-180"
+                          )} />
+                        </Button>
+                      </CollapsibleTrigger>
                     </div>
-                    <div className="flex-1">
-                      <h3 className="text-lg font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent mb-3">
-                        {t('dailyTip')}
-                      </h3>
+                    
+                    <CollapsibleContent>
                       <p className="text-foreground leading-relaxed text-base italic">
                         "{dailyTip}"
                       </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+                    </CollapsibleContent>
+                  </CardContent>
+                </Card>
+              </Collapsible>
 
               {/* Main Info Card - Similar to period mode info card */}
               <Card className="overflow-hidden border-none shadow-lg bg-card">
