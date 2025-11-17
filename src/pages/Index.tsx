@@ -729,13 +729,7 @@ const Index = () => {
             <div className="space-y-4">
               {/* Top Progress Card - Similar to reference */}
               <Card className="overflow-hidden border-none shadow-xl bg-gradient-to-br from-violet-100 via-purple-100 to-fuchsia-100 dark:from-violet-900/30 dark:via-purple-900/30 dark:to-fuchsia-900/30">
-                <CardContent className="p-6 relative">
-                  <div className="absolute top-4 right-4">
-                    <div className="w-10 h-10 rounded-full bg-amber-400 dark:bg-amber-500 flex items-center justify-center shadow-lg">
-                      <Star className="w-5 h-5 text-amber-900 dark:text-amber-950 fill-amber-900 dark:fill-amber-950" />
-                    </div>
-                  </div>
-                  
+                <CardContent className="p-6">
                   <div className="text-center mb-4">
                     <p className="text-lg text-muted-foreground">
                       {pregnancyInfo.daysRemaining} {t('daysRemaining')}
