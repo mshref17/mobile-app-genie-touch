@@ -734,7 +734,10 @@ const Index = () => {
                   <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full translate-y-12 -translate-x-12"></div>
                   
                   <div className="relative z-10">
-                    <div className="text-center mb-4">
+                    <div className="text-center mb-6">
+                      <h2 className="text-5xl font-bold text-white drop-shadow-lg mb-2">
+                        {language === 'ar' ? 'أسبوع' : 'Week'} {pregnancyInfo.weeksPregnant}
+                      </h2>
                       <p className="text-white/90 text-xl font-medium">
                         {pregnancyInfo.daysRemaining} {t('daysRemaining')}
                       </p>
