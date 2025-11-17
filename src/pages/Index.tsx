@@ -728,29 +728,41 @@ const Index = () => {
           {activeTab === 'dashboard' && trackingMode === 'pregnant' && pregnancyInfo && (
             <div className="space-y-4">
               {/* Trimester Progress Card */}
-              <Card className="overflow-hidden border-none shadow-lg bg-white/80 dark:bg-card/90 backdrop-blur-sm border border-white/40">
-                <CardContent className="p-6">
-                  <div className="text-right mb-4">
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="text-sm font-medium text-muted-foreground">
-                        {format(pregnancyInfo.dueDate, "d/M")}
-                      </div>
-                      <div className="text-sm font-medium text-muted-foreground">
-                        {format(lastPeriodDate || new Date(), "d/M")}
-                      </div>
+              <Card className="overflow-hidden border-none shadow-xl bg-gradient-to-br from-violet-500 via-purple-500 to-fuchsia-500 dark:from-violet-600 dark:via-purple-700 dark:to-fuchsia-700">
+                <CardContent className="p-8 relative">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16"></div>
+                  <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full translate-y-12 -translate-x-12"></div>
+                  
+                  <div className="relative z-10">
+                    <div className="text-center mb-6">
+                      <h2 className="text-4xl font-bold text-white drop-shadow-lg mb-3">
+                        {t('week')} {pregnancyInfo.weeksPregnant}
+                      </h2>
+                      <p className="text-white/90 text-xl font-medium">
+                        {t('pregnancyProgress')}
+                      </p>
                     </div>
                     
-                    <div className="relative h-3 bg-gradient-to-r from-pink-100 to-purple-100 rounded-full mb-3 overflow-hidden">
-                      <div 
-                        className="absolute h-full bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 rounded-full transition-all duration-1000 shadow-lg"
-                        style={{ width: `${Math.min((pregnancyInfo.weeksPregnant / 40) * 100, 100)}%` }}
-                      ></div>
-                    </div>
-                    
-                    <div className="flex justify-between text-xs font-medium text-muted-foreground">
-                      <span>{t('thirdTrimester')}</span>
-                      <span>{t('secondTrimester')}</span>
-                      <span>{t('firstTrimester')}</span>
+                    {/* Progress Visualization */}
+                    <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-4 border border-white/30">
+                      <div className="flex items-center justify-between mb-3 text-sm text-white/90">
+                        <span>{format(pregnancyInfo.dueDate, "d/M")}</span>
+                        <span className="font-bold">{Math.round((pregnancyInfo.weeksPregnant / 40) * 100)}%</span>
+                        <span>{format(lastPeriodDate || new Date(), "d/M")}</span>
+                      </div>
+                      
+                      <div className="h-3 bg-white/30 rounded-full overflow-hidden mb-3">
+                        <div 
+                          className="h-full bg-gradient-to-r from-amber-400 via-rose-400 to-pink-300 rounded-full transition-all duration-1000 shadow-lg"
+                          style={{ width: `${Math.min((pregnancyInfo.weeksPregnant / 40) * 100, 100)}%` }}
+                        ></div>
+                      </div>
+                      
+                      <div className="flex justify-between text-xs font-medium text-white/80">
+                        <span>{t('thirdTrimester')}</span>
+                        <span>{t('secondTrimester')}</span>
+                        <span>{t('firstTrimester')}</span>
+                      </div>
                     </div>
                   </div>
                 </CardContent>
