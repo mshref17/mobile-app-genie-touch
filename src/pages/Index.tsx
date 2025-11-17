@@ -730,33 +730,41 @@ const Index = () => {
           {activeTab === 'dashboard' && trackingMode === 'pregnant' && pregnancyInfo && (
             <div className="space-y-4">
               {/* Top Progress Card - Similar to reference */}
-              <Card className="overflow-hidden border-none shadow-xl bg-gradient-to-br from-pink-200 via-purple-200 to-indigo-200 dark:from-pink-900/40 dark:via-purple-900/40 dark:to-indigo-900/40">
+              <Card className="overflow-hidden border-none shadow-xl bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100 dark:from-pink-900/30 dark:via-purple-900/30 dark:to-blue-900/30">
                 <CardContent className="p-8 relative">
                   <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16"></div>
                   <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full translate-y-12 -translate-x-12"></div>
                   
                   <div className="relative z-10">
                     <div className="text-center mb-6">
-                      <h2 className="text-5xl font-bold text-purple-800 dark:text-white drop-shadow-lg mb-2">
+                      <h2 className="text-5xl font-bold text-pink-600 dark:text-pink-400 drop-shadow-sm mb-2">
                         {language === 'ar' ? 'أسبوع' : 'Week'} {pregnancyInfo.weeksPregnant}
                       </h2>
-                      <p className="text-purple-700 dark:text-white/90 text-xl font-medium">
+                      <p className="text-gray-600 dark:text-gray-300 text-base font-normal">
                         {pregnancyInfo.daysRemaining} {t('daysRemaining')}
                       </p>
                     </div>
                     
                     {/* Progress Bar */}
-                    <div className="bg-white/40 dark:bg-white/20 backdrop-blur-sm rounded-2xl p-4 border border-white/50 dark:border-white/30">
-                      <div className="flex justify-between items-center mb-2">
-                        <span className="text-2xl font-bold text-purple-800 dark:text-white">
-                          {Math.round((pregnancyInfo.weeksPregnant / 40) * 100)}%
-                        </span>
-                      </div>
-                      <div className="h-3 bg-white/50 dark:bg-white/30 rounded-full overflow-hidden">
+                    <div className="space-y-2">
+                      <div className="h-2.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                         <div 
-                          className="h-full bg-gradient-to-r from-pink-400 via-purple-400 to-indigo-500 rounded-full transition-all duration-1000 shadow-lg"
+                          className="h-full bg-gradient-to-r from-pink-400 via-purple-400 to-indigo-500 rounded-full transition-all duration-1000"
                           style={{ width: `${Math.min((pregnancyInfo.weeksPregnant / 40) * 100, 100)}%` }}
                         ></div>
+                      </div>
+                      
+                      {/* Week markers */}
+                      <div className="flex justify-between items-center text-xs">
+                        <span className="text-gray-600 dark:text-gray-400">
+                          {language === 'ar' ? 'أسبوع' : 'Week'} 1
+                        </span>
+                        <span className="text-pink-600 dark:text-pink-400 font-bold">
+                          {language === 'ar' ? 'احملت' : 'Pregnant'} {Math.round((pregnancyInfo.weeksPregnant / 40) * 100)}%
+                        </span>
+                        <span className="text-gray-600 dark:text-gray-400">
+                          {language === 'ar' ? 'أسبوع' : 'Week'} 40
+                        </span>
                       </div>
                     </div>
                   </div>
