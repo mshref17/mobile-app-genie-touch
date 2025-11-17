@@ -735,9 +735,6 @@ const Index = () => {
                   
                   <div className="relative z-10">
                     <div className="text-center mb-6">
-                      <h2 className="text-4xl font-bold text-white drop-shadow-lg mb-3">
-                        {t('week')} {pregnancyInfo.weeksPregnant}
-                      </h2>
                       <p className="text-white/90 text-xl font-medium">
                         {t('pregnancyProgress')}
                       </p>
