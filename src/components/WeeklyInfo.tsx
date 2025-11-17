@@ -189,7 +189,7 @@ const WeeklyInfo = ({ currentWeek, openBabyMessage = false, onBabyMessageClose }
           onBabyMessageClose();
         }
       }}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md px-3">
           <DialogHeader>
             <DialogTitle className="text-center text-pink-600">
               {t('messageFromBaby')}
