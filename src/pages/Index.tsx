@@ -741,7 +741,7 @@ const Index = () => {
                         {language === 'ar' ? 'الأسبوع' : 'Week'} {pregnancyInfo.weeksPregnant}
                       </h2>
                       <p className="text-gray-600 dark:text-gray-300 text-base font-normal">
-                        {pregnancyInfo.daysRemaining} {t('daysRemaining')}
+                        {t('daysRemaining')} {pregnancyInfo.daysRemaining}
                       </p>
                     </div>
                     
