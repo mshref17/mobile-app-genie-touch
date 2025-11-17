@@ -771,10 +771,62 @@ const Index = () => {
           {/* Render content based on activeTab */}
           {activeTab === 'dashboard' && trackingMode === 'pregnant' && pregnancyInfo && (
             <div className="space-y-4">
+              {/* Hero Section for Pregnancy Tracking */}
+              <Card className="overflow-hidden border-none shadow-xl bg-gradient-to-br from-pink-500 via-purple-500 to-indigo-500 dark:from-pink-600 dark:via-purple-700 dark:to-indigo-700">
+                <CardContent className="p-8 relative">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16"></div>
+                  <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full translate-y-12 -translate-x-12"></div>
+                  
+                  {/* Daily Tip Button */}
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="absolute left-4 top-4 p-0 h-auto hover:bg-white/20 rounded-xl z-20"
+                    onClick={() => setIsDailyTipOpen(true)}
+                  >
+                    <div className="w-14 h-14 bg-amber-400 rounded-xl flex items-center justify-center shadow-lg relative hover:scale-105 transition-transform">
+                      <Lightbulb className="w-7 h-7 text-amber-900" />
+                      <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center">
+                        <span className="text-white text-xs font-bold">!</span>
+                      </div>
+                    </div>
+                  </Button>
+                  
+                  <div className="relative z-10">
+                    <div className="text-center mb-6">
+                      <h2 className="text-4xl font-bold text-white drop-shadow-lg mb-3">
+                        {pregnancyInfo.weeksPregnant} {t('weeks')} {pregnancyInfo.daysInCurrentWeek} {t('days')}
+                      </h2>
+                      <p className="text-white/90 text-xl font-medium">
+                        <span className="text-2xl font-bold">{pregnancyInfo.daysRemaining}</span> {t('daysRemaining')}
+                      </p>
+                    </div>
+                    
+                    {/* Pregnancy Progress Visualization */}
+                    <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-4 border border-white/30">
+                      <div className="flex items-center justify-between mb-2 text-sm text-white/90">
+                        <span>{t('pregnancyProgress')}</span>
+                        <span className="font-bold">{Math.round((pregnancyInfo.weeksPregnant / 40) * 100)}%</span>
+                      </div>
+                      <div className="h-3 bg-white/30 rounded-full overflow-hidden">
+                        <div 
+                          className="h-full bg-gradient-to-r from-amber-400 to-rose-400 rounded-full transition-all duration-500 shadow-lg"
+                          style={{ width: `${Math.min((pregnancyInfo.weeksPregnant / 40) * 100, 100)}%` }}
+                        ></div>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
               {/* Trimester Progress Card */}
-              <Card className="overflow-hidden border-none shadow-lg bg-white/80 dark:bg-card/90 backdrop-blur-sm border border-white/40">
+              <Card className="overflow-hidden border-none shadow-lg bg-white/80 dark:bg-card/90 backdrop-blur-sm border border-white/40 hover:shadow-xl transition-shadow">
                 <CardContent className="p-6">
                   <div className="text-right mb-4">
+                    <h3 className="text-base font-semibold text-foreground mb-3 flex items-center justify-end gap-2">
+                      <CalendarDays className="w-5 h-5 text-primary" />
+                      {t('trimesterProgress')}
+                    </h3>
                     <div className="flex items-center justify-between mb-3">
                       <div className="text-sm font-medium text-muted-foreground">
                         {format(pregnancyInfo.dueDate, "d/M")}
@@ -784,7 +836,7 @@ const Index = () => {
                       </div>
                     </div>
                     
-                    <div className="relative h-3 bg-gradient-to-r from-pink-100 to-purple-100 rounded-full mb-3 overflow-hidden">
+                    <div className="relative h-3 bg-gradient-to-r from-pink-100 to-purple-100 dark:from-pink-900 dark:to-purple-900 rounded-full mb-3 overflow-hidden">
                       <div 
                         className="absolute h-full bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 rounded-full transition-all duration-1000 shadow-lg"
                         style={{ width: `${Math.min((pregnancyInfo.weeksPregnant / 40) * 100, 100)}%` }}
@@ -795,29 +847,6 @@ const Index = () => {
                       <span>{t('thirdTrimester')}</span>
                       <span>{t('secondTrimester')}</span>
                       <span>{t('firstTrimester')}</span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Days Remaining - Hero Card */}
-              <Card className="overflow-hidden border-none shadow-xl bg-white/80 dark:bg-card/90 backdrop-blur-sm border border-white/40">
-                <CardContent className="p-8 relative">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="absolute left-4 top-4 p-0 h-auto hover:bg-white/20 rounded-xl"
-                    onClick={() => setIsDailyTipOpen(true)}
-                  >
-                    <div className="w-14 h-14 bg-amber-400 rounded-xl flex items-center justify-center shadow-lg relative hover:scale-105 transition-transform">
-                      <Lightbulb className="w-7 h-7 text-amber-900" />
-                      <div className="absolute -top-1 -right-1 w-4 h-4 bg-rose-500 rounded-full animate-pulse"></div>
-                    </div>
-                  </Button>
-                  <div className="text-right">
-                    <h3 className="text-lg font-semibold text-foreground mb-2">{t('daysRemaining')}</h3>
-                    <div className="text-7xl sm:text-8xl leading-none font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent drop-shadow-lg">
-                      {pregnancyInfo.daysRemaining}
                     </div>
                   </div>
                 </CardContent>
