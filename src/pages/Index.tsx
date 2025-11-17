@@ -124,16 +124,6 @@ const Index = () => {
     }
   }, []);
 
-  // Initialize AdSense ads
-  useEffect(() => {
-    try {
-      // @ts-ignore
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
-    } catch (err) {
-      console.error('AdSense error:', err);
-    }
-  }, []);
-
   const handleDateSubmit = () => {
     // Cancel all previous notifications when switching modes
     NotificationService.cancelAllNotifications();
@@ -718,14 +708,9 @@ const Index = () => {
           </div>
         </div>
         
-        {/* AdMob Banner */}
-        <div className="bg-white/30 dark:bg-white/10 border-b border-white/30 flex items-center justify-center min-h-[50px] overflow-hidden">
-          <ins className="adsbygoogle"
-               style={{ display: 'block' }}
-               data-ad-client="ca-app-pub-3940256099942544"
-               data-ad-slot="6300978111"
-               data-ad-format="auto"
-               data-full-width-responsive="true"></ins>
+        {/* AdMob Banner Placeholder */}
+        <div className="bg-white/30 dark:bg-white/10 border-b border-white/30 flex items-center justify-center h-[50px]">
+          <span className="text-xs text-white/90 dark:text-white/70">AdMob Banner</span>
         </div>
         
         {/* Top Navigation */}
@@ -771,63 +756,10 @@ const Index = () => {
           {/* Render content based on activeTab */}
           {activeTab === 'dashboard' && trackingMode === 'pregnant' && pregnancyInfo && (
             <div className="space-y-4">
-              {/* Hero Section for Pregnancy Tracking */}
-              <Card className="overflow-hidden border-none shadow-xl bg-gradient-to-br from-pink-500 via-purple-500 to-indigo-500 dark:from-pink-600 dark:via-purple-700 dark:to-indigo-700 animate-fade-in">
-                <CardContent className="p-8 relative">
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16 animate-pulse"></div>
-                  <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full translate-y-12 -translate-x-12 animate-pulse" style={{ animationDelay: '1s' }}></div>
-                  
-                  {/* Daily Tip Button */}
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="absolute left-4 top-4 p-0 h-auto hover:bg-white/20 rounded-xl z-20 animate-fade-in"
-                    onClick={() => setIsDailyTipOpen(true)}
-                    style={{ animationDelay: '0.6s' }}
-                  >
-                    <div className="w-14 h-14 bg-amber-400 rounded-xl flex items-center justify-center shadow-lg relative hover:scale-105 transition-transform animate-pulse">
-                      <Lightbulb className="w-7 h-7 text-amber-900" />
-                      <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center animate-pulse">
-                        <span className="text-white text-xs font-bold">!</span>
-                      </div>
-                    </div>
-                  </Button>
-                  
-                  <div className="relative z-10">
-                    <div className="text-center mb-6">
-                      <h2 className="text-4xl font-bold text-white drop-shadow-lg mb-3 animate-fade-in" style={{ animationDelay: '0.1s' }}>
-                        {pregnancyInfo.weeksPregnant} {t('weeks')} {pregnancyInfo.daysInCurrentWeek} {t('days')}
-                      </h2>
-                      <p className="text-white/90 text-xl font-medium animate-fade-in" style={{ animationDelay: '0.2s' }}>
-                        <span className="text-2xl font-bold">{pregnancyInfo.daysRemaining}</span> {t('daysRemaining')}
-                      </p>
-                    </div>
-                    
-                    {/* Pregnancy Progress Visualization */}
-                    <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-4 border border-white/30 animate-fade-in" style={{ animationDelay: '0.3s' }}>
-                      <div className="flex items-center justify-between mb-2 text-sm text-white/90">
-                        <span>{t('pregnancyProgress')}</span>
-                        <span className="font-bold animate-scale-in" style={{ animationDelay: '0.5s' }}>{Math.round((pregnancyInfo.weeksPregnant / 40) * 100)}%</span>
-                      </div>
-                      <div className="h-3 bg-white/30 rounded-full overflow-hidden">
-                        <div 
-                          className="h-full bg-gradient-to-r from-amber-400 to-rose-400 rounded-full transition-all duration-1000 shadow-lg animate-slide-in-right"
-                          style={{ width: `${Math.min((pregnancyInfo.weeksPregnant / 40) * 100, 100)}%`, animationDelay: '0.4s' }}
-                        ></div>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
               {/* Trimester Progress Card */}
-              <Card className="overflow-hidden border-none shadow-lg bg-white/80 dark:bg-card/90 backdrop-blur-sm border border-white/40 hover:shadow-xl transition-shadow animate-fade-in" style={{ animationDelay: '0.5s' }}>
+              <Card className="overflow-hidden border-none shadow-lg bg-white/80 dark:bg-card/90 backdrop-blur-sm border border-white/40">
                 <CardContent className="p-6">
                   <div className="text-right mb-4">
-                    <h3 className="text-base font-semibold text-foreground mb-3 flex items-center justify-end gap-2">
-                      <CalendarDays className="w-5 h-5 text-primary" />
-                      {t('trimesterProgress')}
-                    </h3>
                     <div className="flex items-center justify-between mb-3">
                       <div className="text-sm font-medium text-muted-foreground">
                         {format(pregnancyInfo.dueDate, "d/M")}
@@ -837,7 +769,7 @@ const Index = () => {
                       </div>
                     </div>
                     
-                    <div className="relative h-3 bg-gradient-to-r from-pink-100 to-purple-100 dark:from-pink-900 dark:to-purple-900 rounded-full mb-3 overflow-hidden">
+                    <div className="relative h-3 bg-gradient-to-r from-pink-100 to-purple-100 rounded-full mb-3 overflow-hidden">
                       <div 
                         className="absolute h-full bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 rounded-full transition-all duration-1000 shadow-lg"
                         style={{ width: `${Math.min((pregnancyInfo.weeksPregnant / 40) * 100, 100)}%` }}
@@ -848,6 +780,29 @@ const Index = () => {
                       <span>{t('thirdTrimester')}</span>
                       <span>{t('secondTrimester')}</span>
                       <span>{t('firstTrimester')}</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Days Remaining - Hero Card */}
+              <Card className="overflow-hidden border-none shadow-xl bg-white/80 dark:bg-card/90 backdrop-blur-sm border border-white/40">
+                <CardContent className="p-8 relative">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="absolute left-4 top-4 p-0 h-auto hover:bg-white/20 rounded-xl"
+                    onClick={() => setIsDailyTipOpen(true)}
+                  >
+                    <div className="w-14 h-14 bg-amber-400 rounded-xl flex items-center justify-center shadow-lg relative hover:scale-105 transition-transform">
+                      <Lightbulb className="w-7 h-7 text-amber-900" />
+                      <div className="absolute -top-1 -right-1 w-4 h-4 bg-rose-500 rounded-full animate-pulse"></div>
+                    </div>
+                  </Button>
+                  <div className="text-right">
+                    <h3 className="text-lg font-semibold text-foreground mb-2">{t('daysRemaining')}</h3>
+                    <div className="text-7xl sm:text-8xl leading-none font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent drop-shadow-lg">
+                      {pregnancyInfo.daysRemaining}
                     </div>
                   </div>
                 </CardContent>
@@ -998,31 +953,31 @@ const Index = () => {
         {activeTab === 'dashboard' && trackingMode === 'period' && periodInfo && (
           <div className="space-y-4">
             {/* Hero Section for Period Tracking */}
-            <Card className="overflow-hidden border-none shadow-xl bg-gradient-to-br from-violet-500 via-purple-500 to-fuchsia-500 dark:from-violet-600 dark:via-purple-700 dark:to-fuchsia-700 animate-fade-in">
+            <Card className="overflow-hidden border-none shadow-xl bg-gradient-to-br from-violet-500 via-purple-500 to-fuchsia-500 dark:from-violet-600 dark:via-purple-700 dark:to-fuchsia-700">
               <CardContent className="p-8 relative">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16 animate-pulse"></div>
-                <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full translate-y-12 -translate-x-12 animate-pulse" style={{ animationDelay: '1s' }}></div>
+                <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16"></div>
+                <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full translate-y-12 -translate-x-12"></div>
                 
                 <div className="relative z-10">
                   <div className="text-center mb-6">
-                    <h2 className="text-4xl font-bold text-white drop-shadow-lg mb-3 animate-fade-in" style={{ animationDelay: '0.1s' }}>
+                    <h2 className="text-4xl font-bold text-white drop-shadow-lg mb-3">
                       {t('cycleDay')} {periodInfo.cycleDay}
                     </h2>
-                    <p className="text-white/90 text-xl font-medium animate-fade-in" style={{ animationDelay: '0.2s' }}>
+                    <p className="text-white/90 text-xl font-medium">
                       <span className="text-2xl font-bold">{periodInfo.daysUntilNextPeriod}</span> {t('daysUntilPeriod')}
                     </p>
                   </div>
                   
                   {/* Cycle Progress Visualization */}
-                  <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-4 border border-white/30 animate-fade-in" style={{ animationDelay: '0.3s' }}>
+                  <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-4 border border-white/30">
                     <div className="flex items-center justify-between mb-2 text-sm text-white/90">
                       <span>{t('cycleProgress')}</span>
-                      <span className="font-bold animate-scale-in" style={{ animationDelay: '0.5s' }}>{Math.round((periodInfo.cycleDay / cycleLength) * 100)}%</span>
+                      <span className="font-bold">{Math.round((periodInfo.cycleDay / cycleLength) * 100)}%</span>
                     </div>
                     <div className="h-3 bg-white/30 rounded-full overflow-hidden">
                       <div 
-                        className="h-full bg-gradient-to-r from-amber-400 to-rose-400 rounded-full transition-all duration-1000 shadow-lg animate-slide-in-right"
-                        style={{ width: `${(periodInfo.cycleDay / cycleLength) * 100}%`, animationDelay: '0.4s' }}
+                        className="h-full bg-gradient-to-r from-amber-400 to-rose-400 rounded-full transition-all duration-500 shadow-lg"
+                        style={{ width: `${(periodInfo.cycleDay / cycleLength) * 100}%` }}
                       ></div>
                     </div>
                   </div>
@@ -1032,7 +987,7 @@ const Index = () => {
 
             {/* Fertility Window Alert */}
             {periodInfo.isInFertileWindow && (
-              <Card className="overflow-hidden border-none shadow-lg bg-gradient-to-br from-emerald-400/80 to-teal-400/80 dark:from-emerald-500/70 dark:to-teal-600/70 backdrop-blur-lg animate-fade-in" style={{ animationDelay: '0.5s' }}>
+              <Card className="overflow-hidden border-none shadow-lg bg-gradient-to-br from-emerald-400/80 to-teal-400/80 dark:from-emerald-500/70 dark:to-teal-600/70 backdrop-blur-lg">
                 <CardContent className="p-6">
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center flex-shrink-0 shadow-md">
@@ -1048,7 +1003,7 @@ const Index = () => {
             )}
 
             {/* Next Period Date Card */}
-            <Card className="overflow-hidden border-none shadow-lg bg-white/80 dark:bg-card/90 backdrop-blur-sm border border-white/40 hover:shadow-xl transition-shadow animate-fade-in" style={{ animationDelay: '0.6s' }}>
+            <Card className="overflow-hidden border-none shadow-lg bg-white/80 dark:bg-card/90 backdrop-blur-sm border border-white/40 hover:shadow-xl transition-shadow">
               <CardContent className="p-6">
                 <div className="text-right mb-4">
                   <h3 className="text-base font-semibold text-foreground mb-3 flex items-center justify-end gap-2">
