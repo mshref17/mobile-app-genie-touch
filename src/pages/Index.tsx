@@ -835,7 +835,7 @@ const Index = () => {
                     <div className="flex-1 text-right">
                       <p className="text-sm text-muted-foreground mb-1">{t('pregnancyAge')}</p>
                       <p className="text-xl font-semibold text-foreground">
-                        {pregnancyInfo.weeksPregnant} {t('weeks')} + {pregnancyInfo.daysInCurrentWeek} {t('days')}
+                        {pregnancyInfo.weeksPregnant} {t('weeks')} (+{pregnancyInfo.daysInCurrentWeek} {t('days')})
                       </p>
                     </div>
                   </div>
