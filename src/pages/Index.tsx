@@ -728,34 +728,56 @@ const Index = () => {
           {activeTab === 'dashboard' && trackingMode === 'pregnant' && pregnancyInfo && (
             <div className="space-y-4">
               {/* Top Progress Card - Similar to reference */}
-              <Card className="overflow-hidden border-none shadow-xl bg-gradient-to-br from-violet-500 via-purple-500 to-fuchsia-500 dark:from-violet-600 dark:via-purple-700 dark:to-fuchsia-700">
+              <Card className="overflow-hidden border-none shadow-xl bg-gradient-to-br from-pink-200 via-purple-200 to-indigo-200 dark:from-pink-900/40 dark:via-purple-900/40 dark:to-indigo-900/40">
                 <CardContent className="p-8 relative">
                   <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16"></div>
                   <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full translate-y-12 -translate-x-12"></div>
                   
                   <div className="relative z-10">
                     <div className="text-center mb-6">
-                      <h2 className="text-5xl font-bold text-white drop-shadow-lg mb-2">
+                      <h2 className="text-5xl font-bold text-purple-800 dark:text-white drop-shadow-lg mb-2">
                         {language === 'ar' ? 'أسبوع' : 'Week'} {pregnancyInfo.weeksPregnant}
                       </h2>
-                      <p className="text-white/90 text-xl font-medium">
+                      <p className="text-purple-700 dark:text-white/90 text-xl font-medium">
                         {pregnancyInfo.daysRemaining} {t('daysRemaining')}
                       </p>
                     </div>
                     
                     {/* Progress Bar */}
-                    <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-4 border border-white/30">
+                    <div className="bg-white/40 dark:bg-white/20 backdrop-blur-sm rounded-2xl p-4 border border-white/50 dark:border-white/30">
                       <div className="flex justify-between items-center mb-2">
-                        <span className="text-2xl font-bold text-white">
+                        <span className="text-2xl font-bold text-purple-800 dark:text-white">
                           {Math.round((pregnancyInfo.weeksPregnant / 40) * 100)}%
                         </span>
                       </div>
-                      <div className="h-3 bg-white/30 rounded-full overflow-hidden">
+                      <div className="h-3 bg-white/50 dark:bg-white/30 rounded-full overflow-hidden">
                         <div 
-                          className="h-full bg-gradient-to-r from-amber-400 to-rose-400 rounded-full transition-all duration-1000 shadow-lg"
+                          className="h-full bg-gradient-to-r from-pink-400 via-purple-400 to-indigo-500 rounded-full transition-all duration-1000 shadow-lg"
                           style={{ width: `${Math.min((pregnancyInfo.weeksPregnant / 40) * 100, 100)}%` }}
                         ></div>
                       </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Daily Tip Card - Always visible */}
+              <Card className="overflow-hidden border-none shadow-xl bg-card">
+                <CardContent className="p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="w-14 h-14 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg flex-shrink-0 relative">
+                      <Lightbulb className="w-7 h-7 text-white" />
+                      <div className="absolute -top-1 -right-1 w-6 h-6 bg-pink-500 rounded-full flex items-center justify-center shadow-md">
+                        <span className="text-white text-xs font-bold">{pregnancyInfo.totalDays}</span>
+                      </div>
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-lg font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent mb-3">
+                        {t('dailyTip')}
+                      </h3>
+                      <p className="text-foreground leading-relaxed text-base italic">
+                        "{dailyTip}"
+                      </p>
                     </div>
                   </div>
                 </CardContent>
@@ -806,28 +828,6 @@ const Index = () => {
                       <p className="text-sm text-muted-foreground mb-1">{t('currentMonth')}</p>
                       <p className="text-xl font-semibold text-foreground">
                         {t(`month${calculatePregnancyMonth(pregnancyInfo.weeksPregnant)}`)}
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Daily Tip Card - Always visible */}
-              <Card className="overflow-hidden border-none shadow-xl bg-card">
-                <CardContent className="p-6">
-                  <div className="flex items-start gap-4">
-                    <div className="w-14 h-14 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg flex-shrink-0 relative">
-                      <Lightbulb className="w-7 h-7 text-white" />
-                      <div className="absolute -top-1 -right-1 w-6 h-6 bg-pink-500 rounded-full flex items-center justify-center shadow-md">
-                        <span className="text-white text-xs font-bold">{pregnancyInfo.totalDays}</span>
-                      </div>
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-lg font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent mb-3">
-                        {t('dailyTip')}
-                      </h3>
-                      <p className="text-foreground leading-relaxed text-base italic">
-                        "{dailyTip}"
                       </p>
                     </div>
                   </div>
