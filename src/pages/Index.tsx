@@ -23,6 +23,7 @@ import NotificationSettings from "@/components/NotificationSettings";
 import { BottomNavigation } from "@/components/BottomNavigation";
 import SplashScreen from "@/components/SplashScreen";
 import { WelcomeDialog } from "@/components/WelcomeDialog";
+import { AdMobBanner } from "@/components/AdMobBanner";
 import { NotificationService } from "@/lib/notifications";
 import { LocalNotifications, LocalNotificationSchema } from '@capacitor/local-notifications';
 import { Capacitor } from '@capacitor/core';
@@ -710,10 +711,8 @@ const Index = () => {
           </div>
         </div>
         
-        {/* AdMob Banner Placeholder */}
-        <div className="bg-white/30 dark:bg-white/10 border-b border-white/30 flex items-center justify-center h-[50px]">
-          <span className="text-xs text-white/90 dark:text-white/70">AdMob Banner</span>
-        </div>
+        {/* AdMob Banner */}
+        <AdMobBanner />
         
         {/* Top Navigation */}
         <BottomNavigation 
