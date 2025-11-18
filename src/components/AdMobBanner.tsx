@@ -23,12 +23,12 @@ export const AdMobBanner = () => {
 
         initialized.current = true;
 
-        // Show banner ad
+        // Show banner ad - positioned below header
         const options: BannerAdOptions = {
           adId: 'ca-app-pub-3940256099942544/6300978111', // Test Banner Ad Unit ID
           adSize: BannerAdSize.BANNER,
           position: BannerAdPosition.TOP_CENTER,
-          margin: 0,
+          margin: 56, // Push down below the header (logo + settings)
           isTesting: true,
         };
 
