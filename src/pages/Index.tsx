@@ -711,11 +711,8 @@ const Index = () => {
           </div>
         </div>
         
-        {/* AdMob Banner */}
-        <AdMobBanner />
-        
         {/* Top Navigation */}
-        <BottomNavigation 
+        <BottomNavigation
           activeTab={activeTab}
           onTabChange={setActiveTab}
           trackingMode={trackingMode}
@@ -724,6 +721,9 @@ const Index = () => {
 
       {/* Main Content */}
       <div className="min-h-screen pt-[160px] pb-4">
+        {/* AdMob Banner */}
+        <AdMobBanner />
+        
         <div className="container mx-auto p-4 max-w-4xl relative z-10">
           {/* Render content based on activeTab */}
           {activeTab === 'dashboard' && trackingMode === 'pregnant' && pregnancyInfo && (
