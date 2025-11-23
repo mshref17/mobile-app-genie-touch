@@ -583,130 +583,10 @@ const Index = () => {
         <div className="border-b border-white/20">
           <div className="container mx-auto px-4 py-2 max-w-4xl">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 mx-auto">
                 <img src={appLogo} alt={t('appLogoAlt')} className="w-8 h-8 rounded-xl shadow-md" />
                 <h1 className="text-lg font-bold text-white drop-shadow-md">{t('appName')}</h1>
               </div>
-              <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
-                <DialogTrigger asChild>
-                  <Button variant="ghost" size="icon" className="hover:bg-white/20 text-white">
-                    <Settings className="h-6 w-6" />
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-md">
-                  <DialogHeader>
-                    <DialogTitle>{t('settings')}</DialogTitle>
-                    <DialogDescription>
-                      {t('updatePregnancyDates')}
-                    </DialogDescription>
-                  </DialogHeader>
-                  <div className="space-y-6">
-
-                    {/* Pregnancy Dates Section - Only show for pregnancy tracking */}
-                    {/* New Start Section - Available for both pregnancy and period tracking */}
-                    <div className="space-y-4">
-                      <div className="text-center space-y-2">
-                        <h4 className="text-sm font-medium">{t('newStart')}</h4>
-                        <p className="text-xs text-muted-foreground">{t('newStartDescription')}</p>
-                      </div>
-                      <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                          <Button variant="destructive" className="w-full">
-                            {t('newStart')}
-                          </Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                          <AlertDialogHeader>
-                            <AlertDialogTitle>{t('resetAppConfirmTitle')}</AlertDialogTitle>
-                            <AlertDialogDescription>
-                              {t('resetAppConfirmDesc')}
-                            </AlertDialogDescription>
-                          </AlertDialogHeader>
-                          <AlertDialogFooter>
-                            <AlertDialogCancel>
-                              {t('cancel')}
-                            </AlertDialogCancel>
-                            <AlertDialogAction onClick={handleResetApp} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-                              {t('newStart')}
-                            </AlertDialogAction>
-                          </AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialog>
-                    </div>
-                    
-                    {/* Notification Settings */}
-                    {(pregnancyInfo || periodInfo) && (
-                      <div className="border-t pt-4">
-                        <NotificationSettings 
-                          currentWeek={pregnancyInfo?.weeksPregnant || 0}
-                          pregnancyStartDate={lastPeriodDate}
-                          trackingMode={trackingMode}
-                          nextPeriodDate={periodInfo?.nextPeriodDate}
-                        />
-                      </div>
-                    )}
-                    
-                    {/* Display Settings */}
-                    <div className="border-t pt-4">
-                      <div className="space-y-4">
-                        <div>
-                          <h4 className="text-sm font-medium mb-3">{t('displaySettings') || 'إعدادات العرض'}</h4>
-                          
-                          {/* Dark Mode Toggle */}
-                          <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg mb-3">
-                            <div className="flex items-center gap-2">
-                              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-indigo-500 flex items-center justify-center">
-                                {isDarkMode ? (
-                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
-                                ) : (
-                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
-                                )}
-                              </div>
-                              <Label htmlFor="dark-mode" className="text-sm font-medium cursor-pointer">
-                                {t('darkMode') || 'الوضع الداكن'}
-                              </Label>
-                            </div>
-                            <Switch
-                              id="dark-mode"
-                              checked={isDarkMode}
-                              onCheckedChange={(checked) => {
-                                setIsDarkMode(checked);
-                                localStorage.setItem('darkMode', checked.toString());
-                                document.documentElement.classList.toggle('dark', checked);
-                                toast({
-                                  title: checked ? (t('darkModeEnabled') || 'تم تفعيل الوضع الداكن') : (t('darkModeDisabled') || 'تم تعطيل الوضع الداكن'),
-                                });
-                              }}
-                            />
-                          </div>
-                          
-                          {/* Month Format Toggle */}
-                          <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
-                            <Label htmlFor="month-format" className="text-sm font-medium cursor-pointer">
-                              {t('showMonthNumbers')}
-                            </Label>
-                            <Switch
-                              id="month-format"
-                              checked={showMonthNumbers}
-                              onCheckedChange={(checked) => {
-                                setShowMonthNumbers(checked);
-                                localStorage.setItem('showMonthNumbers', checked.toString());
-                              }}
-                            />
-                          </div>
-                          <p className="text-xs text-muted-foreground mt-2">{t('showMonthNumbersDesc')}</p>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="flex gap-2 pt-4">
-                      <Button variant="outline" onClick={() => setIsSettingsOpen(false)} className="w-full">
-                        {t('cancel')}
-                      </Button>
-                    </div>
-                  </div>
-                </DialogContent>
-              </Dialog>
             </div>
           </div>
         </div>
@@ -719,8 +599,126 @@ const Index = () => {
           activeTab={activeTab}
           onTabChange={setActiveTab}
           trackingMode={trackingMode}
+          onSettingsClick={() => setIsSettingsOpen(true)}
         />
       </div>
+
+      {/* Settings Dialog - Moved from header */}
+      <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>{t('settings')}</DialogTitle>
+            <DialogDescription>
+              {t('updatePregnancyDates')}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-6">
+
+            {/* Pregnancy Dates Section - Only show for pregnancy tracking */}
+            {/* New Start Section - Available for both pregnancy and period tracking */}
+            <div className="space-y-4">
+              <div className="text-center space-y-2">
+                <h4 className="text-sm font-medium">{t('newStart')}</h4>
+                <p className="text-xs text-muted-foreground">{t('newStartDescription')}</p>
+              </div>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button variant="destructive" className="w-full">
+                    {t('newStart')}
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>{t('resetAppConfirmTitle')}</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      {t('resetAppConfirmDesc')}
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>
+                      {t('cancel')}
+                    </AlertDialogCancel>
+                    <AlertDialogAction onClick={handleResetApp} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                      {t('newStart')}
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </div>
+            
+            {/* Notification Settings */}
+            {(pregnancyInfo || periodInfo) && (
+              <div className="border-t pt-4">
+                <NotificationSettings 
+                  currentWeek={pregnancyInfo?.weeksPregnant || 0}
+                  pregnancyStartDate={lastPeriodDate}
+                  trackingMode={trackingMode}
+                  nextPeriodDate={periodInfo?.nextPeriodDate}
+                />
+              </div>
+            )}
+            
+            {/* Display Settings */}
+            <div className="border-t pt-4">
+              <div className="space-y-4">
+                <div>
+                  <h4 className="text-sm font-medium mb-3">{t('displaySettings') || 'إعدادات العرض'}</h4>
+                  
+                  {/* Dark Mode Toggle */}
+                  <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg mb-3">
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-indigo-500 flex items-center justify-center">
+                        {isDarkMode ? (
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                        ) : (
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+                        )}
+                      </div>
+                      <Label htmlFor="dark-mode" className="text-sm font-medium cursor-pointer">
+                        {t('darkMode') || 'الوضع الداكن'}
+                      </Label>
+                    </div>
+                    <Switch
+                      id="dark-mode"
+                      checked={isDarkMode}
+                      onCheckedChange={(checked) => {
+                        setIsDarkMode(checked);
+                        localStorage.setItem('darkMode', checked.toString());
+                        document.documentElement.classList.toggle('dark', checked);
+                        toast({
+                          title: checked ? (t('darkModeEnabled') || 'تم تفعيل الوضع الداكن') : (t('darkModeDisabled') || 'تم تعطيل الوضع الداكن'),
+                        });
+                      }}
+                    />
+                  </div>
+                  
+                  {/* Month Format Toggle */}
+                  <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                    <Label htmlFor="month-format" className="text-sm font-medium cursor-pointer">
+                      {t('showMonthNumbers')}
+                    </Label>
+                    <Switch
+                      id="month-format"
+                      checked={showMonthNumbers}
+                      onCheckedChange={(checked) => {
+                        setShowMonthNumbers(checked);
+                        localStorage.setItem('showMonthNumbers', checked.toString());
+                      }}
+                    />
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-2">{t('showMonthNumbersDesc')}</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="flex gap-2 pt-4">
+              <Button variant="outline" onClick={() => setIsSettingsOpen(false)} className="w-full">
+                {t('cancel')}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Main Content */}
       <div className="min-h-screen pt-[160px] pb-4">
