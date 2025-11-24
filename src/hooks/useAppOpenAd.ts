@@ -1,68 +1,80 @@
-import { useEffect } from 'react';
-import { AdMob, AdOptions } from '@capacitor-community/admob';
-import { App } from '@capacitor/app';
-
-const APP_OPEN_AD_UNIT_ID = 'ca-app-pub-3940256099942544/9257395921'; // Test ad unit ID
+import { useEffect, useRef } from 'react';
+import { AdMob, InterstitialAdPluginEvents } from '@capacitor-community/admob';
+import { Capacitor } from '@capacitor/core';
+import { App as CapApp } from '@capacitor/app';
 
 export const useAppOpenAd = () => {
-  useEffect(() => {
-    let isAdShowing = false;
+  const initialized = useRef(false);
+  const adLoaded = useRef(false);
 
-    const initializeAdMob = async () => {
+  useEffect(() => {
+    const initializeAppOpenAd = async () => {
+      if (!Capacitor.isNativePlatform()) {
+        console.log('App Open ads only work on native platforms');
+        return;
+      }
+
+      if (initialized.current) return;
+
       try {
+        // Initialize AdMob if not already done
         await AdMob.initialize({
-          testingDevices: ['YOUR_DEVICE_ID_HERE'],
+          testingDevices: ['YOUR_DEVICE_ID'],
           initializeForTesting: true,
         });
-        console.log('AdMob initialized');
-      } catch (error) {
-        console.error('Error initializing AdMob:', error);
-      }
-    };
 
-    const prepareAppOpenAd = async () => {
-      try {
-        const options: AdOptions = {
-          adId: APP_OPEN_AD_UNIT_ID,
+        initialized.current = true;
+
+        // Listen for when interstitial is loaded
+        await AdMob.addListener(InterstitialAdPluginEvents.Loaded, () => {
+          adLoaded.current = true;
+          console.log('App Open interstitial ad loaded');
+        });
+
+        // Listen for when interstitial is dismissed
+        await AdMob.addListener(InterstitialAdPluginEvents.Dismissed, async () => {
+          adLoaded.current = false;
+          // Preload next ad
+          await AdMob.prepareInterstitial({
+            adId: 'ca-app-pub-3940256099942544/1033173712', // Test Interstitial Ad Unit ID
+            isTesting: true,
+          });
+        });
+
+        // Prepare initial interstitial
+        await AdMob.prepareInterstitial({
+          adId: 'ca-app-pub-3940256099942544/1033173712', // Test Interstitial Ad Unit ID
           isTesting: true,
-        };
-        await AdMob.prepareInterstitial(options);
-        console.log('App Open Ad prepared');
+        });
+        console.log('App Open interstitial ad prepared');
+
       } catch (error) {
-        console.error('Error preparing App Open Ad:', error);
+        console.error('Error with App Open ad:', error);
       }
     };
 
-    const showAppOpenAd = async () => {
-      if (isAdShowing) return;
-      
-      try {
-        isAdShowing = true;
-        await AdMob.showInterstitial();
-        console.log('App Open Ad shown');
-      } catch (error) {
-        console.error('Error showing App Open Ad:', error);
-      } finally {
-        isAdShowing = false;
-        // Prepare next ad
-        prepareAppOpenAd();
-      }
-    };
-
-    // Initialize AdMob and prepare the first ad
-    initializeAdMob().then(() => {
-      prepareAppOpenAd();
-    });
+    initializeAppOpenAd();
 
     // Show ad when app comes to foreground
-    App.addListener('appStateChange', ({ isActive }) => {
-      if (isActive) {
-        showAppOpenAd();
+    let appStateListener: any;
+    
+    CapApp.addListener('appStateChange', async ({ isActive }) => {
+      if (isActive && adLoaded.current && Capacitor.isNativePlatform()) {
+        try {
+          await AdMob.showInterstitial();
+          console.log('App Open interstitial ad shown');
+        } catch (error) {
+          console.error('Error showing App Open ad on resume:', error);
+        }
       }
+    }).then(listener => {
+      appStateListener = listener;
     });
 
     return () => {
-      // Cleanup is handled by Capacitor
+      if (appStateListener) {
+        appStateListener.remove();
+      }
     };
   }, []);
 };
