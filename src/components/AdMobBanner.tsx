@@ -1,53 +1,49 @@
 import { useEffect, useRef } from 'react';
 import { AdMob, BannerAdOptions, BannerAdSize, BannerAdPosition } from '@capacitor-community/admob';
 import { Capacitor } from '@capacitor/core';
+import { getAdId, ADMOB_CONFIG } from '@/config/admob';
 
-export const AdMobBanner = () => {
-  const initialized = useRef(false);
+interface AdMobBannerProps {
+  isAdMobInitialized: boolean;
+}
+
+export const AdMobBanner = ({ isAdMobInitialized }: AdMobBannerProps) => {
+  const bannerShown = useRef(false);
 
   useEffect(() => {
-    const initializeAdMob = async () => {
-      if (!Capacitor.isNativePlatform()) {
-        console.log('AdMob only works on native platforms');
+    const showBanner = async () => {
+      if (!Capacitor.isNativePlatform() || !isAdMobInitialized || bannerShown.current) {
         return;
       }
 
-      if (initialized.current) return;
+      bannerShown.current = true;
       
       try {
-        // Initialize AdMob
-        await AdMob.initialize({
-          testingDevices: ['YOUR_DEVICE_ID'],
-          initializeForTesting: true,
-        });
-
-        initialized.current = true;
-
-        // Show banner ad below header, above tabs
         const options: BannerAdOptions = {
-          adId: 'ca-app-pub-3940256099942544/6300978111', // Test Banner Ad Unit ID
+          adId: getAdId('banner'),
           adSize: BannerAdSize.BANNER,
           position: BannerAdPosition.TOP_CENTER,
           margin: 110,
-          isTesting: true,
+          isTesting: ADMOB_CONFIG.testMode,
         };
 
         await AdMob.showBanner(options);
         console.log('AdMob banner shown successfully');
       } catch (error) {
-        console.error('Error initializing AdMob:', error);
+        console.error('Error showing AdMob banner:', error);
+        bannerShown.current = false;
       }
     };
 
-    initializeAdMob();
+    showBanner();
 
     // Cleanup
     return () => {
-      if (Capacitor.isNativePlatform() && initialized.current) {
+      if (Capacitor.isNativePlatform() && bannerShown.current) {
         AdMob.removeBanner().catch(console.error);
       }
     };
-  }, []);
+  }, [isAdMobInitialized]);
 
   // Show placeholder on web
   if (!Capacitor.isNativePlatform()) {

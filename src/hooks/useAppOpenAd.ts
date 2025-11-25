@@ -1,80 +1,120 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { AdMob, InterstitialAdPluginEvents } from '@capacitor-community/admob';
 import { Capacitor } from '@capacitor/core';
 import { App as CapApp } from '@capacitor/app';
+import { getAdId, ADMOB_CONFIG } from '@/config/admob';
 
-export const useAppOpenAd = () => {
-  const initialized = useRef(false);
-  const adLoaded = useRef(false);
+export const useAppOpenAd = (isAdMobInitialized: boolean) => {
+  const [adLoaded, setAdLoaded] = useState(false);
+  const lastAdShownTime = useRef<number>(0);
+  const appStartTime = useRef<number>(Date.now());
+  const listenersSetup = useRef(false);
 
   useEffect(() => {
-    const initializeAppOpenAd = async () => {
-      if (!Capacitor.isNativePlatform()) {
-        console.log('App Open ads only work on native platforms');
+    if (!Capacitor.isNativePlatform() || !isAdMobInitialized) {
+      return;
+    }
+
+    const setupAppOpenAd = async () => {
+      if (listenersSetup.current) return;
+      listenersSetup.current = true;
+
+      try {
+        // Listen for when ad is loaded
+        const loadedListener = await AdMob.addListener(
+          InterstitialAdPluginEvents.Loaded,
+          () => {
+            setAdLoaded(true);
+            console.log('App Open ad loaded successfully');
+          }
+        );
+
+        // Listen for when ad fails to load
+        const failedListener = await AdMob.addListener(
+          InterstitialAdPluginEvents.FailedToLoad,
+          (error) => {
+            console.error('App Open ad failed to load:', error);
+            setAdLoaded(false);
+            // Retry loading after 30 seconds
+            setTimeout(() => {
+              prepareAppOpenAd();
+            }, 30000);
+          }
+        );
+
+        // Listen for when ad is dismissed
+        const dismissedListener = await AdMob.addListener(
+          InterstitialAdPluginEvents.Dismissed,
+          () => {
+            setAdLoaded(false);
+            console.log('App Open ad dismissed');
+            // Preload next ad
+            prepareAppOpenAd();
+          }
+        );
+
+        // Prepare initial ad
+        await prepareAppOpenAd();
+
+        // Cleanup listeners on unmount
+        return () => {
+          loadedListener.remove();
+          failedListener.remove();
+          dismissedListener.remove();
+        };
+      } catch (error) {
+        console.error('Error setting up App Open ad:', error);
+      }
+    };
+
+    const prepareAppOpenAd = async () => {
+      try {
+        await AdMob.prepareInterstitial({
+          adId: getAdId('appOpen'),
+          isTesting: ADMOB_CONFIG.testMode,
+        });
+        console.log('App Open ad prepared');
+      } catch (error) {
+        console.error('Error preparing App Open ad:', error);
+      }
+    };
+
+    const cleanup = setupAppOpenAd();
+
+    // Show ad when app comes to foreground
+    const appStateListener = CapApp.addListener('appStateChange', async ({ isActive }) => {
+      if (!isActive || !adLoaded) return;
+
+      const now = Date.now();
+      const timeSinceLastAd = now - lastAdShownTime.current;
+      const timeSinceAppStart = now - appStartTime.current;
+
+      // Check frequency capping
+      if (timeSinceLastAd < ADMOB_CONFIG.appOpenAd.minIntervalMs) {
+        console.log('App Open ad skipped: too soon since last ad');
         return;
       }
 
-      if (initialized.current) return;
+      // Check cold start delay
+      if (timeSinceAppStart < ADMOB_CONFIG.appOpenAd.minColdStartDelayMs) {
+        console.log('App Open ad skipped: too soon after app start');
+        return;
+      }
 
       try {
-        // Initialize AdMob if not already done
-        await AdMob.initialize({
-          testingDevices: ['YOUR_DEVICE_ID'],
-          initializeForTesting: true,
-        });
-
-        initialized.current = true;
-
-        // Listen for when interstitial is loaded
-        await AdMob.addListener(InterstitialAdPluginEvents.Loaded, () => {
-          adLoaded.current = true;
-          console.log('App Open interstitial ad loaded');
-        });
-
-        // Listen for when interstitial is dismissed
-        await AdMob.addListener(InterstitialAdPluginEvents.Dismissed, async () => {
-          adLoaded.current = false;
-          // Preload next ad
-          await AdMob.prepareInterstitial({
-            adId: 'ca-app-pub-3940256099942544/1033173712', // Test Interstitial Ad Unit ID
-            isTesting: true,
-          });
-        });
-
-        // Prepare initial interstitial
-        await AdMob.prepareInterstitial({
-          adId: 'ca-app-pub-3940256099942544/1033173712', // Test Interstitial Ad Unit ID
-          isTesting: true,
-        });
-        console.log('App Open interstitial ad prepared');
-
+        await AdMob.showInterstitial();
+        lastAdShownTime.current = now;
+        console.log('App Open ad shown');
       } catch (error) {
-        console.error('Error with App Open ad:', error);
+        console.error('Error showing App Open ad:', error);
       }
-    };
-
-    initializeAppOpenAd();
-
-    // Show ad when app comes to foreground
-    let appStateListener: any;
-    
-    CapApp.addListener('appStateChange', async ({ isActive }) => {
-      if (isActive && adLoaded.current && Capacitor.isNativePlatform()) {
-        try {
-          await AdMob.showInterstitial();
-          console.log('App Open interstitial ad shown');
-        } catch (error) {
-          console.error('Error showing App Open ad on resume:', error);
-        }
-      }
-    }).then(listener => {
-      appStateListener = listener;
     });
 
     return () => {
-      if (appStateListener) {
-        appStateListener.remove();
-      }
+      cleanup?.then((cleanupFn) => cleanupFn?.());
+      appStateListener.then((listener) => listener.remove());
     };
-  }, []);
+  }, [isAdMobInitialized]);
+
+  return { adLoaded };
 };
