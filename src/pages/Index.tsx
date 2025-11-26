@@ -55,6 +55,9 @@ const Index = () => {
   const [dailyTip, setDailyTip] = useState<string>('');
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isDailyTipCollapsed, setIsDailyTipCollapsed] = useState(false);
+  const [isLastPeriodPickerOpen, setIsLastPeriodPickerOpen] = useState(false);
+  const [isDueDatePickerOpen, setIsDueDatePickerOpen] = useState(false);
+  const [isPeriodTrackingPickerOpen, setIsPeriodTrackingPickerOpen] = useState(false);
 
   useEffect(() => {
     const savedDate = localStorage.getItem('lastPeriodDate');
@@ -421,7 +424,7 @@ const Index = () => {
                 {dueDateMode === 'period' ? (
                   <div className="space-y-2">
                     <Label htmlFor="last-period">{t('firstDayLastPeriod')}</Label>
-                    <Popover>
+                    <Popover open={isLastPeriodPickerOpen} onOpenChange={setIsLastPeriodPickerOpen}>
                       <PopoverTrigger asChild>
                         <Button
                           variant="outline"
@@ -438,7 +441,10 @@ const Index = () => {
                         <Calendar
                           mode="single"
                           selected={selectedDate}
-                          onSelect={setSelectedDate}
+                          onSelect={(date) => {
+                            setSelectedDate(date);
+                            setIsLastPeriodPickerOpen(false);
+                          }}
                           disabled={(date) => date > new Date()}
                           initialFocus
                           className="pointer-events-auto"
@@ -449,7 +455,7 @@ const Index = () => {
                 ) : (
                   <div className="space-y-2">
                     <Label htmlFor="due-date">{t('expectedDueDate')}</Label>
-                    <Popover>
+                    <Popover open={isDueDatePickerOpen} onOpenChange={setIsDueDatePickerOpen}>
                       <PopoverTrigger asChild>
                         <Button
                           variant="outline"
@@ -466,7 +472,10 @@ const Index = () => {
                         <Calendar
                           mode="single"
                           selected={selectedDueDate}
-                          onSelect={setSelectedDueDate}
+                          onSelect={(date) => {
+                            setSelectedDueDate(date);
+                            setIsDueDatePickerOpen(false);
+                          }}
                           disabled={(date) => date < new Date()}
                           initialFocus
                           className="pointer-events-auto"
@@ -498,7 +507,7 @@ const Index = () => {
                 </Button>
                 <div className="space-y-2">
                   <Label htmlFor="last-period">{t('lastPeriodStart')}</Label>
-                  <Popover>
+                  <Popover open={isPeriodTrackingPickerOpen} onOpenChange={setIsPeriodTrackingPickerOpen}>
                     <PopoverTrigger asChild>
                       <Button
                         variant="outline"
@@ -515,16 +524,19 @@ const Index = () => {
                       <Calendar
                         mode="single"
                         selected={selectedDate}
-                        onSelect={setSelectedDate}
-                        disabled={(date) => date > new Date()}
-                        initialFocus
-                        className="pointer-events-auto"
-                      />
-                    </PopoverContent>
-                  </Popover>
-                </div>
+                        onSelect={(date) => {
+                          setSelectedDate(date);
+                          setIsPeriodTrackingPickerOpen(false);
+                         }}
+                         disabled={(date) => date > new Date()}
+                         initialFocus
+                         className="pointer-events-auto"
+                       />
+                     </PopoverContent>
+                   </Popover>
+                 </div>
 
-                <div className="space-y-2">
+                 <div className="space-y-2">
                   <Label htmlFor="cycle-length">{t('cycleLengthLabel')}</Label>
                   <Input
                     id="cycle-length"
