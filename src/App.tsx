@@ -5,7 +5,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { AuthProvider } from "@/contexts/AuthContext";
-import { useAdMobInit } from "@/hooks/useAdMobInit";
 import { useAppOpenAd } from "@/hooks/useAppOpenAd";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
@@ -16,8 +15,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 const queryClient = new QueryClient();
 
 const AppContent = () => {
-  const { isInitialized } = useAdMobInit();
-  useAppOpenAd(isInitialized);
+  useAppOpenAd();
   
   return (
     <BrowserRouter>

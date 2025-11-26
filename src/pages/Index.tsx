@@ -15,7 +15,6 @@ import { ar } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useToast } from "@/hooks/use-toast";
-import { useAdMobInit } from "@/hooks/useAdMobInit";
 
 import WeeklyInfo from "@/components/WeeklyInfo";
 import Community from "@/components/Community";
@@ -36,7 +35,6 @@ const appLogo = "/app-icon.png";
 const Index = () => {
   const { t, language } = useLanguage();
   const { toast } = useToast();
-  const { isInitialized: isAdMobInitialized } = useAdMobInit();
   const [trackingMode, setTrackingMode] = useState<'pregnant' | 'period' | null>(null);
   const [lastPeriodDate, setLastPeriodDate] = useState<Date | null>(null);
   const [isFirstTime, setIsFirstTime] = useState(true);
@@ -714,7 +712,7 @@ const Index = () => {
         </div>
         
         {/* AdMob Banner */}
-        <AdMobBanner isAdMobInitialized={isAdMobInitialized} />
+        <AdMobBanner />
         
         {/* Top Navigation */}
         <BottomNavigation 
