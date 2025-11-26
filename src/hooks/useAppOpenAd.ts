@@ -6,6 +6,9 @@ import { App as CapApp } from '@capacitor/app';
 export const useAppOpenAd = () => {
   const initialized = useRef(false);
   const adLoaded = useRef(false);
+  const isShowingAd = useRef(false);
+  const lastAdShownTime = useRef<number>(0);
+  const MIN_TIME_BETWEEN_ADS = 4 * 60 * 60 * 1000; // 4 hours in milliseconds
 
   useEffect(() => {
     const initializeAppOpenAd = async () => {
@@ -41,6 +44,8 @@ export const useAppOpenAd = () => {
         // Listen for when interstitial is shown
         await AdMob.addListener(InterstitialAdPluginEvents.Showed, () => {
           console.log('✅ App Open ad is now showing');
+          isShowingAd.current = true;
+          lastAdShownTime.current = Date.now();
         });
 
         // Listen for when interstitial fails to show
@@ -51,17 +56,21 @@ export const useAppOpenAd = () => {
         // Listen for when interstitial is dismissed
         await AdMob.addListener(InterstitialAdPluginEvents.Dismissed, async () => {
           console.log('ℹ️ App Open ad dismissed');
+          isShowingAd.current = false;
           adLoaded.current = false;
-          // Preload next ad
-          try {
-            await AdMob.prepareInterstitial({
-              adId: 'ca-app-pub-3940256099942544/1033173712', // Test Interstitial Ad Unit ID
-              isTesting: true,
-            });
-            console.log('✅ Next App Open ad prepared');
-          } catch (error) {
-            console.error('❌ Failed to prepare next ad:', error);
-          }
+          
+          // Wait a bit before preparing next ad
+          setTimeout(async () => {
+            try {
+              await AdMob.prepareInterstitial({
+                adId: 'ca-app-pub-3940256099942544/1033173712', // Test Interstitial Ad Unit ID
+                isTesting: true,
+              });
+              console.log('✅ Next App Open ad prepared');
+            } catch (error) {
+              console.error('❌ Failed to prepare next ad:', error);
+            }
+          }, 1000);
         });
 
         // Prepare initial interstitial
@@ -84,18 +93,55 @@ export const useAppOpenAd = () => {
     
     CapApp.addListener('appStateChange', async ({ isActive }) => {
       console.log(`📱 App state changed: ${isActive ? 'ACTIVE (foreground)' : 'INACTIVE (background)'}`);
-      console.log(`📊 Ad loaded status: ${adLoaded.current}`);
+      console.log(`📊 Ad status - Loaded: ${adLoaded.current}, Showing: ${isShowingAd.current}`);
       
-      if (isActive && adLoaded.current && Capacitor.isNativePlatform()) {
+      if (isActive && Capacitor.isNativePlatform()) {
+        // Check if enough time has passed since last ad
+        const timeSinceLastAd = Date.now() - lastAdShownTime.current;
+        console.log(`⏱️ Time since last ad: ${Math.round(timeSinceLastAd / 1000 / 60)} minutes`);
+        
+        if (isShowingAd.current) {
+          console.log('⚠️ Ad is already showing, skipping...');
+          return;
+        }
+        
+        if (!adLoaded.current) {
+          console.log('⚠️ Ad not loaded yet, preparing new ad...');
+          try {
+            await AdMob.prepareInterstitial({
+              adId: 'ca-app-pub-3940256099942544/1033173712',
+              isTesting: true,
+            });
+          } catch (error) {
+            console.error('❌ Failed to prepare ad:', error);
+          }
+          return;
+        }
+        
+        // Skip ad if shown too recently
+        if (lastAdShownTime.current > 0 && timeSinceLastAd < MIN_TIME_BETWEEN_ADS) {
+          console.log('⏳ Too soon to show another ad (minimum 4 hours between ads)');
+          return;
+        }
+        
         console.log('⏳ Attempting to show App Open ad...');
         try {
           await AdMob.showInterstitial();
           console.log('✅ App Open interstitial ad displayed');
         } catch (error) {
-          console.error('❌ Error showing App Open ad on resume:', error);
+          console.error('❌ Error showing App Open ad:', error);
+          // Try to prepare a new ad after failure
+          setTimeout(async () => {
+            try {
+              await AdMob.prepareInterstitial({
+                adId: 'ca-app-pub-3940256099942544/1033173712',
+                isTesting: true,
+              });
+            } catch (e) {
+              console.error('❌ Failed to prepare ad after show failure:', e);
+            }
+          }, 2000);
         }
-      } else if (isActive && !adLoaded.current) {
-        console.log('⚠️ App became active but ad not loaded yet');
       }
     }).then(listener => {
       appStateListener = listener;
