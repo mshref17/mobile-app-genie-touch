@@ -81,13 +81,43 @@ export const useAppOpenAd = (isAdMobInitialized: boolean) => {
 
     const cleanup = setupAppOpenAd();
 
+    // Show ad on initial app start after cold start delay
+    const initialAdTimer = setTimeout(async () => {
+      if (!adLoaded) {
+        console.log('App Open ad not loaded yet on initial start');
+        return;
+      }
+
+      const now = Date.now();
+      const timeSinceLastAd = now - lastAdShownTime.current;
+
+      // Check frequency capping
+      if (timeSinceLastAd < ADMOB_CONFIG.appOpenAd.minIntervalMs) {
+        console.log('App Open ad skipped on initial start: too soon since last ad');
+        return;
+      }
+
+      try {
+        await AdMob.showInterstitial();
+        lastAdShownTime.current = now;
+        console.log('App Open ad shown on initial start');
+      } catch (error) {
+        console.error('Error showing App Open ad on initial start:', error);
+      }
+    }, ADMOB_CONFIG.appOpenAd.minColdStartDelayMs);
+
     // Show ad when app comes to foreground
     const appStateListener = CapApp.addListener('appStateChange', async ({ isActive }) => {
-      if (!isActive || !adLoaded) return;
+      if (!isActive || !adLoaded) {
+        console.log(`App Open ad check: isActive=${isActive}, adLoaded=${adLoaded}`);
+        return;
+      }
 
       const now = Date.now();
       const timeSinceLastAd = now - lastAdShownTime.current;
       const timeSinceAppStart = now - appStartTime.current;
+
+      console.log(`App Open ad timing: timeSinceLastAd=${timeSinceLastAd}ms, timeSinceAppStart=${timeSinceAppStart}ms`);
 
       // Check frequency capping
       if (timeSinceLastAd < ADMOB_CONFIG.appOpenAd.minIntervalMs) {
@@ -104,13 +134,14 @@ export const useAppOpenAd = (isAdMobInitialized: boolean) => {
       try {
         await AdMob.showInterstitial();
         lastAdShownTime.current = now;
-        console.log('App Open ad shown');
+        console.log('App Open ad shown on foreground');
       } catch (error) {
         console.error('Error showing App Open ad:', error);
       }
     });
 
     return () => {
+      clearTimeout(initialAdTimer);
       cleanup?.then((cleanupFn) => cleanupFn?.());
       appStateListener.then((listener) => listener.remove());
     };
