@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Heart, MessageCircle, Camera, Video, Send, Loader2, TrendingUp, Clock, MessageSquare, Shuffle, Plus, LogOut, Flag } from "lucide-react";
+import { Heart, MessageCircle, Camera, Video, Send, Loader2, TrendingUp, Clock, MessageSquare, Shuffle, Plus, LogOut, Flag, Edit, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
@@ -30,7 +30,8 @@ import {
   limit,
   startAfter,
   QueryDocumentSnapshot,
-  DocumentData
+  DocumentData,
+  deleteDoc
 } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
@@ -92,6 +93,12 @@ const Community = () => {
   const [reportReason, setReportReason] = useState<string>('');
   const [reportDialogOpen, setReportDialogOpen] = useState(false);
   const [reportSubmitting, setReportSubmitting] = useState(false);
+  const [editingPostId, setEditingPostId] = useState<string | null>(null);
+  const [editingPostContent, setEditingPostContent] = useState('');
+  const [editingReplyId, setEditingReplyId] = useState<string | null>(null);
+  const [editingReplyContent, setEditingReplyContent] = useState('');
+  const [deleteConfirmPostId, setDeleteConfirmPostId] = useState<string | null>(null);
+  const [deleteConfirmReplyId, setDeleteConfirmReplyId] = useState<string | null>(null);
   const { toast } = useToast();
 
   const POSTS_PER_PAGE = 10;
@@ -608,6 +615,95 @@ const Community = () => {
     setRepliesVisible(prev => ({ ...prev, [postId]: !isVisible }));
   };
 
+  const handleDeletePost = async (postId: string) => {
+    try {
+      await deleteDoc(doc(db, 'posts', postId));
+      
+      toast({
+        title: t("postDeleted"),
+      });
+      
+      setDeleteConfirmPostId(null);
+    } catch (error) {
+      console.error('Error deleting post:', error);
+      toast({
+        title: t("deleteFailed"),
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleEditPost = async (postId: string) => {
+    if (!editingPostContent.trim()) return;
+    
+    try {
+      const postRef = doc(db, 'posts', postId);
+      await updateDoc(postRef, {
+        content: editingPostContent
+      });
+      
+      toast({
+        title: t("postUpdated"),
+      });
+      
+      setEditingPostId(null);
+      setEditingPostContent('');
+    } catch (error) {
+      console.error('Error updating post:', error);
+      toast({
+        title: t("updateFailed"),
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleDeleteReply = async (replyId: string, postId: string) => {
+    try {
+      await deleteDoc(doc(db, 'replies', replyId));
+      
+      const postRef = doc(db, 'posts', postId);
+      await updateDoc(postRef, {
+        replies: increment(-1)
+      });
+      
+      toast({
+        title: t("replyDeleted"),
+      });
+      
+      setDeleteConfirmReplyId(null);
+    } catch (error) {
+      console.error('Error deleting reply:', error);
+      toast({
+        title: t("deleteFailed"),
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleEditReply = async (replyId: string) => {
+    if (!editingReplyContent.trim()) return;
+    
+    try {
+      const replyRef = doc(db, 'replies', replyId);
+      await updateDoc(replyRef, {
+        content: editingReplyContent
+      });
+      
+      toast({
+        title: t("replyUpdated"),
+      });
+      
+      setEditingReplyId(null);
+      setEditingReplyContent('');
+    } catch (error) {
+      console.error('Error updating reply:', error);
+      toast({
+        title: t("updateFailed"),
+        variant: "destructive"
+      });
+    }
+  };
+
   const formatTimeAgo = (timestamp: any) => {
     if (!timestamp) return t("justNow");
     
@@ -863,12 +959,41 @@ const Community = () => {
                          {post.nickname || t("anonymous")}
                        </span>
                      </div>
-                     <span className="text-xs text-gray-500">
-                       {formatTimeAgo(post.timestamp)}
-                     </span>
-                   </div>
-                  
-                  <p className="text-gray-700">{post.content}</p>
+                      <span className="text-xs text-gray-500">
+                        {formatTimeAgo(post.timestamp)}
+                      </span>
+                    </div>
+                   
+                   {editingPostId === post.id ? (
+                     <div className="space-y-2">
+                       <Textarea
+                         value={editingPostContent}
+                         onChange={(e) => setEditingPostContent(e.target.value)}
+                         className="min-h-[80px]"
+                       />
+                       <div className="flex gap-2">
+                         <Button 
+                           size="sm"
+                           onClick={() => handleEditPost(post.id)}
+                           className="bg-green-600 hover:bg-green-700"
+                         >
+                           {t("save")}
+                         </Button>
+                         <Button 
+                           size="sm"
+                           variant="outline"
+                           onClick={() => {
+                             setEditingPostId(null);
+                             setEditingPostContent('');
+                           }}
+                         >
+                           {t("cancel")}
+                         </Button>
+                       </div>
+                     </div>
+                   ) : (
+                     <p className="text-gray-700">{post.content}</p>
+                   )}
                   
                   {/* Display attachments */}
                   {post.attachments && post.attachments.length > 0 && (
@@ -940,7 +1065,32 @@ const Community = () => {
                         {t("reportPost")}
                       </Button>
                     )}
-                  </div>
+                    {user && user.uid === post.authorId && editingPostId !== post.id && (
+                      <>
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className="text-blue-600 hover:text-blue-700"
+                          onClick={() => {
+                            setEditingPostId(post.id);
+                            setEditingPostContent(post.content);
+                          }}
+                        >
+                          <Edit className="w-4 h-4 mr-1" />
+                          {t("edit")}
+                        </Button>
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className="text-red-600 hover:text-red-700"
+                          onClick={() => setDeleteConfirmPostId(post.id)}
+                        >
+                          <Trash2 className="w-4 h-4 mr-1" />
+                          {t("delete")}
+                        </Button>
+                      </>
+                    )}
+                   </div>
                   
                    {/* Reply Form */}
                    {replyingTo === post.id && (
@@ -1023,8 +1173,63 @@ const Community = () => {
                              <span className="text-xs text-gray-500">
                                {formatTimeAgo(reply.timestamp)}
                              </span>
-                           </div>
-                           <p className="text-gray-700 text-sm">{reply.content}</p>
+                            </div>
+                            {editingReplyId === reply.id ? (
+                              <div className="space-y-2 mt-2">
+                                <Textarea
+                                  value={editingReplyContent}
+                                  onChange={(e) => setEditingReplyContent(e.target.value)}
+                                  className="min-h-[60px]"
+                                />
+                                <div className="flex gap-2">
+                                  <Button 
+                                    size="sm"
+                                    onClick={() => handleEditReply(reply.id)}
+                                    className="bg-green-600 hover:bg-green-700"
+                                  >
+                                    {t("save")}
+                                  </Button>
+                                  <Button 
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() => {
+                                      setEditingReplyId(null);
+                                      setEditingReplyContent('');
+                                    }}
+                                  >
+                                    {t("cancel")}
+                                  </Button>
+                                </div>
+                              </div>
+                            ) : (
+                              <p className="text-gray-700 text-sm">{reply.content}</p>
+                            )}
+                           
+                           {user && user.uid === reply.authorId && editingReplyId !== reply.id && (
+                             <div className="flex gap-2 mt-2">
+                               <Button 
+                                 variant="ghost" 
+                                 size="sm" 
+                                 className="text-blue-600 hover:text-blue-700"
+                                 onClick={() => {
+                                   setEditingReplyId(reply.id);
+                                   setEditingReplyContent(reply.content);
+                                 }}
+                               >
+                                 <Edit className="w-3 h-3 mr-1" />
+                                 {t("edit")}
+                               </Button>
+                               <Button 
+                                 variant="ghost" 
+                                 size="sm" 
+                                 className="text-red-600 hover:text-red-700"
+                                 onClick={() => setDeleteConfirmReplyId(reply.id)}
+                               >
+                                 <Trash2 className="w-3 h-3 mr-1" />
+                                 {t("delete")}
+                               </Button>
+                             </div>
+                           )}
                           
                           {/* Display reply attachments */}
                           {reply.attachments && reply.attachments.length > 0 && (
@@ -1097,6 +1302,55 @@ const Community = () => {
           </CardHeader>
         </Card>
       )}
+      
+      {/* Delete Post Confirmation Dialog */}
+      <AlertDialog open={deleteConfirmPostId !== null} onOpenChange={(open) => !open && setDeleteConfirmPostId(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t("deletePost")}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {t("deletePostConfirm")}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={() => deleteConfirmPostId && handleDeletePost(deleteConfirmPostId)}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              {t("delete")}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+      
+      {/* Delete Reply Confirmation Dialog */}
+      <AlertDialog open={deleteConfirmReplyId !== null} onOpenChange={(open) => !open && setDeleteConfirmReplyId(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t("deleteReply")}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {t("deleteReplyConfirm")}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={() => {
+                if (deleteConfirmReplyId) {
+                  const reply = Object.values(postReplies).flat().find(r => r.id === deleteConfirmReplyId);
+                  if (reply) {
+                    handleDeleteReply(deleteConfirmReplyId, reply.postId);
+                  }
+                }
+              }}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              {t("delete")}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
