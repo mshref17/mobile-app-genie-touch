@@ -194,7 +194,8 @@
     "reportSubmitted": "Report Submitted",
     "reportSubmittedDescription": "Thank you for helping keep our community safe.",
     "selectReportReason": "Please select a reason",
-    "submitting": "Submitting..."
+    "submitting": "Submitting...",
+    "submitReply": "Submit Reply"
   },
   "ar": {
     "resetApp": "إبدأ من جديد",
@@ -391,6 +392,7 @@
     "reportSubmitted": "تم إرسال البلاغ",
     "reportSubmittedDescription": "شكراً لمساعدتك في الحفاظ على سلامة مجتمعنا.",
     "selectReportReason": "الرجاء اختيار سبب",
-    "submitting": "جارٍ الإرسال..."
+    "submitting": "جارٍ الإرسال...",
+    "submitReply": "إرسال الرد"
   }
 }
