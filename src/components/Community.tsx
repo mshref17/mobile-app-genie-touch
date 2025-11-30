@@ -7,13 +7,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Heart, MessageCircle, Camera, Video, Send, Loader2, TrendingUp, Clock, MessageSquare, Shuffle, Plus, LogOut, Flag, Edit, Trash2 } from "lucide-react";
+import { Heart, MessageCircle, Camera, Video, Send, Loader2, TrendingUp, Clock, MessageSquare, Shuffle, Plus, LogOut, Flag, Edit, Trash2, MoreVertical } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { db, storage } from "@/lib/firebase";
 import { 
@@ -959,10 +960,38 @@ const Community = () => {
                          {post.nickname || t("anonymous")}
                        </span>
                      </div>
-                      <span className="text-xs text-gray-500">
-                        {formatTimeAgo(post.timestamp)}
-                      </span>
-                    </div>
+                     <span className="text-xs text-gray-500">
+                       {formatTimeAgo(post.timestamp)}
+                     </span>
+                     {user && user.uid === post.authorId && editingPostId !== post.id && (
+                       <DropdownMenu>
+                         <DropdownMenuTrigger asChild>
+                           <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                             <MoreVertical className="h-4 w-4" />
+                           </Button>
+                         </DropdownMenuTrigger>
+                         <DropdownMenuContent align="end" className="bg-background">
+                           <DropdownMenuItem 
+                             onClick={() => {
+                               setEditingPostId(post.id);
+                               setEditingPostContent(post.content);
+                             }}
+                             className="cursor-pointer"
+                           >
+                             <Edit className="w-4 h-4 mr-2" />
+                             {t("edit")}
+                           </DropdownMenuItem>
+                           <DropdownMenuItem 
+                             onClick={() => setDeleteConfirmPostId(post.id)}
+                             className="cursor-pointer text-red-600 focus:text-red-600"
+                           >
+                             <Trash2 className="w-4 h-4 mr-2" />
+                             {t("delete")}
+                           </DropdownMenuItem>
+                         </DropdownMenuContent>
+                       </DropdownMenu>
+                     )}
+                   </div>
                    
                    {editingPostId === post.id ? (
                      <div className="space-y-2">
@@ -1065,31 +1094,6 @@ const Community = () => {
                         {t("reportPost")}
                       </Button>
                     )}
-                    {user && user.uid === post.authorId && editingPostId !== post.id && (
-                      <>
-                        <Button 
-                          variant="ghost" 
-                          size="sm" 
-                          className="text-blue-600 hover:text-blue-700"
-                          onClick={() => {
-                            setEditingPostId(post.id);
-                            setEditingPostContent(post.content);
-                          }}
-                        >
-                          <Edit className="w-4 h-4 mr-1" />
-                          {t("edit")}
-                        </Button>
-                        <Button 
-                          variant="ghost" 
-                          size="sm" 
-                          className="text-red-600 hover:text-red-700"
-                          onClick={() => setDeleteConfirmPostId(post.id)}
-                        >
-                          <Trash2 className="w-4 h-4 mr-1" />
-                          {t("delete")}
-                        </Button>
-                      </>
-                    )}
                    </div>
                   
                    {/* Reply Form */}
@@ -1164,15 +1168,45 @@ const Community = () => {
                   {repliesVisible[post.id] && postReplies[post.id] && (
                     <div className="mt-4 space-y-3">
                       <h4 className="font-medium text-purple-800">{t("replies") || "Replies"}</h4>
-                      {postReplies[post.id].map((reply) => (
-                         <div key={reply.id} className="bg-purple-50 p-3 rounded-lg ml-4">
-                            <div className="flex items-center gap-2 mb-2">
-                              <span className="text-xs font-medium text-purple-700">
-                                {reply.nickname || t("anonymous")}
-                              </span>
-                             <span className="text-xs text-gray-500">
-                               {formatTimeAgo(reply.timestamp)}
-                             </span>
+                       {postReplies[post.id].map((reply) => (
+                          <div key={reply.id} className="bg-purple-50 p-3 rounded-lg ml-4">
+                             <div className="flex items-center gap-2 mb-2">
+                               <div className="flex-1 flex items-center gap-2">
+                                 <span className="text-xs font-medium text-purple-700">
+                                   {reply.nickname || t("anonymous")}
+                                 </span>
+                                 <span className="text-xs text-gray-500">
+                                   {formatTimeAgo(reply.timestamp)}
+                                 </span>
+                               </div>
+                               {user && user.uid === reply.authorId && editingReplyId !== reply.id && (
+                                 <DropdownMenu>
+                                   <DropdownMenuTrigger asChild>
+                                     <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+                                       <MoreVertical className="h-3 w-3" />
+                                     </Button>
+                                   </DropdownMenuTrigger>
+                                   <DropdownMenuContent align="end" className="bg-background">
+                                     <DropdownMenuItem 
+                                       onClick={() => {
+                                         setEditingReplyId(reply.id);
+                                         setEditingReplyContent(reply.content);
+                                       }}
+                                       className="cursor-pointer"
+                                     >
+                                       <Edit className="w-3 h-3 mr-2" />
+                                       {t("edit")}
+                                     </DropdownMenuItem>
+                                     <DropdownMenuItem 
+                                       onClick={() => setDeleteConfirmReplyId(reply.id)}
+                                       className="cursor-pointer text-red-600 focus:text-red-600"
+                                     >
+                                       <Trash2 className="w-3 h-3 mr-2" />
+                                       {t("delete")}
+                                     </DropdownMenuItem>
+                                   </DropdownMenuContent>
+                                 </DropdownMenu>
+                               )}
                             </div>
                             {editingReplyId === reply.id ? (
                               <div className="space-y-2 mt-2">
@@ -1204,32 +1238,6 @@ const Community = () => {
                             ) : (
                               <p className="text-gray-700 text-sm">{reply.content}</p>
                             )}
-                           
-                           {user && user.uid === reply.authorId && editingReplyId !== reply.id && (
-                             <div className="flex gap-2 mt-2">
-                               <Button 
-                                 variant="ghost" 
-                                 size="sm" 
-                                 className="text-blue-600 hover:text-blue-700"
-                                 onClick={() => {
-                                   setEditingReplyId(reply.id);
-                                   setEditingReplyContent(reply.content);
-                                 }}
-                               >
-                                 <Edit className="w-3 h-3 mr-1" />
-                                 {t("edit")}
-                               </Button>
-                               <Button 
-                                 variant="ghost" 
-                                 size="sm" 
-                                 className="text-red-600 hover:text-red-700"
-                                 onClick={() => setDeleteConfirmReplyId(reply.id)}
-                               >
-                                 <Trash2 className="w-3 h-3 mr-1" />
-                                 {t("delete")}
-                               </Button>
-                             </div>
-                           )}
                           
                           {/* Display reply attachments */}
                           {reply.attachments && reply.attachments.length > 0 && (
