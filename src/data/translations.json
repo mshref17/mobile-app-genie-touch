@@ -203,7 +203,19 @@
     "justNow": "Just now",
     "minutesAgo": "m ago",
     "hoursAgo": "h ago",
-    "daysAgo": "d ago"
+    "daysAgo": "d ago",
+    "login": "Login",
+    "loginDescription": "Enter your credentials to access your account",
+    "email": "Email",
+    "emailPlaceholder": "your@email.com",
+    "password": "Password",
+    "passwordPlaceholder": "••••••••",
+    "fillAllFields": "Please fill in all fields",
+    "success": "Success",
+    "loginSuccess": "Logged in successfully",
+    "loginFailed": "Failed to login",
+    "noAccount": "Don't have an account?",
+    "createAccount": "Create account"
   },
   "ar": {
     "resetApp": "إبدأ من جديد",
@@ -409,6 +421,18 @@
     "justNow": "الآن",
     "minutesAgo": "د",
     "hoursAgo": "س",
-    "daysAgo": "ي"
+    "daysAgo": "ي",
+    "login": "تسجيل الدخول",
+    "loginDescription": "أدخلي بياناتك للوصول إلى حسابك",
+    "email": "البريد الإلكتروني",
+    "emailPlaceholder": "your@email.com",
+    "password": "كلمة المرور",
+    "passwordPlaceholder": "••••••••",
+    "fillAllFields": "الرجاء ملء جميع الحقول",
+    "success": "نجح",
+    "loginSuccess": "تم تسجيل الدخول بنجاح",
+    "loginFailed": "فشل تسجيل الدخول",
+    "noAccount": "ليس لديك حساب؟",
+    "createAccount": "إنشاء حساب"
   }
 }
