@@ -28,7 +28,6 @@ import {
   increment,
   serverTimestamp,
   getDocs,
-  getDoc,
   limit,
   startAfter,
   QueryDocumentSnapshot,
@@ -36,8 +35,6 @@ import {
   deleteDoc
 } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { communityNotifications } from '@/lib/communityNotifications';
-import { supabase } from '@/integrations/supabase/client';
 
 
 interface Post {
@@ -294,20 +291,6 @@ const Community = () => {
       Object.values(replyListeners).forEach(unsub => unsub());
     };
   }, [loadInitialPosts]);
-
-  // Initialize push notifications
-  useEffect(() => {
-    if (user) {
-      console.log('📱 [Notifications] Initializing push notifications for user:', user.uid);
-      communityNotifications.initializePushNotifications(user.uid)
-        .then(() => {
-          console.log('📱 [Notifications] Push notifications initialized successfully');
-        })
-        .catch((error) => {
-          console.error('📱 [Notifications] Failed to initialize push notifications:', error);
-        });
-    }
-  }, [user]);
 
   // Cleanup reply listeners on unmount
   useEffect(() => {
@@ -575,62 +558,6 @@ const Community = () => {
       await updateDoc(postRef, {
         replies: increment(1)
       });
-
-      // Track the replier's interaction with this post
-      console.log('📱 [Notifications] Tracking reply interaction for user:', user.uid);
-      await communityNotifications.trackPostInteraction(user.uid, postId);
-      
-      // Get the post to find the author
-      const postSnap = await getDoc(postRef);
-      const postData = postSnap.data();
-      console.log('📱 [Notifications] Post data:', postData);
-      
-      if (postData && postData.authorId) {
-        // Get all users who interacted with this post (including the author)
-        console.log('📱 [Notifications] Getting interested users for post:', postId);
-        const interestedUserIds = await communityNotifications.getInterestedUsers(postId, user.uid);
-        console.log('📱 [Notifications] Interested users:', interestedUserIds);
-        
-        if (interestedUserIds.length > 0) {
-          // Get FCM tokens for all interested users
-          console.log('📱 [Notifications] Fetching FCM tokens...');
-          const tokens = await communityNotifications.getFCMTokensForUsers(interestedUserIds);
-          console.log('📱 [Notifications] FCM tokens found:', tokens.length);
-          
-          if (tokens.length > 0) {
-            // Send push notifications via edge function
-            const notificationTitle = t('newReplyNotification');
-            const notificationBody = t('someoneReplied').replace('{{username}}', userProfile.username);
-            
-            console.log('📱 [Notifications] Sending notifications via edge function...');
-            console.log('📱 [Notifications] Title:', notificationTitle);
-            console.log('📱 [Notifications] Body:', notificationBody);
-            console.log('📱 [Notifications] Tokens:', tokens);
-            
-            const { data, error } = await supabase.functions.invoke('send-community-notification', {
-              body: {
-                tokens,
-                title: notificationTitle,
-                body: notificationBody,
-                data: {
-                  postId,
-                  type: 'reply'
-                }
-              }
-            });
-            
-            if (error) {
-              console.error('📱 [Notifications] Error sending notifications:', error);
-            } else {
-              console.log('📱 [Notifications] Notifications sent successfully:', data);
-            }
-          } else {
-            console.log('📱 [Notifications] No FCM tokens found for interested users');
-          }
-        } else {
-          console.log('📱 [Notifications] No interested users found');
-        }
-      }
       
       setReplyContent('');
       setReplyFiles([]);

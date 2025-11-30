@@ -1,9 +1,5 @@
 {
   "en": {
-    "newReplyNotification": "New reply to your post",
-    "someoneReplied": "{{username}} replied to a post you're following",
-    "replyAdded": "Reply Added",
-    "replyAddedDescription": "Your reply has been posted successfully",
     "resetApp": "Reset App",
     "resetAppConfirmTitle": "Reset Application?",
     "resetAppConfirmDesc": "This will delete all your data and return you to the welcome screen. You can choose a different tracking mode.",
@@ -254,10 +250,6 @@
     "updateFailed": "Failed to update"
   },
   "ar": {
-    "newReplyNotification": "رد جديد على منشورك",
-    "someoneReplied": "{{username}} رد على منشور تتابعه",
-    "replyAdded": "تمت إضافة الرد",
-    "replyAddedDescription": "تم نشر ردك بنجاح",
     "resetApp": "إبدأ من جديد",
     "resetAppConfirmTitle": "إعادة تعيين التطبيق؟",
     "resetAppConfirmDesc": "سيؤدي هذا إلى حذف جميع بياناتك وإعادتك إلى شاشة الترحيب. يمكنك اختيار وضع تتبع مختلف.",
