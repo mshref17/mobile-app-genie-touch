@@ -26,8 +26,8 @@ const Signup = () => {
     if (file) {
       if (file.size > 2 * 1024 * 1024) {
         toast({
-          title: 'Error',
-          description: 'Profile picture must be less than 2MB',
+          title: t('error'),
+          description: t('profilePicSize'),
           variant: 'destructive'
         });
         return;
@@ -42,8 +42,8 @@ const Signup = () => {
     
     if (!email || !password || !username) {
       toast({
-        title: t('error') || 'Error',
-        description: 'Please fill in all required fields',
+        title: t('error'),
+        description: t('fillRequiredFields'),
         variant: 'destructive'
       });
       return;
@@ -51,8 +51,8 @@ const Signup = () => {
 
     if (username.length < 3) {
       toast({
-        title: t('error') || 'Error',
-        description: 'Username must be at least 3 characters',
+        title: t('error'),
+        description: t('usernameMinLength'),
         variant: 'destructive'
       });
       return;
@@ -60,8 +60,8 @@ const Signup = () => {
 
     if (password.length < 6) {
       toast({
-        title: t('error') || 'Error',
-        description: 'Password must be at least 6 characters',
+        title: t('error'),
+        description: t('passwordMinLength'),
         variant: 'destructive'
       });
       return;
@@ -71,14 +71,14 @@ const Signup = () => {
     try {
       await signup(email, password, username, profilePic || undefined);
       toast({
-        title: t('success') || 'Success',
-        description: 'Account created successfully'
+        title: t('success'),
+        description: t('accountCreated')
       });
       navigate('/');
     } catch (error: any) {
       toast({
-        title: t('error') || 'Error',
-        description: error.message || 'Failed to create account',
+        title: t('error'),
+        description: error.message || t('accountCreationFailed'),
         variant: 'destructive'
       });
     } finally {
@@ -91,61 +91,61 @@ const Signup = () => {
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center">
-            {t('createAccount') || 'Create Account'}
+            {t('signupTitle')}
           </CardTitle>
           <CardDescription className="text-center">
-            Join the community today
+            {t('signupDescription')}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="username">Username *</Label>
+              <Label htmlFor="username">{t('usernameRequired')}</Label>
               <Input
                 id="username"
                 type="text"
-                placeholder="username"
+                placeholder={t('usernamePlaceholder')}
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 disabled={loading}
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="email">Email *</Label>
+              <Label htmlFor="email">{t('emailRequired')}</Label>
               <Input
                 id="email"
                 type="email"
-                placeholder="your@email.com"
+                placeholder={t('emailPlaceholder')}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={loading}
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Password *</Label>
+              <Label htmlFor="password">{t('passwordRequired')}</Label>
               <Input
                 id="password"
                 type="password"
-                placeholder="••••••••"
+                placeholder={t('passwordPlaceholder')}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={loading}
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="profilePic">Profile Picture (Optional)</Label>
+              <Label htmlFor="profilePic">{t('profilePicture')}</Label>
               <div className="flex items-center gap-4">
                 {previewUrl && (
                   <img 
                     src={previewUrl} 
-                    alt="Preview" 
+                    alt={t('preview')}
                     className="w-16 h-16 rounded-full object-cover"
                   />
                 )}
                 <label htmlFor="profilePic" className="cursor-pointer">
                   <div className="flex items-center gap-2 px-4 py-2 border rounded-md hover:bg-accent">
                     <Upload className="h-4 w-4" />
-                    <span className="text-sm">Upload Image</span>
+                    <span className="text-sm">{t('uploadImage')}</span>
                   </div>
                   <Input
                     id="profilePic"
@@ -160,13 +160,13 @@ const Signup = () => {
             </div>
             <Button type="submit" className="w-full" disabled={loading}>
               {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {t('createAccount') || 'Create Account'}
+              {t('signupTitle')}
             </Button>
           </form>
           <div className="mt-4 text-center text-sm">
-            Already have an account?{' '}
+            {t('alreadyHaveAccount')}{' '}
             <Link to="/login" className="text-primary hover:underline">
-              Login
+              {t('login')}
             </Link>
           </div>
         </CardContent>
