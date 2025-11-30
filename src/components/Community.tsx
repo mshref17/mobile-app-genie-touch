@@ -7,12 +7,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Heart, MessageCircle, Camera, Video, Send, Loader2, TrendingUp, Clock, MessageSquare, Shuffle, Plus, LogOut } from "lucide-react";
+import { Heart, MessageCircle, Camera, Video, Send, Loader2, TrendingUp, Clock, MessageSquare, Shuffle, Plus, LogOut, Flag } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { db, storage } from "@/lib/firebase";
 import { 
   collection, 
@@ -86,6 +88,10 @@ const Community = () => {
   const [currentAlgorithm, setCurrentAlgorithm] = useState<SortAlgorithm>('smart');
   const [touchStartY, setTouchStartY] = useState<number>(0);
   const [isCreatePostOpen, setIsCreatePostOpen] = useState(false);
+  const [reportingPostId, setReportingPostId] = useState<string | null>(null);
+  const [reportReason, setReportReason] = useState<string>('');
+  const [reportDialogOpen, setReportDialogOpen] = useState(false);
+  const [reportSubmitting, setReportSubmitting] = useState(false);
   const { toast } = useToast();
 
   const POSTS_PER_PAGE = 10;
@@ -451,6 +457,53 @@ const Community = () => {
     }
   };
 
+  const handleReportPost = async () => {
+    if (!user || !reportingPostId || !reportReason) {
+      if (!reportReason) {
+        toast({
+          title: t("selectReportReason"),
+          variant: "destructive"
+        });
+      }
+      return;
+    }
+    
+    setReportSubmitting(true);
+    try {
+      const post = displayedPosts.find(p => p.id === reportingPostId);
+      
+      const reportData = {
+        postId: reportingPostId,
+        reporterId: user.uid,
+        reason: reportReason,
+        timestamp: serverTimestamp(),
+        status: 'pending',
+        postContent: post?.content || '',
+        postAuthorId: post?.authorId || ''
+      };
+      
+      await addDoc(collection(db, 'reports'), reportData);
+      
+      toast({
+        title: t("reportSubmitted"),
+        description: t("reportSubmittedDescription"),
+      });
+      
+      setReportDialogOpen(false);
+      setReportingPostId(null);
+      setReportReason('');
+    } catch (error) {
+      console.error('Error reporting post:', error);
+      toast({
+        title: "Error",
+        description: "Failed to submit report. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setReportSubmitting(false);
+    }
+  };
+
   const handleReplySubmit = async (postId: string) => {
     if (!user || !userProfile) {
       navigate('/login');
@@ -592,6 +645,53 @@ const Community = () => {
           </Button>
         </div>
       )}
+
+      {/* Report Dialog */}
+      <AlertDialog open={reportDialogOpen} onOpenChange={setReportDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t("reportPostTitle")}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {t("reportPostDescription")}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <RadioGroup value={reportReason} onValueChange={setReportReason}>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="spam" id="spam" />
+              <Label htmlFor="spam" className="cursor-pointer">{t("reportReasonSpam")}</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="harassment" id="harassment" />
+              <Label htmlFor="harassment" className="cursor-pointer">{t("reportReasonHarassment")}</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="inappropriate" id="inappropriate" />
+              <Label htmlFor="inappropriate" className="cursor-pointer">{t("reportReasonInappropriate")}</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="hate" id="hate" />
+              <Label htmlFor="hate" className="cursor-pointer">{t("reportReasonHateSpeech")}</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="other" id="other" />
+              <Label htmlFor="other" className="cursor-pointer">{t("reportReasonOther")}</Label>
+            </div>
+          </RadioGroup>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={reportSubmitting}>{t("cancel")}</AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={handleReportPost}
+              disabled={reportSubmitting || !reportReason}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              {reportSubmitting ? (
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              ) : null}
+              {reportSubmitting ? t("submitting") || "Submitting..." : t("submitReport")}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       {/* Floating Action Button */}
       <Dialog open={isCreatePostOpen} onOpenChange={(open) => {
@@ -812,6 +912,20 @@ const Community = () => {
                     >
                       {t("reply") || "Reply"}
                     </Button>
+                    {user && user.uid !== post.authorId && (
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="text-red-600 hover:text-red-700"
+                        onClick={() => {
+                          setReportingPostId(post.id);
+                          setReportDialogOpen(true);
+                        }}
+                      >
+                        <Flag className="w-4 h-4 mr-1" />
+                        {t("reportPost")}
+                      </Button>
+                    )}
                   </div>
                   
                    {/* Reply Form */}

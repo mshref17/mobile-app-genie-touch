@@ -181,7 +181,20 @@
     "displaySettings": "Display Settings",
     "darkMode": "Dark Mode",
     "darkModeEnabled": "Dark Mode Enabled",
-    "darkModeDisabled": "Light Mode Enabled"
+    "darkModeDisabled": "Light Mode Enabled",
+    "reportPost": "Report",
+    "reportPostTitle": "Report Post",
+    "reportPostDescription": "Why are you reporting this post?",
+    "reportReasonSpam": "Spam or misleading",
+    "reportReasonHarassment": "Harassment or bullying",
+    "reportReasonInappropriate": "Inappropriate content",
+    "reportReasonHateSpeech": "Hate speech",
+    "reportReasonOther": "Other",
+    "submitReport": "Submit Report",
+    "reportSubmitted": "Report Submitted",
+    "reportSubmittedDescription": "Thank you for helping keep our community safe.",
+    "selectReportReason": "Please select a reason",
+    "submitting": "Submitting..."
   },
   "ar": {
     "resetApp": "إبدأ من جديد",
@@ -365,6 +378,19 @@
     "displaySettings": "إعدادات العرض",
     "darkMode": "الوضع الداكن",
     "darkModeEnabled": "تم تفعيل الوضع الداكن",
-    "darkModeDisabled": "تم تفعيل الوضع الفاتح"
+    "darkModeDisabled": "تم تفعيل الوضع الفاتح",
+    "reportPost": "إبلاغ",
+    "reportPostTitle": "الإبلاغ عن المنشور",
+    "reportPostDescription": "لماذا تبلغين عن هذا المنشور؟",
+    "reportReasonSpam": "بريد مزعج أو مضلل",
+    "reportReasonHarassment": "تحرش أو تنمر",
+    "reportReasonInappropriate": "محتوى غير لائق",
+    "reportReasonHateSpeech": "خطاب كراهية",
+    "reportReasonOther": "أخرى",
+    "submitReport": "إرسال البلاغ",
+    "reportSubmitted": "تم إرسال البلاغ",
+    "reportSubmittedDescription": "شكراً لمساعدتك في الحفاظ على سلامة مجتمعنا.",
+    "selectReportReason": "الرجاء اختيار سبب",
+    "submitting": "جارٍ الإرسال..."
   }
 }
