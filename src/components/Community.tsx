@@ -103,8 +103,8 @@ const Community = () => {
     'most-replied': { name: t('discussed'), icon: MessageSquare, description: t('discussedDescription') }
   };
 
-  // Load initial posts
-  const loadInitialPosts = useCallback(async () => {
+  // Load initial posts with real-time updates
+  const loadInitialPosts = useCallback(() => {
     try {
       setLoading(true);
       let q;
@@ -125,31 +125,39 @@ const Community = () => {
           break;
       }
       
-      const querySnapshot = await getDocs(q);
-      const posts: Post[] = [];
-      querySnapshot.forEach((doc) => {
-        const data = doc.data() as any;
-        if (data) {
-          posts.push({ 
-            id: doc.id, 
-            content: data.content || '',
-            timestamp: data.timestamp,
-            likes: data.likes || 0,
-            replies: data.replies || 0,
-            attachments: data.attachments || [],
-            nickname: data.nickname || '',
-            authorId: data.authorId || ''
-          } as Post);
-        }
+      // Use onSnapshot for real-time updates
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        const posts: Post[] = [];
+        querySnapshot.forEach((doc) => {
+          const data = doc.data() as any;
+          if (data) {
+            posts.push({ 
+              id: doc.id, 
+              content: data.content || '',
+              timestamp: data.timestamp,
+              likes: data.likes || 0,
+              replies: data.replies || 0,
+              attachments: data.attachments || [],
+              nickname: data.nickname || '',
+              authorId: data.authorId || ''
+            } as Post);
+          }
+        });
+        
+        setDisplayedPosts(posts);
+        setLastDoc(querySnapshot.docs[querySnapshot.docs.length - 1] || null);
+        setHasMore(querySnapshot.docs.length === POSTS_PER_PAGE);
+        setLoading(false);
+      }, (error) => {
+        console.error('Error loading initial posts:', error);
+        setLoading(false);
       });
-      
-      setDisplayedPosts(posts);
-      setLastDoc(querySnapshot.docs[querySnapshot.docs.length - 1] || null);
-      setHasMore(querySnapshot.docs.length === POSTS_PER_PAGE);
-      setLoading(false);
+
+      return unsubscribe;
     } catch (error) {
       console.error('Error loading initial posts:', error);
       setLoading(false);
+      return () => {};
     }
   }, [currentAlgorithm]);
 
@@ -214,7 +222,11 @@ const Community = () => {
     setDisplayedPosts([]);
     setLastDoc(null);
     setHasMore(true);
-    loadInitialPosts();
+    const unsubscribe = loadInitialPosts();
+    
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
   }, [currentAlgorithm, loadInitialPosts]);
 
   // Infinite scroll
@@ -262,11 +274,13 @@ const Community = () => {
 
   // Load initial posts on mount
   useEffect(() => {
-    loadInitialPosts();
+    const unsubscribe = loadInitialPosts();
     
     return () => {
+      // Clean up real-time listener
+      if (unsubscribe) unsubscribe();
       // Clean up all reply listeners
-      Object.values(replyListeners).forEach(unsubscribe => unsubscribe());
+      Object.values(replyListeners).forEach(unsub => unsub());
     };
   }, [loadInitialPosts]);
 
