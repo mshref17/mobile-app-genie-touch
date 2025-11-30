@@ -196,7 +196,14 @@
     "selectReportReason": "Please select a reason",
     "submitting": "Submitting...",
     "submitReply": "Submit Reply",
-    "writeReply": "Write your reply..."
+    "writeReply": "Write your reply...",
+    "logout": "Logout",
+    "error": "Error",
+    "reportError": "Failed to submit report. Please try again.",
+    "justNow": "Just now",
+    "minutesAgo": "m ago",
+    "hoursAgo": "h ago",
+    "daysAgo": "d ago"
   },
   "ar": {
     "resetApp": "إبدأ من جديد",
@@ -395,6 +402,13 @@
     "selectReportReason": "الرجاء اختيار سبب",
     "submitting": "جارٍ الإرسال...",
     "submitReply": "إرسال الرد",
-    "writeReply": "اكتبي ردك..."
+    "writeReply": "اكتبي ردك...",
+    "logout": "تسجيل الخروج",
+    "error": "خطأ",
+    "reportError": "فشل في إرسال البلاغ. يرجى المحاولة مرة أخرى.",
+    "justNow": "الآن",
+    "minutesAgo": "د",
+    "hoursAgo": "س",
+    "daysAgo": "ي"
   }
 }

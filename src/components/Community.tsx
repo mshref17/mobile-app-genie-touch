@@ -509,8 +509,8 @@ const Community = () => {
     } catch (error) {
       console.error('Error reporting post:', error);
       toast({
-        title: "Error",
-        description: "Failed to submit report. Please try again.",
+        title: t("error"),
+        description: t("reportError"),
         variant: "destructive"
       });
     } finally {
@@ -609,18 +609,18 @@ const Community = () => {
   };
 
   const formatTimeAgo = (timestamp: any) => {
-    if (!timestamp) return 'Just now';
+    if (!timestamp) return t("justNow");
     
     const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
     const now = new Date();
     const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60));
     
     if (diffInMinutes < 60) {
-      return `${diffInMinutes}m ago`;
+      return `${diffInMinutes}${t("minutesAgo")}`;
     } else if (diffInMinutes < 1440) {
-      return `${Math.floor(diffInMinutes / 60)}h ago`;
+      return `${Math.floor(diffInMinutes / 60)}${t("hoursAgo")}`;
     } else {
-      return `${Math.floor(diffInMinutes / 1440)}d ago`;
+      return `${Math.floor(diffInMinutes / 1440)}${t("daysAgo")}`;
     }
   };
 
@@ -655,7 +655,7 @@ const Community = () => {
             className="gap-2"
           >
             <LogOut className="h-4 w-4" />
-            Logout
+            {t("logout")}
           </Button>
         </div>
       )}
