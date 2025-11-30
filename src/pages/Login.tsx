@@ -23,8 +23,8 @@ const Login = () => {
     
     if (!email || !password) {
       toast({
-        title: t('error') || 'Error',
-        description: 'Please fill in all fields',
+        title: t('error'),
+        description: t('fillAllFields'),
         variant: 'destructive'
       });
       return;
@@ -34,14 +34,14 @@ const Login = () => {
     try {
       await login(email, password);
       toast({
-        title: t('success') || 'Success',
-        description: 'Logged in successfully'
+        title: t('success'),
+        description: t('loginSuccess')
       });
       navigate('/');
     } catch (error: any) {
       toast({
-        title: t('error') || 'Error',
-        description: error.message || 'Failed to login',
+        title: t('error'),
+        description: error.message || t('loginFailed'),
         variant: 'destructive'
       });
     } finally {
@@ -54,31 +54,31 @@ const Login = () => {
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center">
-            {t('login') || 'Login'}
+            {t('login')}
           </CardTitle>
           <CardDescription className="text-center">
-            Enter your credentials to access your account
+            {t('loginDescription')}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">{t('email')}</Label>
               <Input
                 id="email"
                 type="email"
-                placeholder="your@email.com"
+                placeholder={t('emailPlaceholder')}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={loading}
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">{t('password')}</Label>
               <Input
                 id="password"
                 type="password"
-                placeholder="••••••••"
+                placeholder={t('passwordPlaceholder')}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={loading}
@@ -86,13 +86,13 @@ const Login = () => {
             </div>
             <Button type="submit" className="w-full" disabled={loading}>
               {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {t('login') || 'Login'}
+              {t('login')}
             </Button>
           </form>
           <div className="mt-4 text-center text-sm">
-            Don't have an account?{' '}
+            {t('noAccount')}{' '}
             <Link to="/signup" className="text-primary hover:underline">
-              Create account
+              {t('createAccount')}
             </Link>
           </div>
         </CardContent>
