@@ -725,7 +725,7 @@ const Community = () => {
     <div className="space-y-6 relative">
       {/* User Profile & Logout */}
       {user && userProfile && (
-        <div className="flex items-center justify-between p-4 bg-gradient-to-r from-pink-50 to-purple-50 rounded-lg">
+        <div className="flex items-center justify-between p-4 bg-gradient-to-r from-pink-50 to-purple-50 dark:from-pink-950/30 dark:to-purple-950/30 rounded-lg">
           <div className="flex items-center gap-3">
             {userProfile.profilePic ? (
               <img 
@@ -734,14 +734,14 @@ const Community = () => {
                 className="w-10 h-10 rounded-full object-cover"
               />
             ) : (
-              <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
-                <span className="text-sm font-semibold">
+              <div className="w-10 h-10 rounded-full bg-primary/20 dark:bg-primary/30 flex items-center justify-center">
+                <span className="text-sm font-semibold text-foreground">
                   {userProfile.username.charAt(0).toUpperCase()}
                 </span>
               </div>
             )}
             <div>
-              <p className="font-medium text-sm">{userProfile.username}</p>
+              <p className="font-medium text-sm text-foreground">{userProfile.username}</p>
               <p className="text-xs text-muted-foreground">{user.email}</p>
             </div>
           </div>
@@ -820,10 +820,10 @@ const Community = () => {
             <Plus className="h-6 w-6" />
           </Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[500px]">
+        <DialogContent className="sm:max-w-[500px] bg-background">
           <DialogHeader>
-            <DialogTitle className="text-pink-800">{t("shareWithCommunity")}</DialogTitle>
-            <DialogDescription>
+            <DialogTitle className="text-pink-800 dark:text-pink-400">{t("shareWithCommunity")}</DialogTitle>
+            <DialogDescription className="text-muted-foreground">
               {t("communityDescription")}
             </DialogDescription>
           </DialogHeader>
@@ -848,7 +848,7 @@ const Community = () => {
                   className="hidden"
                 />
                 <Label htmlFor="file-upload" className="cursor-pointer">
-                  <div className="flex items-center gap-2 px-3 py-2 border rounded-md hover:bg-gray-50">
+                  <div className="flex items-center gap-2 px-3 py-2 border rounded-md hover:bg-gray-50 dark:hover:bg-gray-800">
                     <Camera className="w-4 h-4" />
                     <span className="text-sm">{t("photo")}</span>
                   </div>
@@ -889,7 +889,7 @@ const Community = () => {
         onTouchEnd={handleTouchEnd}
       >
         <div className="flex items-center justify-between">
-          <h3 className="text-xl font-semibold text-pink-800">{t("communityQuestions")}</h3>
+          <h3 className="text-xl font-semibold text-pink-800 dark:text-pink-400">{t("communityQuestions")}</h3>
           <div className="flex items-center gap-2">
             <Badge variant="outline" className="hidden text-purple-600 border-purple-200">
               {React.createElement(algorithms[currentAlgorithm].icon, { className: "w-3 h-3 mr-1" })}
@@ -929,16 +929,16 @@ const Community = () => {
             ))}
           </div>
         ) : displayedPosts.length === 0 ? (
-          <Card className="text-center py-8">
+          <Card className="text-center py-8 bg-card dark:bg-card">
             <CardContent>
-              <p className="text-gray-500 mb-2">{t('noPostsAvailable')}</p>
-              <p className="text-sm text-gray-400">{t('beFirstToShare')}</p>
+              <p className="text-gray-500 dark:text-gray-400 mb-2">{t('noPostsAvailable')}</p>
+              <p className="text-sm text-gray-400 dark:text-gray-500">{t('beFirstToShare')}</p>
             </CardContent>
           </Card>
         ) : (
           <>
             {displayedPosts.map((post) => (
-            <Card key={post.id}>
+            <Card key={post.id} className="bg-card dark:bg-card">
               <CardContent className="pt-6">
                  <div className="space-y-3">
                    <div className="flex items-center gap-2 mb-2">
@@ -949,18 +949,18 @@ const Community = () => {
                          className="w-8 h-8 rounded-full object-cover"
                        />
                      ) : (
-                       <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center">
-                         <span className="text-xs font-semibold text-purple-700">
+                       <div className="w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
+                         <span className="text-xs font-semibold text-purple-700 dark:text-purple-300">
                            {post.nickname?.charAt(0).toUpperCase()}
                          </span>
                        </div>
                      )}
                      <div className="flex-1">
-                       <span className="text-sm font-medium text-purple-700">
+                       <span className="text-sm font-medium text-purple-700 dark:text-purple-400">
                          {post.nickname || t("anonymous")}
                        </span>
                      </div>
-                     <span className="text-xs text-gray-500">
+                     <span className="text-xs text-gray-500 dark:text-gray-400">
                        {formatTimeAgo(post.timestamp)}
                      </span>
                      {user && user.uid === post.authorId && editingPostId !== post.id && (
@@ -1021,7 +1021,7 @@ const Community = () => {
                        </div>
                      </div>
                    ) : (
-                     <p className="text-gray-700">{post.content}</p>
+                     <p className="text-gray-700 dark:text-gray-300">{post.content}</p>
                    )}
                   
                   {/* Display attachments */}
@@ -1098,7 +1098,7 @@ const Community = () => {
                   
                    {/* Reply Form */}
                    {replyingTo === post.id && (
-                     <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+                     <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-900/50 rounded-lg">
                         <div className="space-y-3 mb-3">
                          <Textarea
                            placeholder={t("writeReply") || "Write your reply..."}
@@ -1117,12 +1117,12 @@ const Community = () => {
                             onChange={handleReplyFileSelect}
                             className="hidden"
                           />
-                          <Label htmlFor={`reply-file-upload-${post.id}`} className="cursor-pointer">
-                            <div className="flex items-center gap-2 px-3 py-2 border rounded-md hover:bg-gray-100">
-                              <Camera className="w-4 h-4" />
-                              <span className="text-sm">{t("photo")}</span>
-                            </div>
-                          </Label>
+                           <Label htmlFor={`reply-file-upload-${post.id}`} className="cursor-pointer">
+                             <div className="flex items-center gap-2 px-3 py-2 border rounded-md hover:bg-gray-100 dark:hover:bg-gray-800">
+                               <Camera className="w-4 h-4" />
+                               <span className="text-sm">{t("photo")}</span>
+                             </div>
+                           </Label>
                         </div>
                       </div>
                       
@@ -1164,18 +1164,18 @@ const Community = () => {
                     </div>
                   )}
                   
-                  {/* Replies List */}
-                  {repliesVisible[post.id] && postReplies[post.id] && (
-                    <div className="mt-4 space-y-3">
-                      <h4 className="font-medium text-purple-800">{t("replies") || "Replies"}</h4>
+                   {/* Replies List */}
+                   {repliesVisible[post.id] && postReplies[post.id] && (
+                     <div className="mt-4 space-y-3">
+                       <h4 className="font-medium text-purple-800 dark:text-purple-400">{t("replies") || "Replies"}</h4>
                        {postReplies[post.id].map((reply) => (
-                          <div key={reply.id} className="bg-purple-50 p-3 rounded-lg ml-4">
+                          <div key={reply.id} className="bg-purple-50 dark:bg-purple-950/30 p-3 rounded-lg ml-4">
                              <div className="flex items-center gap-2 mb-2">
                                <div className="flex-1 flex items-center gap-2">
-                                 <span className="text-xs font-medium text-purple-700">
+                                 <span className="text-xs font-medium text-purple-700 dark:text-purple-400">
                                    {reply.nickname || t("anonymous")}
                                  </span>
-                                 <span className="text-xs text-gray-500">
+                                 <span className="text-xs text-gray-500 dark:text-gray-400">
                                    {formatTimeAgo(reply.timestamp)}
                                  </span>
                                </div>
@@ -1236,7 +1236,7 @@ const Community = () => {
                                 </div>
                               </div>
                             ) : (
-                              <p className="text-gray-700 text-sm">{reply.content}</p>
+                              <p className="text-gray-700 dark:text-gray-300 text-sm">{reply.content}</p>
                             )}
                           
                           {/* Display reply attachments */}
@@ -1278,21 +1278,21 @@ const Community = () => {
                     <Loader2 className="w-4 h-4 animate-spin" />
                     <span className="text-sm text-gray-500">{t('loadingMorePosts')}</span>
                   </div>
-                ) : (
-                  <Button 
-                    variant="outline" 
-                    onClick={loadMorePosts}
-                    className="text-purple-600 border-purple-200 hover:bg-purple-50"
-                  >
-                    {t('loadMorePosts')}
-                  </Button>
+                 ) : (
+                   <Button 
+                     variant="outline" 
+                     onClick={loadMorePosts}
+                     className="text-purple-600 dark:text-purple-400 border-purple-200 dark:border-purple-800 hover:bg-purple-50 dark:hover:bg-purple-950/30"
+                   >
+                     {t('loadMorePosts')}
+                   </Button>
                 )}
               </div>
             )}
             
             {!hasMore && displayedPosts.length > 0 && (
               <div className="text-center py-4">
-                <p className="text-sm text-gray-500">{t('noMorePosts')}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">{t('noMorePosts')}</p>
               </div>
             )}
           </>
@@ -1301,10 +1301,10 @@ const Community = () => {
 
       {/* Firebase Setup Notice - Show only if no config */}
       {(!db || displayedPosts.length === 0) && !loading && (
-        <Card className="border-blue-200 bg-blue-50">
+        <Card className="border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950/30">
           <CardHeader>
-            <CardTitle className="text-blue-800">Firebase Configuration</CardTitle>
-            <CardDescription className="text-blue-700">
+            <CardTitle className="text-blue-800 dark:text-blue-400">Firebase Configuration</CardTitle>
+            <CardDescription className="text-blue-700 dark:text-blue-300">
               Replace the placeholder config in src/lib/firebase.ts with your actual Firebase project configuration to enable community features.
             </CardDescription>
           </CardHeader>
