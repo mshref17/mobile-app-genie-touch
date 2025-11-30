@@ -232,7 +232,22 @@
     "usernameMinLength": "Username must be at least 3 characters",
     "passwordMinLength": "Password must be at least 6 characters",
     "accountCreated": "Account created successfully",
-    "accountCreationFailed": "Failed to create account"
+    "accountCreationFailed": "Failed to create account",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save",
+    "editing": "Editing...",
+    "deleting": "Deleting...",
+    "deletePost": "Delete Post",
+    "deletePostConfirm": "Are you sure you want to delete this post?",
+    "deleteReply": "Delete Reply",
+    "deleteReplyConfirm": "Are you sure you want to delete this reply?",
+    "postDeleted": "Post deleted successfully",
+    "replyDeleted": "Reply deleted successfully",
+    "postUpdated": "Post updated successfully",
+    "replyUpdated": "Reply updated successfully",
+    "deleteFailed": "Failed to delete",
+    "updateFailed": "Failed to update"
   },
   "ar": {
     "resetApp": "إبدأ من جديد",
@@ -467,6 +482,21 @@
     "usernameMinLength": "يجب أن يكون اسم المستخدم 3 أحرف على الأقل",
     "passwordMinLength": "يجب أن تكون كلمة المرور 6 أحرف على الأقل",
     "accountCreated": "تم إنشاء الحساب بنجاح",
-    "accountCreationFailed": "فشل إنشاء الحساب"
+    "accountCreationFailed": "فشل إنشاء الحساب",
+    "edit": "تعديل",
+    "delete": "حذف",
+    "save": "حفظ",
+    "editing": "جاري التعديل...",
+    "deleting": "جاري الحذف...",
+    "deletePost": "حذف المنشور",
+    "deletePostConfirm": "هل أنت متأكد من حذف هذا المنشور؟",
+    "deleteReply": "حذف الرد",
+    "deleteReplyConfirm": "هل أنت متأكد من حذف هذا الرد؟",
+    "postDeleted": "تم حذف المنشور بنجاح",
+    "replyDeleted": "تم حذف الرد بنجاح",
+    "postUpdated": "تم تحديث المنشور بنجاح",
+    "replyUpdated": "تم تحديث الرد بنجاح",
+    "deleteFailed": "فشل الحذف",
+    "updateFailed": "فشل التحديث"
   }
 }
