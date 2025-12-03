@@ -23,14 +23,11 @@ import NotificationSettings from "@/components/NotificationSettings";
 import { BottomNavigation } from "@/components/BottomNavigation";
 import SplashScreen from "@/components/SplashScreen";
 import { WelcomeDialog } from "@/components/WelcomeDialog";
+import AppIcon from "@/components/AppIcon";
 
 import { NotificationService } from "@/lib/notifications";
 import { LocalNotifications, LocalNotificationSchema } from '@capacitor/local-notifications';
 import { Capacitor } from '@capacitor/core';
-
-
-
-const appLogo = "/app-icon.png";
 
 const Index = () => {
   const { t, language } = useLanguage();
@@ -596,7 +593,7 @@ const Index = () => {
           <div className="container mx-auto px-4 py-2 max-w-4xl">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <img src={appLogo} alt={t('appLogoAlt')} className="w-8 h-8 rounded-xl shadow-md" />
+                <AppIcon className="w-8 h-8 rounded-xl shadow-md" />
                 <h1 className="text-lg font-bold text-white drop-shadow-md">{t('appName')}</h1>
               </div>
               <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
