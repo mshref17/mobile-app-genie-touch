@@ -2,13 +2,13 @@ import { useEffect, useRef } from 'react';
 import { AdMob, InterstitialAdPluginEvents } from '@capacitor-community/admob';
 import { Capacitor } from '@capacitor/core';
 import { App as CapApp } from '@capacitor/app';
+import { ADMOB_CONFIG } from '@/config/admob';
 
 export const useAppOpenAd = () => {
   const initialized = useRef(false);
   const adLoaded = useRef(false);
   const isShowingAd = useRef(false);
   const lastAdShownTime = useRef<number>(0);
-  const MIN_TIME_BETWEEN_ADS = 4 * 60 * 60 * 1000; // 4 hours in milliseconds
 
   useEffect(() => {
     const initializeAppOpenAd = async () => {
@@ -22,8 +22,8 @@ export const useAppOpenAd = () => {
       try {
         // Initialize AdMob if not already done
         await AdMob.initialize({
-          testingDevices: ['YOUR_DEVICE_ID'],
-          initializeForTesting: true,
+          testingDevices: ADMOB_CONFIG.TESTING_DEVICES,
+          initializeForTesting: ADMOB_CONFIG.IS_TESTING,
         });
 
         console.log('✅ AdMob initialized for App Open ads');
@@ -63,8 +63,8 @@ export const useAppOpenAd = () => {
           setTimeout(async () => {
             try {
               await AdMob.prepareInterstitial({
-                adId: 'ca-app-pub-3940256099942544/1033173712', // Test Interstitial Ad Unit ID
-                isTesting: true,
+                adId: ADMOB_CONFIG.INTERSTITIAL_AD_UNIT_ID,
+                isTesting: ADMOB_CONFIG.IS_TESTING,
               });
               console.log('✅ Next App Open ad prepared');
             } catch (error) {
@@ -76,8 +76,8 @@ export const useAppOpenAd = () => {
         // Prepare initial interstitial
         console.log('⏳ Preparing initial App Open ad...');
         await AdMob.prepareInterstitial({
-          adId: 'ca-app-pub-3940256099942544/1033173712', // Test Interstitial Ad Unit ID
-          isTesting: true,
+          adId: ADMOB_CONFIG.INTERSTITIAL_AD_UNIT_ID,
+          isTesting: ADMOB_CONFIG.IS_TESTING,
         });
         console.log('✅ Initial App Open interstitial ad prepared');
 
@@ -109,8 +109,8 @@ export const useAppOpenAd = () => {
           console.log('⚠️ Ad not loaded yet, preparing new ad...');
           try {
             await AdMob.prepareInterstitial({
-              adId: 'ca-app-pub-3940256099942544/1033173712',
-              isTesting: true,
+              adId: ADMOB_CONFIG.INTERSTITIAL_AD_UNIT_ID,
+              isTesting: ADMOB_CONFIG.IS_TESTING,
             });
           } catch (error) {
             console.error('❌ Failed to prepare ad:', error);
@@ -119,7 +119,7 @@ export const useAppOpenAd = () => {
         }
         
         // Skip ad if shown too recently
-        if (lastAdShownTime.current > 0 && timeSinceLastAd < MIN_TIME_BETWEEN_ADS) {
+        if (lastAdShownTime.current > 0 && timeSinceLastAd < ADMOB_CONFIG.MIN_TIME_BETWEEN_ADS_MS) {
           console.log('⏳ Too soon to show another ad (minimum 4 hours between ads)');
           return;
         }
@@ -134,8 +134,8 @@ export const useAppOpenAd = () => {
           setTimeout(async () => {
             try {
               await AdMob.prepareInterstitial({
-                adId: 'ca-app-pub-3940256099942544/1033173712',
-                isTesting: true,
+                adId: ADMOB_CONFIG.INTERSTITIAL_AD_UNIT_ID,
+                isTesting: ADMOB_CONFIG.IS_TESTING,
               });
             } catch (e) {
               console.error('❌ Failed to prepare ad after show failure:', e);
