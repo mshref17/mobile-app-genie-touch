@@ -24,6 +24,7 @@ import { BottomNavigation } from "@/components/BottomNavigation";
 import SplashScreen from "@/components/SplashScreen";
 import { WelcomeDialog } from "@/components/WelcomeDialog";
 import AppIcon from "@/components/AppIcon";
+import LatestPostTicker from "@/components/LatestPostTicker";
 
 import { NotificationService } from "@/lib/notifications";
 import { LocalNotifications, LocalNotificationSchema } from '@capacitor/local-notifications';
@@ -774,8 +775,11 @@ const Index = () => {
                       </div>
                     </div>
                   </div>
-                </CardContent>
+              </CardContent>
               </Card>
+
+              {/* Latest Post Ticker */}
+              <LatestPostTicker onNavigateToCommunity={() => setActiveTab('community')} />
 
               {/* Daily Tip Card - Collapsible */}
               <Collapsible open={!isDailyTipCollapsed} onOpenChange={(open) => setIsDailyTipCollapsed(!open)}>
@@ -900,6 +904,9 @@ const Index = () => {
                 </div>
               </CardContent>
             </Card>
+
+            {/* Latest Post Ticker */}
+            <LatestPostTicker onNavigateToCommunity={() => setActiveTab('community')} />
 
             {/* Fertility Window Alert */}
             {periodInfo.isInFertileWindow && (
