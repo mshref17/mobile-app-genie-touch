@@ -357,8 +357,8 @@ const Index = () => {
       <div className="min-h-screen bg-gradient-to-br from-pink-100 via-purple-100 to-indigo-100 dark:from-purple-950 dark:via-indigo-950 dark:to-pink-950 p-4 flex items-center justify-center safe-area-full">
         <Card className="w-full max-w-md border-none shadow-2xl bg-white/95 backdrop-blur-sm">
           <CardHeader className="text-center space-y-4">
-            <div className="mx-auto mb-2 w-20 h-20 bg-gradient-to-br from-pink-500 to-purple-500 rounded-full flex items-center justify-center shadow-lg">
-              <Baby className="w-10 h-10 text-white" />
+            <div className="mx-auto mb-2">
+              <AppIcon className="w-20 h-20 rounded-2xl shadow-lg" />
             </div>
             <CardTitle className="text-3xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">{t('welcomeTitle')}</CardTitle>
             <CardDescription className="text-base">
