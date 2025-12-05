@@ -18,7 +18,7 @@ const LatestPostTicker = ({ onNavigateToCommunity }: LatestPostTickerProps) => {
 
   useEffect(() => {
     const postsRef = collection(db, 'posts');
-    const q = query(postsRef, orderBy('createdAt', 'desc'), limit(1));
+    const q = query(postsRef, orderBy('timestamp', 'desc'), limit(1));
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
       if (!snapshot.empty) {
@@ -31,7 +31,7 @@ const LatestPostTicker = ({ onNavigateToCommunity }: LatestPostTickerProps) => {
         
         setLatestPost({
           content: truncated,
-          authorName: data.authorName || (language === 'ar' ? 'مجهول' : 'Anonymous')
+          authorName: data.nickname || (language === 'ar' ? 'مجهول' : 'Anonymous')
         });
       }
     });
