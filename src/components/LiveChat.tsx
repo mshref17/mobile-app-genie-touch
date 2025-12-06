@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Send, Loader2, Flag, MoreVertical, Reply, Trash2, X } from "lucide-react";
+import { Send, Loader2, Flag, MoreVertical, Reply, Trash2, X, Users } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
@@ -25,7 +25,9 @@ import {
   serverTimestamp,
   where,
   Timestamp,
-  limit
+  limit,
+  setDoc,
+  getDocs
 } from 'firebase/firestore';
 
 interface ChatMessage {
@@ -56,7 +58,9 @@ const LiveChat = () => {
   const [reportDialogOpen, setReportDialogOpen] = useState(false);
   const [reportSubmitting, setReportSubmitting] = useState(false);
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
+  const [onlineCount, setOnlineCount] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const presenceDocId = useRef<string | null>(null);
   const { toast } = useToast();
 
   const MESSAGES_LIMIT = 100;
@@ -65,6 +69,75 @@ const LiveChat = () => {
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
+
+  // Presence tracking - mark user as online when viewing chat
+  useEffect(() => {
+    const PRESENCE_TIMEOUT = 2 * 60 * 1000; // 2 minutes
+    
+    const markOnline = async () => {
+      try {
+        const sessionId = `${user?.uid || 'anon'}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        presenceDocId.current = sessionId;
+        
+        await setDoc(doc(db, 'chat_presence', sessionId), {
+          odentifier: user?.uid || 'anonymous',
+          timestamp: serverTimestamp(),
+          nickname: userProfile?.username || 'Guest'
+        });
+      } catch (error) {
+        console.error('Error marking presence:', error);
+      }
+    };
+
+    const cleanupPresence = async () => {
+      if (presenceDocId.current) {
+        try {
+          await deleteDoc(doc(db, 'chat_presence', presenceDocId.current));
+        } catch (error) {
+          console.error('Error cleaning up presence:', error);
+        }
+      }
+    };
+
+    markOnline();
+
+    // Refresh presence every minute to stay "online"
+    const refreshInterval = setInterval(markOnline, 60 * 1000);
+
+    // Cleanup on unmount
+    return () => {
+      clearInterval(refreshInterval);
+      cleanupPresence();
+    };
+  }, [user?.uid, userProfile?.username]);
+
+  // Listen to online users count
+  useEffect(() => {
+    const twoMinutesAgo = new Date();
+    twoMinutesAgo.setMinutes(twoMinutesAgo.getMinutes() - 2);
+
+    const q = query(collection(db, 'chat_presence'));
+    
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const now = new Date();
+      const twoMinutesAgo = new Date(now.getTime() - 2 * 60 * 1000);
+      
+      let count = 0;
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        const timestamp = data.timestamp?.toDate ? data.timestamp.toDate() : new Date(data.timestamp);
+        if (timestamp > twoMinutesAgo) {
+          count++;
+        }
+      });
+      
+      setOnlineCount(count);
+    }, (error) => {
+      console.error('Error listening to presence:', error);
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   // Load messages with real-time updates (only messages from last 48 hours)
   useEffect(() => {
@@ -334,9 +407,21 @@ const LiveChat = () => {
             {t("chatExpiry") || "Messages expire after 48 hours"}
           </p>
         </div>
-        <Badge variant="outline" className="text-xs">
-          {messages.length} {t("messages") || "messages"}
-        </Badge>
+        <div className="flex items-center gap-2">
+          {/* Online Users Indicator */}
+          <div className="flex items-center gap-1.5 px-2 py-1 bg-green-100 rounded-full">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+            </span>
+            <span className="text-xs font-medium text-green-700">
+              {onlineCount} {t("online") || "online"}
+            </span>
+          </div>
+          <Badge variant="outline" className="text-xs">
+            {messages.length} {t("messages") || "messages"}
+          </Badge>
+        </div>
       </div>
 
       {/* Messages Area */}
