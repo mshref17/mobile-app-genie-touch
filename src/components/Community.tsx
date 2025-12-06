@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,7 +6,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Heart, MessageCircle, Camera, Video, Send, Loader2, TrendingUp, Clock, MessageSquare, Shuffle, Plus, LogOut, Flag, Edit, Trash2, MoreVertical } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Heart, MessageCircle, Camera, Video, Send, Loader2, TrendingUp, Clock, MessageSquare, Shuffle, Plus, LogOut, Flag, Edit, Trash2, MoreVertical, MessagesSquare } from "lucide-react";
+import LiveChat from "@/components/LiveChat";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
@@ -882,24 +883,46 @@ const Community = () => {
         </DialogContent>
       </Dialog>
 
-      {/* Posts Feed */}
-      <div 
-        className="space-y-4" 
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
-      >
-        <div className="flex items-center justify-between">
-          <h3 className="text-xl font-semibold text-pink-800">{t("communityQuestions")}</h3>
-          <div className="flex items-center gap-2">
-            <Badge variant="outline" className="hidden text-purple-600 border-purple-200">
-              {React.createElement(algorithms[currentAlgorithm].icon, { className: "w-3 h-3 mr-1" })}
-              {algorithms[currentAlgorithm].name}
-            </Badge>
-            <Badge variant="secondary" className="text-xs">
-              {t('swipeDownToChange')}
-            </Badge>
-          </div>
-        </div>
+      {/* Tabs for Posts and Live Chat */}
+      <Tabs defaultValue="posts" className="w-full">
+        <TabsList className="grid w-full grid-cols-2 mb-4">
+          <TabsTrigger value="posts" className="flex items-center gap-2">
+            <MessageSquare className="h-4 w-4" />
+            {t("posts") || "Posts"}
+          </TabsTrigger>
+          <TabsTrigger value="chat" className="flex items-center gap-2">
+            <MessagesSquare className="h-4 w-4" />
+            {t("liveChat") || "Live Chat"}
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="chat" className="mt-0">
+          <Card>
+            <CardContent className="p-0">
+              <LiveChat />
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="posts" className="mt-0">
+          {/* Posts Feed */}
+          <div 
+            className="space-y-4" 
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+          >
+            <div className="flex items-center justify-between">
+              <h3 className="text-xl font-semibold text-pink-800">{t("communityQuestions")}</h3>
+              <div className="flex items-center gap-2">
+                <Badge variant="outline" className="hidden text-purple-600 border-purple-200">
+                  {React.createElement(algorithms[currentAlgorithm].icon, { className: "w-3 h-3 mr-1" })}
+                  {algorithms[currentAlgorithm].name}
+                </Badge>
+                <Badge variant="secondary" className="text-xs">
+                  {t('swipeDownToChange')}
+                </Badge>
+              </div>
+            </div>
         
         {loading ? (
           // Facebook-style loading skeleton
@@ -1297,7 +1320,9 @@ const Community = () => {
             )}
           </>
         )}
-      </div>
+          </div>
+        </TabsContent>
+      </Tabs>
 
       {/* Firebase Setup Notice - Show only if no config */}
       {(!db || displayedPosts.length === 0) && !loading && (

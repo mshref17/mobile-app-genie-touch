@@ -247,7 +247,22 @@
     "postUpdated": "Post updated successfully",
     "replyUpdated": "Reply updated successfully",
     "deleteFailed": "Failed to delete",
-    "updateFailed": "Failed to update"
+    "updateFailed": "Failed to update",
+    "posts": "Posts",
+    "liveChat": "Live Chat",
+    "chatExpiry": "Messages expire after 48 hours",
+    "messages": "messages",
+    "noMessages": "No messages yet. Start the conversation!",
+    "typeMessage": "Type a message...",
+    "loginToChat": "Login to chat",
+    "replyingTo": "Replying to",
+    "messageDeleted": "Message deleted",
+    "reportMessageTitle": "Report Message",
+    "reportMessageDescription": "Please select a reason for reporting this message.",
+    "messageSendError": "Failed to send message. Please try again.",
+    "confirmDelete": "Delete Message?",
+    "deleteMessageConfirm": "This action cannot be undone. This will permanently delete your message.",
+    "report": "Report"
   },
   "ar": {
     "resetApp": "إبدأ من جديد",
@@ -497,6 +512,21 @@
     "postUpdated": "تم تحديث المنشور بنجاح",
     "replyUpdated": "تم تحديث الرد بنجاح",
     "deleteFailed": "فشل الحذف",
-    "updateFailed": "فشل التحديث"
+    "updateFailed": "فشل التحديث",
+    "posts": "المنشورات",
+    "liveChat": "الدردشة المباشرة",
+    "chatExpiry": "تنتهي الرسائل بعد 48 ساعة",
+    "messages": "رسائل",
+    "noMessages": "لا توجد رسائل بعد. ابدأي المحادثة!",
+    "typeMessage": "اكتبي رسالة...",
+    "loginToChat": "سجلي الدخول للدردشة",
+    "replyingTo": "الرد على",
+    "messageDeleted": "تم حذف الرسالة",
+    "reportMessageTitle": "الإبلاغ عن رسالة",
+    "reportMessageDescription": "يرجى اختيار سبب للإبلاغ عن هذه الرسالة.",
+    "messageSendError": "فشل إرسال الرسالة. يرجى المحاولة مرة أخرى.",
+    "confirmDelete": "حذف الرسالة؟",
+    "deleteMessageConfirm": "لا يمكن التراجع عن هذا الإجراء. سيتم حذف رسالتك نهائياً.",
+    "report": "إبلاغ"
   }
 }
