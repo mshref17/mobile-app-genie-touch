@@ -262,6 +262,7 @@
     "messageSendError": "Failed to send message. Please try again.",
     "confirmDelete": "Delete Message?",
     "deleteMessageConfirm": "This action cannot be undone. This will permanently delete your message.",
+    "online": "online",
     "report": "Report"
   },
   "ar": {
@@ -527,6 +528,7 @@
     "messageSendError": "فشل إرسال الرسالة. يرجى المحاولة مرة أخرى.",
     "confirmDelete": "حذف الرسالة؟",
     "deleteMessageConfirm": "لا يمكن التراجع عن هذا الإجراء. سيتم حذف رسالتك نهائياً.",
-    "report": "إبلاغ"
+    "report": "إبلاغ",
+    "online": "متصل"
   }
 }
