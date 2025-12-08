@@ -103,6 +103,8 @@ const Community = () => {
   const [deleteConfirmPostId, setDeleteConfirmPostId] = useState<string | null>(null);
   const [deleteConfirmReplyId, setDeleteConfirmReplyId] = useState<string | null>(null);
   const [onlineCount, setOnlineCount] = useState(0);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [activeTab, setActiveTab] = useState('posts');
   const presenceDocId = React.useRef<string | null>(null);
   const { toast } = useToast();
 
@@ -169,6 +171,44 @@ const Community = () => {
 
     return () => unsubscribe();
   }, []);
+
+  // Track unread chat messages
+  useEffect(() => {
+    const lastSeenKey = 'chat_last_seen';
+    const lastSeen = localStorage.getItem(lastSeenKey);
+    const lastSeenTime = lastSeen ? new Date(parseInt(lastSeen)) : new Date(0);
+    
+    const expiryTime = new Date();
+    expiryTime.setHours(expiryTime.getHours() - 48);
+    
+    const q = query(
+      collection(db, 'chat_messages'),
+      orderBy('timestamp', 'desc'),
+      limit(100)
+    );
+    
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      let count = 0;
+      querySnapshot.forEach((docSnapshot) => {
+        const data = docSnapshot.data();
+        const msgTime = data.timestamp?.toDate ? data.timestamp.toDate() : new Date(data.timestamp);
+        if (msgTime > lastSeenTime && msgTime > expiryTime) {
+          count++;
+        }
+      });
+      setUnreadCount(count);
+    });
+    
+    return () => unsubscribe();
+  }, [activeTab]);
+
+  // Mark messages as seen when switching to chat tab
+  useEffect(() => {
+    if (activeTab === 'chat') {
+      localStorage.setItem('chat_last_seen', Date.now().toString());
+      setUnreadCount(0);
+    }
+  }, [activeTab]);
 
   const POSTS_PER_PAGE = 10;
 
@@ -984,7 +1024,7 @@ const Community = () => {
       </Dialog>
 
       {/* Tabs for Posts and Live Chat */}
-      <Tabs defaultValue="posts" className="w-full">
+      <Tabs defaultValue="posts" value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="grid w-full grid-cols-2 mb-4">
           <TabsTrigger value="posts" className="flex items-center gap-2">
             <MessageSquare className="h-4 w-4" />
@@ -993,7 +1033,9 @@ const Community = () => {
           <TabsTrigger value="chat" className="flex items-center gap-2">
             <MessagesSquare className="h-4 w-4" />
             {t("liveChat") || "Live Chat"}
-            <Badge variant="secondary" className="ml-1 text-[10px] px-1.5 py-0 h-4 bg-primary text-primary-foreground">{t("new") || "New"}</Badge>
+            <Badge variant="secondary" className="ml-1 text-[10px] px-1.5 py-0 h-4 bg-primary text-primary-foreground">
+              {t("new") || "New"}{unreadCount > 0 && ` (${unreadCount})`}
+            </Badge>
           </TabsTrigger>
         </TabsList>
 
