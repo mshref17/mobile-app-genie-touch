@@ -993,6 +993,7 @@ const Community = () => {
           <TabsTrigger value="chat" className="flex items-center gap-2">
             <MessagesSquare className="h-4 w-4" />
             {t("liveChat") || "Live Chat"}
+            <Badge variant="secondary" className="ml-1 text-[10px] px-1.5 py-0 h-4 bg-primary text-primary-foreground">{t("new") || "New"}</Badge>
           </TabsTrigger>
         </TabsList>
 
