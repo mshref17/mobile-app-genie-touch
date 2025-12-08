@@ -33,7 +33,8 @@ import {
   startAfter,
   QueryDocumentSnapshot,
   DocumentData,
-  deleteDoc
+  deleteDoc,
+  setDoc
 } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
@@ -101,7 +102,73 @@ const Community = () => {
   const [editingReplyContent, setEditingReplyContent] = useState('');
   const [deleteConfirmPostId, setDeleteConfirmPostId] = useState<string | null>(null);
   const [deleteConfirmReplyId, setDeleteConfirmReplyId] = useState<string | null>(null);
+  const [onlineCount, setOnlineCount] = useState(0);
+  const presenceDocId = React.useRef<string | null>(null);
   const { toast } = useToast();
+
+  // Presence tracking - mark user as online when viewing community
+  useEffect(() => {
+    const markOnline = async () => {
+      try {
+        const sessionId = `${user?.uid || 'anon'}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        presenceDocId.current = sessionId;
+        
+        await setDoc(doc(db, 'chat_presence', sessionId), {
+          identifier: user?.uid || 'anonymous',
+          timestamp: serverTimestamp(),
+          nickname: userProfile?.username || 'Guest'
+        });
+      } catch (error) {
+        console.error('Error marking presence:', error);
+      }
+    };
+
+    const cleanupPresence = async () => {
+      if (presenceDocId.current) {
+        try {
+          await deleteDoc(doc(db, 'chat_presence', presenceDocId.current));
+        } catch (error) {
+          console.error('Error cleaning up presence:', error);
+        }
+      }
+    };
+
+    markOnline();
+
+    // Refresh presence every minute to stay "online"
+    const refreshInterval = setInterval(markOnline, 60 * 1000);
+
+    // Cleanup on unmount
+    return () => {
+      clearInterval(refreshInterval);
+      cleanupPresence();
+    };
+  }, [user?.uid, userProfile?.username]);
+
+  // Listen to online users count
+  useEffect(() => {
+    const q = query(collection(db, 'chat_presence'));
+    
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const now = new Date();
+      const twoMinutesAgo = new Date(now.getTime() - 2 * 60 * 1000);
+      
+      let count = 0;
+      querySnapshot.forEach((docSnapshot) => {
+        const data = docSnapshot.data();
+        const timestamp = data.timestamp?.toDate ? data.timestamp.toDate() : new Date(data.timestamp);
+        if (timestamp > twoMinutesAgo) {
+          count++;
+        }
+      });
+      
+      setOnlineCount(count);
+    }, (error) => {
+      console.error('Error listening to presence:', error);
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   const POSTS_PER_PAGE = 10;
 
@@ -726,35 +793,68 @@ const Community = () => {
     <div className="space-y-6 relative">
       {/* User Profile & Logout */}
       {user && userProfile && (
-        <div className="flex items-center justify-between p-4 bg-gradient-to-r from-pink-50 to-purple-50 rounded-lg">
-          <div className="flex items-center gap-3">
-            {userProfile.profilePic ? (
-              <img 
-                src={userProfile.profilePic} 
-                alt={userProfile.username}
-                className="w-10 h-10 rounded-full object-cover"
-              />
-            ) : (
-              <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
-                <span className="text-sm font-semibold">
-                  {userProfile.username.charAt(0).toUpperCase()}
-                </span>
+        <div className="p-4 bg-gradient-to-r from-pink-50 to-purple-50 rounded-lg space-y-2">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              {userProfile.profilePic ? (
+                <img 
+                  src={userProfile.profilePic} 
+                  alt={userProfile.username}
+                  className="w-10 h-10 rounded-full object-cover"
+                />
+              ) : (
+                <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+                  <span className="text-sm font-semibold">
+                    {userProfile.username.charAt(0).toUpperCase()}
+                  </span>
+                </div>
+              )}
+              <div>
+                <p className="font-medium text-sm">{userProfile.username}</p>
+                <p className="text-xs text-muted-foreground">{user.email}</p>
               </div>
-            )}
-            <div>
-              <p className="font-medium text-sm">{userProfile.username}</p>
-              <p className="text-xs text-muted-foreground">{user.email}</p>
             </div>
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={logout}
+              className="gap-2"
+            >
+              <LogOut className="h-4 w-4" />
+              {t("logout")}
+            </Button>
           </div>
-          <Button 
-            variant="outline" 
-            size="sm"
-            onClick={logout}
-            className="gap-2"
-          >
-            <LogOut className="h-4 w-4" />
-            {t("logout")}
-          </Button>
+          {/* Online Users Counter */}
+          <div className="flex items-center gap-1.5 justify-center">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+            </span>
+            <span className="text-xs font-medium text-green-700">
+              {onlineCount} {t("online") || "online"}
+            </span>
+          </div>
+        </div>
+      )}
+
+      {/* Login prompt with online counter for non-logged users */}
+      {!user && (
+        <div className="p-4 bg-gradient-to-r from-pink-50 to-purple-50 rounded-lg space-y-2">
+          <div className="flex items-center justify-center">
+            <Button onClick={() => navigate('/login')} className="bg-pink-600 hover:bg-pink-700">
+              {t("loginToParticipate") || "Login to participate"}
+            </Button>
+          </div>
+          {/* Online Users Counter */}
+          <div className="flex items-center gap-1.5 justify-center">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+            </span>
+            <span className="text-xs font-medium text-green-700">
+              {onlineCount} {t("online") || "online"}
+            </span>
+          </div>
         </div>
       )}
 
@@ -899,7 +999,7 @@ const Community = () => {
         <TabsContent value="chat" className="mt-0">
           <Card>
             <CardContent className="p-0">
-              <LiveChat />
+              <LiveChat onOnlineCountChange={setOnlineCount} />
             </CardContent>
           </Card>
         </TabsContent>
