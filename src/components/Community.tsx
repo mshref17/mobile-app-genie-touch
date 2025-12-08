@@ -104,6 +104,7 @@ const Community = () => {
   const [deleteConfirmReplyId, setDeleteConfirmReplyId] = useState<string | null>(null);
   const [onlineCount, setOnlineCount] = useState(0);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [hasSeenChat, setHasSeenChat] = useState(() => localStorage.getItem('chat_last_seen') !== null);
   const [activeTab, setActiveTab] = useState('posts');
   const presenceDocId = React.useRef<string | null>(null);
   const { toast } = useToast();
@@ -207,6 +208,7 @@ const Community = () => {
     if (activeTab === 'chat') {
       localStorage.setItem('chat_last_seen', Date.now().toString());
       setUnreadCount(0);
+      setHasSeenChat(true);
     }
   }, [activeTab]);
 
@@ -1033,9 +1035,11 @@ const Community = () => {
           <TabsTrigger value="chat" className="flex items-center gap-2">
             <MessagesSquare className="h-4 w-4" />
             {t("liveChat") || "Live Chat"}
-            <Badge variant="secondary" className="ml-1 text-[10px] px-1.5 py-0 h-4 bg-primary text-primary-foreground">
-              {t("new") || "New"}{unreadCount > 0 && ` (${unreadCount})`}
-            </Badge>
+            {!hasSeenChat && unreadCount > 0 && (
+              <Badge variant="secondary" className="ml-1 text-[10px] px-1.5 py-0 h-4 bg-primary text-primary-foreground">
+                {t("new") || "New"} ({unreadCount})
+              </Badge>
+            )}
           </TabsTrigger>
         </TabsList>
 
