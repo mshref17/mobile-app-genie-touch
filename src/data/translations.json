@@ -529,6 +529,8 @@
     "confirmDelete": "حذف الرسالة؟",
     "deleteMessageConfirm": "لا يمكن التراجع عن هذا الإجراء. سيتم حذف رسالتك نهائياً.",
     "report": "إبلاغ",
-    "online": "متصل"
+    "online": "متصل",
+    "loginToParticipate": "انضمي للمحادثة",
+    "new": "جديد"
   }
 }
