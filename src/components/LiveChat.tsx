@@ -68,7 +68,7 @@ const LiveChat = ({ onOnlineCountChange }: LiveChatProps) => {
   const { toast } = useToast();
 
   const MESSAGES_LIMIT = 100;
-  const MESSAGE_EXPIRY_HOURS = 48;
+  const MESSAGE_EXPIRY_HOURS = 24;
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -144,7 +144,7 @@ const LiveChat = ({ onOnlineCountChange }: LiveChatProps) => {
     return () => unsubscribe();
   }, [onOnlineCountChange]);
 
-  // Load messages with real-time updates (only messages from last 48 hours)
+  // Load messages with real-time updates (prefer recent messages, fallback to older)
   useEffect(() => {
     const expiryTime = new Date();
     expiryTime.setHours(expiryTime.getHours() - MESSAGE_EXPIRY_HOURS);
@@ -156,25 +156,32 @@ const LiveChat = ({ onOnlineCountChange }: LiveChatProps) => {
     );
     
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const msgs: ChatMessage[] = [];
+      const allMsgs: ChatMessage[] = [];
+      const recentMsgs: ChatMessage[] = [];
+      
       querySnapshot.forEach((doc) => {
         const data = doc.data();
-        // Filter out expired messages client-side
         const msgTime = data.timestamp?.toDate ? data.timestamp.toDate() : new Date(data.timestamp);
+        const msg = { 
+          id: doc.id, 
+          content: data.content || '',
+          timestamp: data.timestamp,
+          nickname: data.nickname || '',
+          authorId: data.authorId || '',
+          profilePic: data.profilePic || '',
+          replyTo: data.replyTo || null
+        };
+        
+        allMsgs.push(msg);
+        
+        // Check if message is within expiry time (24 hours)
         if (msgTime > expiryTime) {
-          msgs.push({ 
-            id: doc.id, 
-            content: data.content || '',
-            timestamp: data.timestamp,
-            nickname: data.nickname || '',
-            authorId: data.authorId || '',
-            profilePic: data.profilePic || '',
-            replyTo: data.replyTo || null
-          });
+          recentMsgs.push(msg);
         }
       });
       
-      setMessages(msgs);
+      // Show recent messages if available, otherwise show all messages
+      setMessages(recentMsgs.length > 0 ? recentMsgs : allMsgs);
       setLoading(false);
       setTimeout(scrollToBottom, 100);
     }, (error) => {
@@ -409,7 +416,7 @@ const LiveChat = ({ onOnlineCountChange }: LiveChatProps) => {
         <div>
           <h3 className="font-semibold text-pink-800">{t("liveChat") || "Live Chat"}</h3>
           <p className="text-xs text-muted-foreground">
-            {t("chatExpiry") || "Messages expire after 48 hours"}
+            {t("chatExpiry") || "Messages expire after 24 hours"}
           </p>
         </div>
         <div className="flex items-center gap-3">
