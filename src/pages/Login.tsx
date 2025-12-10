@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, ArrowLeft } from 'lucide-react';
+import { Loader2, X } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 const Login = () => {
@@ -55,9 +55,9 @@ const Login = () => {
         variant="ghost"
         size="icon"
         className="absolute top-4 left-4 rtl:left-auto rtl:right-4"
-        onClick={() => navigate(-1)}
+        onClick={() => navigate('/?tab=community')}
       >
-        <ArrowLeft className="h-5 w-5 rtl:rotate-180" />
+        <X className="h-5 w-5" />
       </Button>
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
