@@ -55,7 +55,7 @@ const Login = () => {
         variant="ghost"
         size="icon"
         className="absolute top-4 left-4 rtl:left-auto rtl:right-4"
-        onClick={() => navigate('/?tab=community')}
+        onClick={() => navigate(-1)}
       >
         <X className="h-5 w-5" />
       </Button>
