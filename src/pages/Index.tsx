@@ -23,7 +23,7 @@ import NotificationSettings from "@/components/NotificationSettings";
 import { BottomNavigation } from "@/components/BottomNavigation";
 import SplashScreen from "@/components/SplashScreen";
 import { WelcomeDialog } from "@/components/WelcomeDialog";
-import AppIcon from "@/components/AppIcon";
+import appLogo from "@/assets/app-logo.png";
 import LatestPostTicker from "@/components/LatestPostTicker";
 
 import { NotificationService } from "@/lib/notifications";
@@ -358,7 +358,7 @@ const Index = () => {
         <Card className="w-full max-w-md border-none shadow-2xl bg-white/95 backdrop-blur-sm">
           <CardHeader className="text-center space-y-4">
             <div className="mx-auto mb-2">
-              <AppIcon className="w-20 h-20 rounded-2xl shadow-lg" />
+              <img src={appLogo} alt="App Logo" className="w-20 h-20 rounded-2xl shadow-lg" />
             </div>
             <CardTitle className="text-3xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">{t('welcomeTitle')}</CardTitle>
             <CardDescription className="text-base">
@@ -594,7 +594,7 @@ const Index = () => {
           <div className="container mx-auto px-4 py-2 max-w-4xl">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <AppIcon className="w-8 h-8 rounded-xl shadow-md" />
+                <img src={appLogo} alt="App Logo" className="w-8 h-8 rounded-xl shadow-md" />
                 <h1 className="text-lg font-bold text-white drop-shadow-md">{t('appName')}</h1>
               </div>
               <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
