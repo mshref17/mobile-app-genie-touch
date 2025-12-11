@@ -937,7 +937,7 @@ const Community = () => {
         </AlertDialogContent>
       </AlertDialog>
 
-      {/* Floating Action Button */}
+      {/* Floating Action Button - Only show on posts tab */}
       <Dialog open={isCreatePostOpen} onOpenChange={(open) => {
         if (open && !user) {
           navigate('/login');
@@ -945,14 +945,16 @@ const Community = () => {
           setIsCreatePostOpen(open);
         }
       }}>
-        <DialogTrigger asChild>
-          <Button 
-            className="fixed bottom-28 right-6 h-14 w-14 rounded-full shadow-lg bg-pink-600 hover:bg-pink-700 opacity-40 hover:opacity-60 transition-opacity z-[100]"
-            size="icon"
-          >
-            <Plus className="h-6 w-6" />
-          </Button>
-        </DialogTrigger>
+        {activeTab === 'posts' && (
+          <DialogTrigger asChild>
+            <Button 
+              className="fixed bottom-28 right-6 h-14 w-14 rounded-full shadow-lg bg-pink-600 hover:bg-pink-700 opacity-40 hover:opacity-60 transition-opacity z-[100]"
+              size="icon"
+            >
+              <Plus className="h-6 w-6" />
+            </Button>
+          </DialogTrigger>
+        )}
         <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
             <DialogTitle className="text-pink-800">{t("shareWithCommunity")}</DialogTitle>
