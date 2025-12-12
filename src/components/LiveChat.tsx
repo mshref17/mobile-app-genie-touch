@@ -380,7 +380,7 @@ const LiveChat = ({ onOnlineCountChange }: LiveChatProps) => {
                 <div 
                   key={message.id} 
                   id={`message-${message.id}`}
-                  className={`flex gap-2 transition-colors duration-500 ${isOwnMessage ? 'flex-row-reverse' : 'flex-row-reverse'}`}
+                  className="flex gap-2 transition-colors duration-500"
                   dir="rtl"
                 >
                   {/* Avatar */}
@@ -399,7 +399,7 @@ const LiveChat = ({ onOnlineCountChange }: LiveChatProps) => {
                   )}
 
                   {/* Message Content */}
-                  <div className={`flex flex-col max-w-[70%] ${isOwnMessage ? 'items-start' : 'items-start'}`}>
+                  <div className="flex flex-col max-w-[70%] items-start">
                     <div className="flex items-center gap-2 mb-1">
                       <span className="text-xs font-medium text-purple-700">
                         {message.nickname}
@@ -422,11 +422,11 @@ const LiveChat = ({ onOnlineCountChange }: LiveChatProps) => {
                       </div>
                     )}
 
-                    <div className={`group flex items-center gap-1 ${isOwnMessage ? '' : 'flex-row-reverse'}`}>
+                    <div className="group flex items-center gap-1">
                       <div className={`px-3 py-2 rounded-2xl text-right ${
                         isOwnMessage 
-                          ? 'bg-pink-500 text-white rounded-bl-md' 
-                          : 'bg-muted rounded-br-md'
+                          ? 'bg-pink-500 text-white rounded-tl-md' 
+                          : 'bg-muted rounded-tl-md'
                       }`}>
                         <p className="text-sm whitespace-pre-wrap break-words">{message.content}</p>
                       </div>
