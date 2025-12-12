@@ -111,11 +111,21 @@ const Community = () => {
 
   // Presence tracking - mark user as online when viewing community
   useEffect(() => {
+    // Use a stable identifier per browser session to avoid duplicate counts
+    const getSessionId = () => {
+      let sessionId = sessionStorage.getItem('presence_session_id');
+      if (!sessionId) {
+        sessionId = `${user?.uid || 'anon'}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        sessionStorage.setItem('presence_session_id', sessionId);
+      }
+      return sessionId;
+    };
+
+    const sessionId = getSessionId();
+    presenceDocId.current = sessionId;
+
     const markOnline = async () => {
       try {
-        const sessionId = `${user?.uid || 'anon'}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-        presenceDocId.current = sessionId;
-        
         await setDoc(doc(db, 'chat_presence', sessionId), {
           identifier: user?.uid || 'anonymous',
           timestamp: serverTimestamp(),
@@ -130,6 +140,7 @@ const Community = () => {
       if (presenceDocId.current) {
         try {
           await deleteDoc(doc(db, 'chat_presence', presenceDocId.current));
+          sessionStorage.removeItem('presence_session_id');
         } catch (error) {
           console.error('Error cleaning up presence:', error);
         }
@@ -138,8 +149,8 @@ const Community = () => {
 
     markOnline();
 
-    // Refresh presence every minute to stay "online"
-    const refreshInterval = setInterval(markOnline, 60 * 1000);
+    // Refresh presence every 30 seconds to stay "online"
+    const refreshInterval = setInterval(markOnline, 30 * 1000);
 
     // Cleanup on unmount
     return () => {
@@ -854,29 +865,26 @@ const Community = () => {
               <div>
                 <p className="font-medium text-sm">{userProfile.username}</p>
                 <p className="text-xs text-muted-foreground">{user.email}</p>
+                <div className="flex items-center gap-1 mt-0.5">
+                  <span className="relative flex h-1.5 w-1.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-green-500"></span>
+                  </span>
+                  <span className="text-[10px] text-muted-foreground">
+                    {onlineCount} {t("online") || "online"}
+                  </span>
+                </div>
               </div>
             </div>
-            <div className="flex items-center gap-3">
-              {/* Online Users Counter */}
-              <div className="flex items-center gap-1.5">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                </span>
-                <span className="text-xs font-medium text-green-700">
-                  {onlineCount} {t("online") || "online"}
-                </span>
-              </div>
-              <Button 
-                variant="outline" 
-                size="sm"
-                onClick={logout}
-                className="gap-2"
-              >
-                <LogOut className="h-4 w-4" />
-                {t("logout")}
-              </Button>
-            </div>
+            <Button
+              variant="outline" 
+              size="sm"
+              onClick={logout}
+              className="gap-2"
+            >
+              <LogOut className="h-4 w-4" />
+              {t("logout")}
+            </Button>
           </div>
         </div>
       )}
