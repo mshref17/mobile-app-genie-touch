@@ -271,7 +271,7 @@ const LiveChat = ({ onOnlineCountChange }: LiveChatProps) => {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-280px)] min-h-[400px]">
+    <div className="flex flex-col h-[calc(100vh-280px)] min-h-[400px]" dir="rtl">
       {/* Delete Confirmation Dialog */}
       <AlertDialog open={!!deleteConfirmId} onOpenChange={() => setDeleteConfirmId(null)}>
         <AlertDialogContent>
