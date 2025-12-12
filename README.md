@@ -25,7 +25,7 @@ npx cap run android
 # TO Publish a new apk
 Change `versionCode` and name in `build.gradle` file.
 go to android directory /android
-./gradlew bundleRelease
+run the command `./gradlew bundleRelease`
 
 keystore password is the one is mms*****85
 key.properties file has the keystore file path
