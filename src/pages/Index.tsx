@@ -41,7 +41,7 @@ const Index = () => {
   const [selectedDueDate, setSelectedDueDate] = useState<Date>();
   const [dueDateMode, setDueDateMode] = useState<'period' | 'duedate'>('period');
   const [activeTab, setActiveTab] = useState('dashboard');
-  const [showSplash, setShowSplash] = useState(true);
+  const [showSplash, setShowSplash] = useState(() => !sessionStorage.getItem('splashShown'));
   const [cycleLength, setCycleLength] = useState<number>(28);
   const [periodDuration, setPeriodDuration] = useState<number>(5);
   const [isPeriodDatePickerOpen, setIsPeriodDatePickerOpen] = useState(false);
@@ -579,7 +579,10 @@ const Index = () => {
 
   
   if (showSplash) {
-    return <SplashScreen onComplete={() => setShowSplash(false)} />;
+    return <SplashScreen onComplete={() => {
+      sessionStorage.setItem('splashShown', 'true');
+      setShowSplash(false);
+    }} />;
   }
   
   return (
