@@ -15,11 +15,17 @@ npm i
 # Step 4: Start the development server with auto-reloading and an instant preview.
 npm run dev
 
+To run a change in (Android) device/emulator not locally
+npm run build
+Then
+npx cap sync android
+Then run
+npx cap run android
 
 # TO Publish a new apk
 Change `versionCode` and name in `build.gradle` file.
 go to android directory /android
-then run the command `./gradlew bundleRelease`
+run the command `./gradlew bundleRelease`
 
 keystore password is the one is mms*****85
 key.properties file has the keystore file path

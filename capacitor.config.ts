@@ -3,7 +3,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'app.lovable.e4d164e326634c4abca4073288a7eff6',
-  appName: 'ايامي',
+  appName: 'أيامي',
   webDir: 'dist',
   bundledWebRuntime: false,
   plugins: {
@@ -11,7 +11,7 @@ const config: CapacitorConfig = {
       presentationOptions: ["badge", "sound", "alert"]
     },
     AdMob: {
-      appId: "ca-app-pub-9774872560845243~9690105991", // Test App ID
+      appId: "ca-app-pub-3940256099942544~3347511713", // Test App ID
       testingDevices: ["YOUR_DEVICE_ID"]
     }
   }

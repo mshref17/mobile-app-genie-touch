@@ -3,11 +3,11 @@
 
 export const ADMOB_CONFIG = {
   // AdMob App ID (configured in capacitor.config.ts and AndroidManifest.xml)
-  APP_ID: 'ca-app-pub-9774872560845243~9690105991',
+  APP_ID: 'ca-app-pub-3940256099942544~3347511713',
   
   // Ad Unit IDs
-  BANNER_AD_UNIT_ID: 'ca-app-pub-9774872560845243/7519461931',
-  INTERSTITIAL_AD_UNIT_ID: 'ca-app-pub-9774872560845243/2666396986',
+  BANNER_AD_UNIT_ID: 'ca-app-pub-3940256099942544/6300978111',
+  INTERSTITIAL_AD_UNIT_ID: 'ca-app-pub-3940256099942544/1033173712',
   
   // Testing configuration
   IS_TESTING: true,
