@@ -263,7 +263,18 @@
     "confirmDelete": "Delete Message?",
     "deleteMessageConfirm": "This action cannot be undone. This will permanently delete your message.",
     "online": "online",
-    "report": "Report"
+    "report": "Report",
+    "profile": "Profile",
+    "myPosts": "My Posts",
+    "myPostsDescription": "All your community posts",
+    "noPostsYet": "No posts yet",
+    "goToCommunity": "Go to community",
+    "accountActions": "Account Actions",
+    "deleteAccount": "Delete Account",
+    "deleteAccountTitle": "Delete Account?",
+    "deleteAccountDescription": "This will submit a request to delete your account and all your data. This action cannot be undone. We will process your request within 48 hours.",
+    "deleteAccountRequestSent": "Your account deletion request has been submitted. We will process it within 48 hours.",
+    "memberSince": "Member since"
   },
   "ar": {
     "resetApp": "إبدأ من جديد",
@@ -531,6 +542,17 @@
     "report": "إبلاغ",
     "online": "متصل",
     "loginToParticipate": "انضمي للمحادثة",
-    "new": "جديد"
+    "new": "جديد",
+    "profile": "الملف الشخصي",
+    "myPosts": "منشوراتي",
+    "myPostsDescription": "جميع منشوراتك في المجتمع",
+    "noPostsYet": "لا توجد منشورات بعد",
+    "goToCommunity": "اذهبي إلى المجتمع",
+    "accountActions": "إجراءات الحساب",
+    "deleteAccount": "حذف الحساب",
+    "deleteAccountTitle": "حذف الحساب؟",
+    "deleteAccountDescription": "سيتم إرسال طلب لحذف حسابك وجميع بياناتك. لا يمكن التراجع عن هذا الإجراء. سنقوم بمعالجة طلبك خلال 48 ساعة.",
+    "deleteAccountRequestSent": "تم إرسال طلب حذف حسابك. سنقوم بمعالجته خلال 48 ساعة.",
+    "memberSince": "عضو منذ"
   }
 }
