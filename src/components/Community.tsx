@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Heart, MessageCircle, Camera, Video, Send, Loader2, TrendingUp, Clock, MessageSquare, Shuffle, Plus, LogOut, Flag, Edit, Trash2, MoreVertical, MessagesSquare } from "lucide-react";
+import { Heart, MessageCircle, Camera, Video, Send, Loader2, TrendingUp, Clock, MessageSquare, Shuffle, Plus, LogOut, Flag, Edit, Trash2, MoreVertical, MessagesSquare, User } from "lucide-react";
 import LiveChat from "@/components/LiveChat";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -848,7 +848,10 @@ const Community = () => {
       {user && userProfile && (
         <div className="p-4 bg-gradient-to-r from-pink-50 to-purple-50 rounded-lg space-y-2">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
+            <div 
+              className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity"
+              onClick={() => navigate('/profile')}
+            >
               {userProfile.profilePic ? (
                 <img 
                   src={userProfile.profilePic} 
@@ -876,15 +879,26 @@ const Community = () => {
                 </div>
               </div>
             </div>
-            <Button
-              variant="outline" 
-              size="sm"
-              onClick={logout}
-              className="gap-2"
-            >
-              <LogOut className="h-4 w-4" />
-              {t("logout")}
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline" 
+                size="sm"
+                onClick={() => navigate('/profile')}
+                className="gap-2"
+              >
+                <User className="h-4 w-4" />
+                {t("profile") || "Profile"}
+              </Button>
+              <Button
+                variant="outline" 
+                size="sm"
+                onClick={logout}
+                className="gap-2"
+              >
+                <LogOut className="h-4 w-4" />
+                {t("logout")}
+              </Button>
+            </div>
           </div>
         </div>
       )}
