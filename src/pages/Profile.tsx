@@ -36,10 +36,10 @@ const Profile = () => {
 
     const fetchUserPosts = async () => {
       try {
+        // Simple query without orderBy to avoid needing composite index
         const q = query(
           collection(db, 'posts'),
-          where('authorId', '==', user.uid),
-          orderBy('timestamp', 'desc')
+          where('authorId', '==', user.uid)
         );
         const querySnapshot = await getDocs(q);
         const posts: Post[] = [];
@@ -52,6 +52,12 @@ const Profile = () => {
             likes: data.likes || 0,
             replies: data.replies || 0,
           });
+        });
+        // Sort client-side to avoid needing Firebase composite index
+        posts.sort((a, b) => {
+          const dateA = a.timestamp?.toDate ? a.timestamp.toDate() : new Date(a.timestamp || 0);
+          const dateB = b.timestamp?.toDate ? b.timestamp.toDate() : new Date(b.timestamp || 0);
+          return dateB.getTime() - dateA.getTime();
         });
         setUserPosts(posts);
       } catch (error) {
@@ -161,7 +167,7 @@ const Profile = () => {
                 <p>{t('noPostsYet') || 'No posts yet'}</p>
                 <Button
                   variant="link"
-                  onClick={() => navigate('/')}
+                  onClick={() => navigate('/?tab=community')}
                   className="text-pink-600 mt-2"
                 >
                   {t('goToCommunity') || 'Go to community'}
@@ -173,7 +179,7 @@ const Profile = () => {
                   <div
                     key={post.id}
                     className="p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors cursor-pointer"
-                    onClick={() => navigate('/')}
+                    onClick={() => navigate('/?tab=community')}
                   >
                     <p className="text-sm line-clamp-2">{post.content}</p>
                     <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground">

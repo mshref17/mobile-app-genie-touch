@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -33,6 +34,7 @@ import { Capacitor } from '@capacitor/core';
 const Index = () => {
   const { t, language } = useLanguage();
   const { toast } = useToast();
+  const [searchParams] = useSearchParams();
   const [trackingMode, setTrackingMode] = useState<'pregnant' | 'period' | null>(null);
   const [lastPeriodDate, setLastPeriodDate] = useState<Date | null>(null);
   const [isFirstTime, setIsFirstTime] = useState(true);
@@ -40,7 +42,7 @@ const Index = () => {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [selectedDueDate, setSelectedDueDate] = useState<Date>();
   const [dueDateMode, setDueDateMode] = useState<'period' | 'duedate'>('period');
-  const [activeTab, setActiveTab] = useState('dashboard');
+  const [activeTab, setActiveTab] = useState(() => searchParams.get('tab') || 'dashboard');
   const [showSplash, setShowSplash] = useState(() => !sessionStorage.getItem('splashShown'));
   const [cycleLength, setCycleLength] = useState<number>(28);
   const [periodDuration, setPeriodDuration] = useState<number>(5);
