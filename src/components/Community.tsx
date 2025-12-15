@@ -102,6 +102,7 @@ const Community = () => {
   const [editingReplyContent, setEditingReplyContent] = useState('');
   const [deleteConfirmPostId, setDeleteConfirmPostId] = useState<string | null>(null);
   const [deleteConfirmReplyId, setDeleteConfirmReplyId] = useState<string | null>(null);
+  const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
   const [onlineCount, setOnlineCount] = useState(0);
   const [unreadCount, setUnreadCount] = useState(0);
   const [hasSeenChat, setHasSeenChat] = useState(() => localStorage.getItem('chat_last_seen') !== null);
@@ -891,7 +892,7 @@ const Community = () => {
               <Button
                 variant="outline" 
                 size="icon"
-                onClick={logout}
+                onClick={() => setLogoutDialogOpen(true)}
                 className="h-8 w-8"
               >
                 <LogOut className="h-4 w-4" />
@@ -911,6 +912,30 @@ const Community = () => {
           </div>
         </div>
       )}
+
+      {/* Logout Confirmation Dialog */}
+      <AlertDialog open={logoutDialogOpen} onOpenChange={setLogoutDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t("confirmLogout") || "Confirm Logout"}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {t("confirmLogoutDescription") || "Are you sure you want to logout?"}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={() => {
+                logout();
+                setLogoutDialogOpen(false);
+              }}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              {t("logout")}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       {/* Report Dialog */}
       <AlertDialog open={reportDialogOpen} onOpenChange={setReportDialogOpen}>
