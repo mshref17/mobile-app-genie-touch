@@ -1067,24 +1067,18 @@ const Community = () => {
           </Card>
         </TabsContent>
 
-        <TabsContent value="posts" className="mt-0">
+        <TabsContent value="posts" className="mt-0 -mx-4">
           {/* Posts Feed */}
           <div 
-            className="space-y-4" 
+            className="space-y-2" 
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
           >
-            <div className="flex items-center justify-between">
-              <h3 className="text-xl font-semibold text-pink-800">{t("communityQuestions")}</h3>
-              <div className="flex items-center gap-2">
-                <Badge variant="outline" className="hidden text-purple-600 border-purple-200">
-                  {React.createElement(algorithms[currentAlgorithm].icon, { className: "w-3 h-3 mr-1" })}
-                  {algorithms[currentAlgorithm].name}
-                </Badge>
-                <Badge variant="secondary" className="text-xs">
-                  {t('swipeDownToChange')}
-                </Badge>
-              </div>
+            <div className="flex items-center justify-between px-4">
+              <h3 className="text-lg font-semibold text-pink-800">{t("communityQuestions")}</h3>
+              <Badge variant="secondary" className="text-xs">
+                {t('swipeDownToChange')}
+              </Badge>
             </div>
         
         {loading ? (
@@ -1124,8 +1118,8 @@ const Community = () => {
         ) : (
           <>
             {displayedPosts.map((post) => (
-            <Card key={post.id}>
-              <CardContent className="pt-6">
+            <div key={post.id} className="bg-card border-y border-border">
+              <div className="px-4 py-3">
                  <div className="space-y-3">
                    <div className="flex items-center gap-2 mb-2">
                      {post.profilePic ? (
@@ -1452,8 +1446,8 @@ const Community = () => {
                     </div>
                   )}
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
             ))}
             
             {/* Load More Button / Loading */}
