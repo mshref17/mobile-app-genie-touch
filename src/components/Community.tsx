@@ -1372,7 +1372,7 @@ const Community = () => {
                     <div className="mt-4 space-y-3">
                       <h4 className="font-medium text-purple-800">{t("replies") || "Replies"}</h4>
                        {postReplies[post.id].map((reply) => (
-                          <div key={reply.id} className="bg-purple-50 p-3 rounded-lg ml-4">
+                          <div key={reply.id} className="bg-purple-50 p-3 rounded-lg ml-2">
                              <div className="flex items-center gap-2 mb-2">
                                <div className="flex-1 flex items-center gap-2">
                                  <span className="text-xs font-medium text-purple-700">
