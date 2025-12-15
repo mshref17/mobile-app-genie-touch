@@ -846,28 +846,28 @@ const Community = () => {
     <div className="space-y-6 relative">
       {/* User Profile & Logout */}
       {user && userProfile && (
-        <div className="p-4 bg-gradient-to-r from-pink-50 to-purple-50 rounded-lg space-y-2">
-          <div className="flex items-center justify-between">
+        <div className="p-3 bg-gradient-to-r from-pink-50 to-purple-50 rounded-lg space-y-2">
+          <div className="flex items-center justify-between gap-2">
             <div 
-              className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity"
+              className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity min-w-0 flex-1"
               onClick={() => navigate('/profile')}
             >
               {userProfile.profilePic ? (
                 <img 
                   src={userProfile.profilePic} 
                   alt={userProfile.username}
-                  className="w-10 h-10 rounded-full object-cover"
+                  className="w-9 h-9 rounded-full object-cover flex-shrink-0"
                 />
               ) : (
-                <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+                <div className="w-9 h-9 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
                   <span className="text-sm font-semibold">
                     {userProfile.username.charAt(0).toUpperCase()}
                   </span>
                 </div>
               )}
-              <div>
-                <p className="font-medium text-sm">{userProfile.username}</p>
-                <p className="text-xs text-muted-foreground">{user.email}</p>
+              <div className="min-w-0">
+                <p className="font-medium text-sm truncate">{userProfile.username}</p>
+                <p className="text-xs text-muted-foreground truncate">{user.email}</p>
                 <div className="flex items-center gap-1 mt-0.5">
                   <span className="relative flex h-1.5 w-1.5">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
@@ -879,24 +879,22 @@ const Community = () => {
                 </div>
               </div>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1 flex-shrink-0">
               <Button
                 variant="outline" 
-                size="sm"
+                size="icon"
                 onClick={() => navigate('/profile')}
-                className="gap-2"
+                className="h-8 w-8"
               >
                 <User className="h-4 w-4" />
-                {t("profile") || "Profile"}
               </Button>
               <Button
                 variant="outline" 
-                size="sm"
+                size="icon"
                 onClick={logout}
-                className="gap-2"
+                className="h-8 w-8"
               >
                 <LogOut className="h-4 w-4" />
-                {t("logout")}
               </Button>
             </div>
           </div>
