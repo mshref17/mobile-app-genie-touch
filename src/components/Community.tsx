@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Heart, MessageCircle, Camera, Video, Send, Loader2, TrendingUp, Clock, MessageSquare, Shuffle, Plus, LogOut, Flag, Edit, Trash2, MoreVertical, MessagesSquare, User } from "lucide-react";
 import LiveChat from "@/components/LiveChat";
+import NotificationBell from "@/components/NotificationBell";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
@@ -34,7 +35,9 @@ import {
   QueryDocumentSnapshot,
   DocumentData,
   deleteDoc,
-  setDoc
+  setDoc,
+  where,
+  getDoc
 } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
@@ -107,7 +110,9 @@ const Community = () => {
   const [unreadCount, setUnreadCount] = useState(0);
   const [hasSeenChat, setHasSeenChat] = useState(() => localStorage.getItem('chat_last_seen') !== null);
   const [activeTab, setActiveTab] = useState('posts');
+  const [highlightedPostId, setHighlightedPostId] = useState<string | null>(null);
   const presenceDocId = React.useRef<string | null>(null);
+  const postRefs = React.useRef<Record<string, HTMLDivElement | null>>({});
   const { toast } = useToast();
 
   // Presence tracking - mark user as online when viewing community
@@ -681,6 +686,9 @@ const Community = () => {
         replies: increment(1)
       });
       
+      // Create notifications
+      await createNotificationsForReply(postId, replyContent);
+      
       setReplyContent('');
       setReplyFiles([]);
       setReplyingTo(null);
@@ -698,6 +706,104 @@ const Community = () => {
       });
     } finally {
       setReplyUploading(false);
+    }
+  };
+
+  const createNotificationsForReply = async (postId: string, replyContent: string) => {
+    if (!user || !userProfile) return;
+    
+    try {
+      // Get the post to find the author
+      const postDoc = await getDoc(doc(db, 'posts', postId));
+      if (!postDoc.exists()) return;
+      
+      const postData = postDoc.data();
+      const postAuthorId = postData.authorId;
+      const postPreview = postData.content?.substring(0, 50) || '';
+      const replyPreview = replyContent.substring(0, 50);
+      
+      const usersToNotify = new Set<string>();
+      
+      // Notify post author (if not the replier)
+      if (postAuthorId && postAuthorId !== user.uid) {
+        // Create notification for post author
+        await addDoc(collection(db, 'notifications'), {
+          type: 'reply_to_post',
+          postId: postId,
+          postPreview: postPreview,
+          fromUserId: user.uid,
+          fromUsername: userProfile.username,
+          fromProfilePic: userProfile.profilePic || '',
+          toUserId: postAuthorId,
+          read: false,
+          timestamp: serverTimestamp(),
+          replyPreview: replyPreview
+        });
+        usersToNotify.add(postAuthorId);
+      }
+      
+      // Find all users who have replied to this post (participants)
+      const repliesQuery = query(
+        collection(db, 'replies'),
+        where('postId', '==', postId)
+      );
+      const repliesSnapshot = await getDocs(repliesQuery);
+      
+      const participantIds = new Set<string>();
+      repliesSnapshot.forEach((doc) => {
+        const replyData = doc.data();
+        if (replyData.authorId && 
+            replyData.authorId !== user.uid && 
+            replyData.authorId !== postAuthorId &&
+            !usersToNotify.has(replyData.authorId)) {
+          participantIds.add(replyData.authorId);
+        }
+      });
+      
+      // Create notifications for participants
+      for (const participantId of participantIds) {
+        await addDoc(collection(db, 'notifications'), {
+          type: 'reply_to_participated',
+          postId: postId,
+          postPreview: postPreview,
+          fromUserId: user.uid,
+          fromUsername: userProfile.username,
+          fromProfilePic: userProfile.profilePic || '',
+          toUserId: participantId,
+          read: false,
+          timestamp: serverTimestamp(),
+          replyPreview: replyPreview
+        });
+      }
+    } catch (error) {
+      console.error('Error creating notifications:', error);
+      // Don't throw - notifications are not critical
+    }
+  };
+
+  const handleNotificationClick = (postId: string) => {
+    // Switch to posts tab
+    setActiveTab('posts');
+    
+    // Set highlighted post
+    setHighlightedPostId(postId);
+    
+    // Scroll to the post
+    setTimeout(() => {
+      const postElement = postRefs.current[postId];
+      if (postElement) {
+        postElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        
+        // Remove highlight after animation
+        setTimeout(() => {
+          setHighlightedPostId(null);
+        }, 2000);
+      }
+    }, 100);
+    
+    // Also expand replies for that post
+    if (!repliesVisible[postId]) {
+      toggleReplies(postId);
     }
   };
 
@@ -881,6 +987,7 @@ const Community = () => {
               </div>
             </div>
             <div className="flex items-center gap-1 flex-shrink-0">
+              <NotificationBell onNotificationClick={handleNotificationClick} />
               <Button
                 variant="outline" 
                 size="icon"
@@ -1141,7 +1248,13 @@ const Community = () => {
         ) : (
           <>
             {displayedPosts.map((post) => (
-            <div key={post.id} className="bg-card border-y border-border">
+            <div 
+              key={post.id} 
+              ref={(el) => { postRefs.current[post.id] = el; }}
+              className={`bg-card border-y border-border transition-all duration-500 ${
+                highlightedPostId === post.id ? 'ring-2 ring-purple-500 bg-purple-50' : ''
+              }`}
+            >
               <div className="px-4 py-3">
                  <div className="space-y-3">
                    <div className="flex items-center gap-2 mb-2">
