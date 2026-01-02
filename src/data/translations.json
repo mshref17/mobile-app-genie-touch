@@ -276,7 +276,12 @@
     "deleteAccountTitle": "Delete Account?",
     "deleteAccountDescription": "This will submit a request to delete your account and all your data. This action cannot be undone. We will process your request within 48 hours.",
     "deleteAccountRequestSent": "Your account deletion request has been submitted. We will process it within 48 hours.",
-    "memberSince": "Member since"
+    "memberSince": "Member since",
+    "notifications": "Notifications",
+    "markAllRead": "Mark all read",
+    "noNotifications": "No notifications yet",
+    "repliedToYourPost": "replied to your post",
+    "repliedToConversation": "replied to a conversation you participated in"
   },
   "ar": {
     "resetApp": "إبدأ من جديد",
@@ -557,6 +562,11 @@
     "deleteAccountTitle": "حذف الحساب؟",
     "deleteAccountDescription": "سيتم إرسال طلب لحذف حسابك وجميع بياناتك. لا يمكن التراجع عن هذا الإجراء. سنقوم بمعالجة طلبك خلال 48 ساعة.",
     "deleteAccountRequestSent": "تم إرسال طلب حذف حسابك. سنقوم بمعالجته خلال 48 ساعة.",
-    "memberSince": "عضو منذ"
+    "memberSince": "عضو منذ",
+    "notifications": "الإشعارات",
+    "markAllRead": "تحديد الكل كمقروء",
+    "noNotifications": "لا توجد إشعارات بعد",
+    "repliedToYourPost": "رد على منشورك",
+    "repliedToConversation": "رد على محادثة شاركت فيها"
   }
 }
