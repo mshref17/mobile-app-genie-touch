@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Bell } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -38,11 +39,8 @@ interface Notification {
   replyPreview: string;
 }
 
-interface NotificationBellProps {
-  onNotificationClick: (postId: string) => void;
-}
-
-const NotificationBell: React.FC<NotificationBellProps> = ({ onNotificationClick }) => {
+const NotificationBell: React.FC = () => {
+  const navigate = useNavigate();
   const { user } = useAuth();
   const { t, language } = useLanguage();
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -82,8 +80,8 @@ const NotificationBell: React.FC<NotificationBellProps> = ({ onNotificationClick
       }
     }
 
-    // Navigate to the post
-    onNotificationClick(notification.postId);
+    // Navigate to the post detail page
+    navigate(`/post/${notification.postId}`);
     setOpen(false);
   };
 

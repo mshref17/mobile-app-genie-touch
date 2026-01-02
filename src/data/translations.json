@@ -281,7 +281,11 @@
     "markAllRead": "Mark all read",
     "noNotifications": "No notifications yet",
     "repliedToYourPost": "replied to your post",
-    "repliedToConversation": "replied to a conversation you participated in"
+    "repliedToConversation": "replied to a conversation you participated in",
+    "post": "Post",
+    "noRepliesYet": "No replies yet. Be the first to reply!",
+    "loginToReply": "Login to reply",
+    "goBack": "Go Back"
   },
   "ar": {
     "resetApp": "إبدأ من جديد",
@@ -567,6 +571,10 @@
     "markAllRead": "تحديد الكل كمقروء",
     "noNotifications": "لا توجد إشعارات بعد",
     "repliedToYourPost": "رد على منشورك",
-    "repliedToConversation": "رد على محادثة شاركت فيها"
+    "repliedToConversation": "رد على محادثة شاركت فيها",
+    "post": "المنشور",
+    "noRepliesYet": "لا توجد ردود بعد. كن أول من يرد!",
+    "loginToReply": "سجل دخول للرد",
+    "goBack": "العودة"
   }
 }
