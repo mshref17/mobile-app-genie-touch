@@ -428,7 +428,7 @@ const PostDetail = () => {
             <Button 
               variant="ghost" 
               size="icon"
-              onClick={() => navigate(-1)}
+              onClick={() => window.history.back()}
               className="h-9 w-9"
             >
               <ArrowLeft className="h-5 w-5" />
