@@ -285,7 +285,8 @@
     "post": "Post",
     "noRepliesYet": "No replies yet. Be the first to reply!",
     "loginToReply": "Login to reply",
-    "goBack": "Go Back"
+    "goBack": "Go Back",
+    "loadMoreReplies": "Load More Replies"
   },
   "ar": {
     "resetApp": "إبدأ من جديد",
@@ -575,6 +576,7 @@
     "post": "المنشور",
     "noRepliesYet": "لا توجد ردود بعد. كن أول من يرد!",
     "loginToReply": "سجل دخول للرد",
-    "goBack": "العودة"
+    "goBack": "العودة",
+    "loadMoreReplies": "تحميل المزيد من الردود"
   }
 }

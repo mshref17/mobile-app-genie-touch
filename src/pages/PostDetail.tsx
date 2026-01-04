@@ -25,7 +25,11 @@ import {
   getDoc,
   getDocs,
   deleteDoc,
-  where
+  where,
+  limit,
+  startAfter,
+  QueryDocumentSnapshot,
+  DocumentData
 } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
@@ -66,6 +70,12 @@ const PostDetail = () => {
   const [replyFiles, setReplyFiles] = useState<File[]>([]);
   const [replyUploading, setReplyUploading] = useState(false);
   
+  // Pagination state
+  const REPLIES_PER_PAGE = 5;
+  const [lastReplyDoc, setLastReplyDoc] = useState<QueryDocumentSnapshot<DocumentData> | null>(null);
+  const [hasMoreReplies, setHasMoreReplies] = useState(true);
+  const [loadingMoreReplies, setLoadingMoreReplies] = useState(false);
+  
   const [editingPostContent, setEditingPostContent] = useState('');
   const [isEditingPost, setIsEditingPost] = useState(false);
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
@@ -73,6 +83,72 @@ const PostDetail = () => {
   const [editingReplyId, setEditingReplyId] = useState<string | null>(null);
   const [editingReplyContent, setEditingReplyContent] = useState('');
   const [deleteReplyId, setDeleteReplyId] = useState<string | null>(null);
+
+  // Load initial replies with pagination
+  const loadInitialReplies = async () => {
+    if (!postId) return;
+    
+    try {
+      const repliesQuery = query(
+        collection(db, 'replies'),
+        where('postId', '==', postId),
+        orderBy('timestamp', 'asc'),
+        limit(REPLIES_PER_PAGE)
+      );
+      
+      const snapshot = await getDocs(repliesQuery);
+      const repliesData: Reply[] = [];
+      
+      snapshot.forEach((doc) => {
+        repliesData.push({ id: doc.id, ...doc.data() } as Reply);
+      });
+      
+      setReplies(repliesData);
+      
+      if (snapshot.docs.length > 0) {
+        setLastReplyDoc(snapshot.docs[snapshot.docs.length - 1]);
+      }
+      
+      setHasMoreReplies(snapshot.docs.length === REPLIES_PER_PAGE);
+    } catch (error) {
+      console.error('Error loading replies:', error);
+    }
+  };
+
+  // Load more replies
+  const loadMoreReplies = async () => {
+    if (!postId || !lastReplyDoc || loadingMoreReplies) return;
+    
+    setLoadingMoreReplies(true);
+    try {
+      const repliesQuery = query(
+        collection(db, 'replies'),
+        where('postId', '==', postId),
+        orderBy('timestamp', 'asc'),
+        startAfter(lastReplyDoc),
+        limit(REPLIES_PER_PAGE)
+      );
+      
+      const snapshot = await getDocs(repliesQuery);
+      const newReplies: Reply[] = [];
+      
+      snapshot.forEach((doc) => {
+        newReplies.push({ id: doc.id, ...doc.data() } as Reply);
+      });
+      
+      setReplies(prev => [...prev, ...newReplies]);
+      
+      if (snapshot.docs.length > 0) {
+        setLastReplyDoc(snapshot.docs[snapshot.docs.length - 1]);
+      }
+      
+      setHasMoreReplies(snapshot.docs.length === REPLIES_PER_PAGE);
+    } catch (error) {
+      console.error('Error loading more replies:', error);
+    } finally {
+      setLoadingMoreReplies(false);
+    }
+  };
 
   // Fetch post data
   useEffect(() => {
@@ -103,34 +179,17 @@ const PostDetail = () => {
     };
 
     fetchPost();
+    loadInitialReplies();
 
-    // Set up real-time listener for post updates
+    // Set up real-time listener for post updates only (not replies - for cost savings)
     const unsubscribePost = onSnapshot(doc(db, 'posts', postId), (docSnapshot) => {
       if (docSnapshot.exists()) {
         setPost({ id: docSnapshot.id, ...docSnapshot.data() } as Post);
       }
     });
 
-    // Set up real-time listener for replies
-    const repliesQuery = query(
-      collection(db, 'replies'),
-      orderBy('timestamp', 'asc')
-    );
-
-    const unsubscribeReplies = onSnapshot(repliesQuery, (snapshot) => {
-      const repliesData: Reply[] = [];
-      snapshot.forEach((doc) => {
-        const replyData = { id: doc.id, ...doc.data() } as Reply;
-        if (replyData.postId === postId) {
-          repliesData.push(replyData);
-        }
-      });
-      setReplies(repliesData);
-    });
-
     return () => {
       unsubscribePost();
-      unsubscribeReplies();
     };
   }, [postId, navigate, t, toast]);
 
@@ -172,7 +231,20 @@ const PostDetail = () => {
         profilePic: userProfile.profilePic || ''
       };
       
-      await addDoc(collection(db, 'replies'), replyData);
+      const docRef = await addDoc(collection(db, 'replies'), replyData);
+      
+      // Add new reply to local state to avoid extra Firebase read
+      const newReply: Reply = {
+        id: docRef.id,
+        content: replyContent,
+        timestamp: { seconds: Date.now() / 1000, nanoseconds: 0 },
+        postId: postId,
+        attachments: attachments,
+        nickname: userProfile.username,
+        authorId: user.uid,
+        profilePic: userProfile.profilePic || ''
+      };
+      setReplies(prev => [...prev, newReply]);
       
       const postRef = doc(db, 'posts', postId);
       await updateDoc(postRef, {
@@ -756,6 +828,27 @@ const PostDetail = () => {
                 </div>
               </div>
             ))
+          )}
+          
+          {/* Load More Button */}
+          {hasMoreReplies && replies.length > 0 && (
+            <div className="p-4 text-center">
+              <Button
+                variant="outline"
+                onClick={loadMoreReplies}
+                disabled={loadingMoreReplies}
+                className="w-full"
+              >
+                {loadingMoreReplies ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    {t("loading") || "Loading..."}
+                  </>
+                ) : (
+                  t("loadMoreReplies") || "Load More Replies"
+                )}
+              </Button>
+            </div>
           )}
         </div>
       </div>
