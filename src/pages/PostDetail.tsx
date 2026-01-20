@@ -29,7 +29,8 @@ import {
   limit,
   startAfter,
   QueryDocumentSnapshot,
-  DocumentData
+  DocumentData,
+  getCountFromServer
 } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
@@ -71,10 +72,11 @@ const PostDetail = () => {
   const [replyUploading, setReplyUploading] = useState(false);
   
   // Pagination state
-  const REPLIES_PER_PAGE = 5;
+  const REPLIES_PER_PAGE = 10;
   const [lastReplyDoc, setLastReplyDoc] = useState<QueryDocumentSnapshot<DocumentData> | null>(null);
-  const [hasMoreReplies, setHasMoreReplies] = useState(true);
+  const [hasMoreReplies, setHasMoreReplies] = useState(false);
   const [loadingMoreReplies, setLoadingMoreReplies] = useState(false);
+  const [totalReplyCount, setTotalReplyCount] = useState(0);
   
   const [editingPostContent, setEditingPostContent] = useState('');
   const [isEditingPost, setIsEditingPost] = useState(false);
@@ -89,6 +91,16 @@ const PostDetail = () => {
     if (!postId) return;
     
     try {
+      // Get total count of replies first
+      const countQuery = query(
+        collection(db, 'replies'),
+        where('postId', '==', postId)
+      );
+      const countSnapshot = await getCountFromServer(countQuery);
+      const totalCount = countSnapshot.data().count;
+      setTotalReplyCount(totalCount);
+      
+      // Fetch first page of replies
       const repliesQuery = query(
         collection(db, 'replies'),
         where('postId', '==', postId),
@@ -109,7 +121,8 @@ const PostDetail = () => {
         setLastReplyDoc(snapshot.docs[snapshot.docs.length - 1]);
       }
       
-      setHasMoreReplies(snapshot.docs.length === REPLIES_PER_PAGE);
+      // Has more if we fetched a full page and there are more total
+      setHasMoreReplies(snapshot.docs.length === REPLIES_PER_PAGE && totalCount > REPLIES_PER_PAGE);
     } catch (error) {
       console.error('Error loading replies:', error);
     }
@@ -245,6 +258,7 @@ const PostDetail = () => {
         profilePic: userProfile.profilePic || ''
       };
       setReplies(prev => [...prev, newReply]);
+      setTotalReplyCount(prev => prev + 1);
       
       const postRef = doc(db, 'posts', postId);
       await updateDoc(postRef, {
@@ -411,6 +425,10 @@ const PostDetail = () => {
     if (!postId) return;
     try {
       await deleteDoc(doc(db, 'replies', replyId));
+      
+      // Remove from local state
+      setReplies(prev => prev.filter(r => r.id !== replyId));
+      setTotalReplyCount(prev => Math.max(0, prev - 1));
       
       const postRef = doc(db, 'posts', postId);
       await updateDoc(postRef, {
@@ -830,8 +848,8 @@ const PostDetail = () => {
             ))
           )}
           
-          {/* Load More Button */}
-          {hasMoreReplies && replies.length > 0 && (
+          {/* Load More Button - only show when total replies > 10 and there are more to load */}
+          {hasMoreReplies && totalReplyCount > 10 && (
             <div className="p-4 text-center">
               <Button
                 variant="outline"
