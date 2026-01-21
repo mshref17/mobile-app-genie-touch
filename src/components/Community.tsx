@@ -110,7 +110,9 @@ const Community = () => {
   const [unreadCount, setUnreadCount] = useState(0);
   const [hasSeenChat, setHasSeenChat] = useState(() => localStorage.getItem('chat_last_seen') !== null);
   const [activeTab, setActiveTab] = useState('posts');
+  const [highlightedPostId, setHighlightedPostId] = useState<string | null>(null);
   const presenceDocId = React.useRef<string | null>(null);
+  const postRefs = React.useRef<Record<string, HTMLDivElement | null>>({});
   const { toast } = useToast();
 
   // Presence tracking - mark user as online when viewing community
@@ -778,6 +780,33 @@ const Community = () => {
       // Don't throw - notifications are not critical
     }
   };
+
+  const handleNotificationClick = (postId: string) => {
+    // Switch to posts tab
+    setActiveTab('posts');
+    
+    // Set highlighted post
+    setHighlightedPostId(postId);
+    
+    // Scroll to the post
+    setTimeout(() => {
+      const postElement = postRefs.current[postId];
+      if (postElement) {
+        postElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        
+        // Remove highlight after animation
+        setTimeout(() => {
+          setHighlightedPostId(null);
+        }, 2000);
+      }
+    }, 100);
+    
+    // Also expand replies for that post
+    if (!repliesVisible[postId]) {
+      toggleReplies(postId);
+    }
+  };
+
   const loadReplies = (postId: string) => {
     // Don't set up listener if one already exists
     if (replyListeners[postId]) return;
@@ -958,7 +987,7 @@ const Community = () => {
               </div>
             </div>
             <div className="flex items-center gap-1 flex-shrink-0">
-              <NotificationBell />
+              <NotificationBell onNotificationClick={handleNotificationClick} />
               <Button
                 variant="outline" 
                 size="icon"
@@ -1221,8 +1250,10 @@ const Community = () => {
             {displayedPosts.map((post) => (
             <div 
               key={post.id} 
-              className="bg-card border-y border-border cursor-pointer hover:bg-muted/50 transition-colors"
-              onClick={() => navigate(`/post/${post.id}`)}
+              ref={(el) => { postRefs.current[post.id] = el; }}
+              className={`bg-card border-y border-border transition-all duration-500 ${
+                highlightedPostId === post.id ? 'ring-2 ring-purple-500 bg-purple-50' : ''
+              }`}
             >
               <div className="px-4 py-3">
                  <div className="space-y-3">
@@ -1249,35 +1280,33 @@ const Community = () => {
                        {formatTimeAgo(post.timestamp)}
                      </span>
                      {user && user.uid === post.authorId && editingPostId !== post.id && (
-                       <div onClick={(e) => e.stopPropagation()}>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                              <MoreVertical className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end" className="bg-background">
-                            <DropdownMenuItem 
-                              onClick={() => {
-                                setEditingPostId(post.id);
-                                setEditingPostContent(post.content);
-                              }}
-                              className="cursor-pointer"
-                            >
-                              <Edit className="w-4 h-4 mr-2" />
-                              {t("edit")}
-                            </DropdownMenuItem>
-                            <DropdownMenuItem 
-                              onClick={() => setDeleteConfirmPostId(post.id)}
-                              className="cursor-pointer text-red-600 focus:text-red-600"
-                            >
-                              <Trash2 className="w-4 h-4 mr-2" />
-                              {t("delete")}
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                       </div>
-                      )}
+                       <DropdownMenu>
+                         <DropdownMenuTrigger asChild>
+                           <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                             <MoreVertical className="h-4 w-4" />
+                           </Button>
+                         </DropdownMenuTrigger>
+                         <DropdownMenuContent align="end" className="bg-background">
+                           <DropdownMenuItem 
+                             onClick={() => {
+                               setEditingPostId(post.id);
+                               setEditingPostContent(post.content);
+                             }}
+                             className="cursor-pointer"
+                           >
+                             <Edit className="w-4 h-4 mr-2" />
+                             {t("edit")}
+                           </DropdownMenuItem>
+                           <DropdownMenuItem 
+                             onClick={() => setDeleteConfirmPostId(post.id)}
+                             className="cursor-pointer text-red-600 focus:text-red-600"
+                           >
+                             <Trash2 className="w-4 h-4 mr-2" />
+                             {t("delete")}
+                           </DropdownMenuItem>
+                         </DropdownMenuContent>
+                       </DropdownMenu>
+                     )}
                    </div>
                    
                    {editingPostId === post.id ? (
@@ -1334,15 +1363,12 @@ const Community = () => {
                     </div>
                   )}
                   
-                  <div className="flex items-center gap-4 pt-2" onClick={(e) => e.stopPropagation()}>
+                  <div className="flex items-center gap-4 pt-2">
                     <Button 
                       variant="ghost" 
                       size="sm" 
                       className="text-pink-600 hover:text-pink-700"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleLikePost(post.id);
-                      }}
+                      onClick={() => handleLikePost(post.id)}
                     >
                       <Heart className="w-4 h-4 mr-1" />
                       {post.likes}
@@ -1351,10 +1377,7 @@ const Community = () => {
                       variant="ghost" 
                       size="sm" 
                       className="text-purple-600 hover:text-purple-700"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        navigate(`/post/${post.id}`);
-                      }}
+                      onClick={() => toggleReplies(post.id)}
                     >
                       <MessageCircle className="w-4 h-4 mr-1" />
                       {post.replies} {t("replies")}
@@ -1363,12 +1386,11 @@ const Community = () => {
                       variant="ghost" 
                       size="sm" 
                       className="text-blue-600 hover:text-blue-700"
-                      onClick={(e) => {
-                        e.stopPropagation();
+                      onClick={() => {
                         if (!user) {
                           navigate('/login');
                         } else {
-                          navigate(`/post/${post.id}`);
+                          setReplyingTo(post.id);
                         }
                       }}
                     >
@@ -1379,8 +1401,7 @@ const Community = () => {
                         variant="ghost" 
                         size="sm" 
                         className="text-red-600 hover:text-red-700"
-                        onClick={(e) => {
-                          e.stopPropagation();
+                        onClick={() => {
                           setReportingPostId(post.id);
                           setReportDialogOpen(true);
                         }}

@@ -12,7 +12,6 @@ import Signup from "./pages/Signup";
 import NotFound from "./pages/NotFound";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Profile from "./pages/Profile";
-import PostDetail from "./pages/PostDetail";
 
 const queryClient = new QueryClient();
 
@@ -27,7 +26,6 @@ const AppContent = () => {
         <Route path="/signup" element={<Signup />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/post/:postId" element={<PostDetail />} />
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>

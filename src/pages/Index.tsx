@@ -35,19 +35,9 @@ const Index = () => {
   const { t, language } = useLanguage();
   const { toast } = useToast();
   const [searchParams] = useSearchParams();
-  const [trackingMode, setTrackingMode] = useState<'pregnant' | 'period' | null>(() => {
-    const saved = localStorage.getItem('trackingMode');
-    return saved as 'pregnant' | 'period' | null;
-  });
-  const [lastPeriodDate, setLastPeriodDate] = useState<Date | null>(() => {
-    const saved = localStorage.getItem('lastPeriodDate');
-    return saved ? new Date(saved) : null;
-  });
-  const [isFirstTime, setIsFirstTime] = useState(() => {
-    const savedDate = localStorage.getItem('lastPeriodDate');
-    const savedMode = localStorage.getItem('trackingMode');
-    return !(savedDate && savedMode);
-  });
+  const [trackingMode, setTrackingMode] = useState<'pregnant' | 'period' | null>(null);
+  const [lastPeriodDate, setLastPeriodDate] = useState<Date | null>(null);
+  const [isFirstTime, setIsFirstTime] = useState(true);
   const [selectedDate, setSelectedDate] = useState<Date>();
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [selectedDueDate, setSelectedDueDate] = useState<Date>();
